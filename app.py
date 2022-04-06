@@ -34,13 +34,26 @@ def signup():
 
 @app.route('/login/', methods=['POST'])
 def login():
+    conn = dbi.connect()
     email = request.form.get('email')
     password = request.form.get('password')
 
-    # login = b(password)
+    login_result = queries.login(conn, email)
+    if(login_result is None):
+        flash('Login is incorrect. Please try again or sign up.')
+        return redirect( url_for('login'))
 
-    # hash2 = bcrypt.hashpw(login, hash1)
-    # hash2 == hash1
+    stored_password = login_result['password']
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'),
+                            stored_password.encode('utf-8'))
+                        
+    if(hashed_password = stored_password):
+        flash('Successfully logged in.')
+        #redirect them to the page for logged in people
+        return redirect('user', username=username) 
+    else:
+        flash('Login unsuccessful. Please try again or sign up.')
+        return redirect(url_for('get_login'))
 
 
 
