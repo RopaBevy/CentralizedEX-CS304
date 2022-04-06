@@ -1,5 +1,7 @@
 from flask import (Flask, render_template, make_response,
                    request, redirect, url_for, flash)
+import bcrypt
+import queries
 
 app = Flask(__name__)
 
@@ -9,29 +11,43 @@ def get_login():
     return render_template("index.html")
 
 
-# @auth.route('/signup', methods=['POST'])
-# def signup_post():
-#     # code to validate and add user to database goes here
-#     email = request.form.get('email')
-#     name = request.form.get('name')
-#     password = request.form.get('password')
+@app.route('/signup/', methods=['POST'])
+def signup():
+    conn = dbi.connect()
+    # code to validate and add user to database goes here
+    email = request.form.get('email')
+    name = request.form.get('name')
+    password = request.form.get('password')
 
-#     user = User.query.filter_by(email=email).first() # if this returns a user, then the email already exists in database
+    # if user is already in database, redirect back to signup page
+    if (queries.user_exists(conn, email)): 
+        return redirect(url_for('signup'))
+    else:
+        # create a new user with the form data.
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        stored_password = hashed.decode('utf-8')
 
-#     if user: # if a user is found, we want to redirect back to signup page so user can try again
-#         return redirect(url_for('auth.signup'))
+        # add the new user to the database
+        queries.insert_member(conn, email, password, name)
 
-#     # create a new user with the form data. Hash the password so the plaintext version isn't saved.
-#     new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'))
+    return redirect(url_for('login'))
 
-#     # add the new user to the database
-#     db.session.add(new_user)
-#     db.session.commit()
+@app.route('/login/', methods=['POST'])
+def login():
+    email = request.form.get('email')
+    password = request.form.get('password')
 
-#     return redirect(url_for('auth.login'))
+    # login = b(password)
+
+    # hash2 = bcrypt.hashpw(login, hash1)
+    # hash2 == hash1
+
 
 
 if __name__ == '__main__':
+    dbi.cache_cnf()
+    dbi.use('rs2_db') #centralex_db
+
     import os
     port = os.getuid()
     app.debug = True
