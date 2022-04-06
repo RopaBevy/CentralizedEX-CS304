@@ -18,6 +18,10 @@ def signup():
     email = request.form.get('email')
     name = request.form.get('name')
     password = request.form.get('password')
+    password2 = request.form.get('password2')
+    if password != password2:
+        flash('passwords do not match')
+        return redirect( url_for('signup'))
 
     # if user is already in database, redirect back to signup page
     if (queries.user_exists(conn, email)): 
@@ -29,7 +33,6 @@ def signup():
 
         # add the new user to the database
         queries.insert_member(conn, email, password, name)
-
     return redirect(url_for('login'))
 
 @app.route('/login/', methods=['POST'])
