@@ -10,13 +10,17 @@ def user_exists(conn, email):
                     FROM member
                     WHERE email = %s'''
     curs.execute(sql, [email])
-    result = curs.fetchone()
-    if(result is None):
+    if(curs.fetchone() is None):
         return False
     return True
 
-def login(conn, email, hashed_password):
-    
+def login(conn, email):
+    curs = dbi.dict_cursor(conn)
+    sql = '''SELECT email, password
+                    FROM member
+                    WHERE email = %s'''
+    curs.execute(sql, [email])
+    return curs.fetchone()
 
 
 
