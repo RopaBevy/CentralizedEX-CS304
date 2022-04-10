@@ -10,7 +10,8 @@ drop table if exists opportunity;
 
 create table member(
     email varchar(30),
-    `name` varchar(40),
+    `password` varchar(200) not null,
+    `name` varchar(40) not null,
     `type` enum('Student','Alum', 'Professor'),
     primary key(email)
 )
@@ -25,7 +26,7 @@ create table opportunity(
     `description` varchar(1250),
     `location` varchar(50),
     app_link nvarchar(2000),
-    experience_level set('First year', 'Sophomore', 'Juniors', 'Seniors', 'Any'),
+    exp_level set('First year', 'Sophomore', 'Juniors', 'Seniors', 'Any'),
     primary key(pid)
 )
 ENGINE = InnoDB;
