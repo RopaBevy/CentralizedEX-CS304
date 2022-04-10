@@ -1,22 +1,35 @@
-<!DOCTYPE html>
-<html>
-<body>
+{% extends "index.html"%}
 
-<h2>HTML Forms</h2>
+{% block page_content %}
+<h2>Sign Up Form</h2>
 
-<form action="/action_page.php">
-  <label for="uname"> User name:</label><br>
-  <input type="text" id="uname" name="uname" value=""><br>
+<form action="{{url_for('signup')}}" method='POST'>
+  <label for="name"> Name:</label><br>
+  <input type="text" id="name" name="name" value="" required><br><br>
 
   <label for="email">Wellesley Email:</label><br>
-  <input type="text" id="email" name="email" value=""><br><br>
+  <input type="text" id="email" name="email" value="" required><br><br>
 
-  <label for="password">password:</label><br>
-  <input type="text" id="password" name="password" value=""><br><br>
-  
+  <label for="password">Password:</label><br>
+  <input type="password" id="password" name="password" value="" required><br><br>
+
+  <label for="password2">Enter password again:</label><br>
+  <input type="password" id="password2" name="password2" value="" required><br><br>
+
+  <div id="type">
+    <p>Type of relation to Wellesley College:</p>
+    <input type="radio" name="type" value="Student" required>
+    <label>Student</label>
+    <input type="radio" name="type" value="Professor" required>
+    <label>Professor</label>
+    <input type="radio" name="type" value="Alum" required>
+    <label>Alumn</label><br><br>
+  </div>
   <input type="submit" value="Submit">
-</form> 
+</form><br><br>
 
+<p>Already have an account? <a href="{{url_for('login')}}">Login here!</a></p>
+{% endblock %}
 
 </body>
 </html>

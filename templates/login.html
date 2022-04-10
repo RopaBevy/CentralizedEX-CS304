@@ -1,17 +1,21 @@
-<!DOCTYPE html>
-<html>
-<body>
+{% extends "index.html" %}
 
-<h2>HTML Forms</h2>
+{% block page_content %}
+<p>catch flash message here!!!</p> 
 
-<form action="/action_page.php">
+<h2>Login Form</h2>
+
+<form action="{{url_for('login')}}" methods='POST'>
   <label for="uname"> User name:</label><br>
-  <input type="text" id="uname" name="uname" value=""><br>
-  <label for="password">password:</label><br>
-  <input type="text" id="password" name="password" value=""><br><br>
-  <input type="submit" value="Submit">
-</form> 
+  <input type="text" id="uname" name="uname" value=""><br><br>
 
+  <label for="password">Password:</label><br>
+  <input type="password" id="password" name="password" value=""><br><br>
+  <input type="submit" value="Submit">
+</form><br><br>
+
+<p>Not registered? <a href="{{url_for('signup')}}">Sign up!</a></p>
+{% endblock %}
 
 </body>
 </html>
