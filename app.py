@@ -3,14 +3,30 @@ from flask import (Flask, render_template, make_response,
 import cs304dbi as dbi
 import bcrypt
 import queries
+<<<<<<< HEAD
 import cs304dbi as dbi
+=======
+import random
+>>>>>>> 3ed4308f255d5438f71c9de0cbb68cfd81507a7b
 
 app = Flask(__name__)
 
+app.secret_key = 'your secret here'
+# replace that with a random key
+app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
+                                          'abcdefghijklmnopqrstuvxyz' +
+                                          '0123456789'))
+                           for i in range(20) ])
+
 # home page
 @app.route('/')
+<<<<<<< HEAD
 def get_login():
     return render_template("login.html")
+=======
+def home():
+    return render_template("index.html")
+>>>>>>> 3ed4308f255d5438f71c9de0cbb68cfd81507a7b
 
 
 @app.route('/signup/', methods=['GET', 'POST'])
@@ -47,16 +63,16 @@ def signup():
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     if(request.method == 'GET'):
+        print('get method')
         return render_template("login.html")
     else:
         conn = dbi.connect()
         email = request.form.get('email')
         password = request.form.get('password')
 
-        login_result = queries.login(conn, email)
-        if(login_result is None):
-            flash('Login is incorrect. Please try again or sign up.')
-            return redirect( url_for('login'))
+        if(not queries.user_exists(conn, email)):
+            flash('Login credentials are incorrect. Please try again or sign up.')
+            return redirect(url_for('login'))
 
         stored_password = login_result['password']
         hashed_password = bcrypt.hashpw(password.encode('utf-8'),
@@ -65,10 +81,10 @@ def login():
         if(hashed_password == stored_password):
             flash('Successfully logged in.')
             #redirect them to the page for logged in people
-            return redirect('user', username=username) 
+            return redirect(url_for('home'))
         else:
             flash('Login unsuccessful. Please try again or sign up.')
-            return redirect(url_for('get_login'))
+            return redirect(url_for('login'))
 
 
 

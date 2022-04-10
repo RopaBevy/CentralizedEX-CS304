@@ -41,6 +41,14 @@
         </nav>
         <!-- Masthead-->
         {% block page_content%}
+        {% with messages = get_flashed_messages() %} -->
+<!--I am not sure if the flash messages are supposed to be caught in this template-->
+        {% if messages %}
+            <div id="messages">
+                <p>{{msg}}</p>
+            </div>
+        {% endif %}
+        {% endwith %}
         <header class="masthead">
             <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
                 <div class="d-flex justify-content-center">
