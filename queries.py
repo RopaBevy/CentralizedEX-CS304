@@ -1,8 +1,8 @@
 import cs304dbi as dbi
 
 # add to member table, use in signup
-def insert_member(email, password, name):
-    
+# def insert_member(email, password, name):
+
 
 def user_exists(conn, email):
     curs = dbi.dict_cursor(conn)
@@ -27,4 +27,4 @@ def login(conn, email):
 # check the member table for someone
 
 # to be used for testing code in this module
-if __name__ == '__main__':
+# if __name__ == '__main__':

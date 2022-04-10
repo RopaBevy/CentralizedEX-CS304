@@ -2,13 +2,14 @@ from flask import (Flask, render_template, make_response,
                    request, redirect, url_for, flash)
 import bcrypt
 import queries
+import cs304dbi as dbi
 
 app = Flask(__name__)
 
 # home page
 @app.route('/')
 def get_login():
-    return render_template("index.html")
+    return render_template("login.html")
 
 
 @app.route('/signup/', methods=['POST'])
@@ -21,7 +22,7 @@ def signup():
     password2 = request.form.get('password2')
     if password != password2:
         flash('passwords do not match')
-        return redirect( url_for('signup'))
+        return redirect(url_for('signup'))
 
     # if user is already in database, redirect back to signup page
     if (queries.user_exists(conn, email)): 
@@ -50,7 +51,7 @@ def login():
     hashed_password = bcrypt.hashpw(password.encode('utf-8'),
                             stored_password.encode('utf-8'))
                         
-    if(hashed_password = stored_password):
+    if(hashed_password == stored_password):
         flash('Successfully logged in.')
         #redirect them to the page for logged in people
         return redirect('user', username=username) 
