@@ -4,7 +4,7 @@ import cs304dbi as dbi
 def insert_member(conn, user_email, user_password, user_name, user_type):
     curs = dbi.dict_cursor(conn)
     sql = ''' INSERT INTO  member (email, password, name, type)
-            values (user_email, user_password, user_name, user_type)
+            values (%s, %s, %s, %s)
         '''
     curs.execute(sql, [user_email, user_password, user_name, user_type])
     conn.commit()
@@ -27,10 +27,10 @@ def login(conn, email):
     curs.execute(sql, [email])
     return curs.fetchone()
 
-
-
 # check the member table for someone
 
 # to be used for testing code in this module
 if __name__ == '__main__':
-    pass
+    conn = dbi.connect()
+    print(login(conn, 'rs2@wellesley.edu'))
+    print(login(conn, 'nothing here'))
