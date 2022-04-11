@@ -3,7 +3,11 @@ from flask import (Flask, render_template, make_response,
 import cs304dbi as dbi
 import bcrypt
 import queries
+<<<<<<< HEAD
+import cs304dbi as dbi
+=======
 import random
+>>>>>>> 3ed4308f255d5438f71c9de0cbb68cfd81507a7b
 
 app = Flask(__name__)
 
@@ -16,8 +20,13 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
 
 # home page
 @app.route('/')
+<<<<<<< HEAD
+def get_login():
+    return render_template("login.html")
+=======
 def home():
     return render_template("index.html")
+>>>>>>> 3ed4308f255d5438f71c9de0cbb68cfd81507a7b
 
 
 @app.route('/signup/', methods=['GET', 'POST'])

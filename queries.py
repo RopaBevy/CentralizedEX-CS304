@@ -31,6 +31,10 @@ def login(conn, email):
 
 # to be used for testing code in this module
 if __name__ == '__main__':
+<<<<<<< HEAD
+    pass
+=======
     conn = dbi.connect()
     print(login(conn, 'rs2@wellesley.edu'))
     print(login(conn, 'nothing here'))
+>>>>>>> 3ed4308f255d5438f71c9de0cbb68cfd81507a7b
