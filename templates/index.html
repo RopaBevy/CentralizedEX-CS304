@@ -26,29 +26,25 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto">
-<<<<<<< HEAD
-                        <li class="nav-item"><a class="nav-link" href="./signup.html">About</a></li>
-                        <li class="nav-item"><a class="nav-link" href="./login.html">login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#signup">Contact</a></li>
-=======
                         <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{url_for('login')}}">Login</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{url_for('signup')}}">Sign Up</a></li>
->>>>>>> 8db7faec5025396a80593a5e2797e84c5e740099
                     </ul>
                 </div>
             </div>
         </nav>
         <!-- Masthead-->
-        {% block page_content%}
-        {% with messages = get_flashed_messages() %} -->
-<!--I am not sure if the flash messages are supposed to be caught in this template-->
-        {% if messages %}
-            <div id="messages">
-                <p>{{msg}}</p>
-            </div>
-        {% endif %}
+        {% with messages = get_flashed_messages() %}
+        <!--I am not sure if the flash messages are supposed to be caught in this template-->
+            {% if messages %}
+                <div id="messages">
+                    <p>{{msg}}</p>
+                </div>
+            {% endif %}
         {% endwith %}
+
+        {% block page_content%}
+
         <header class="masthead">
             <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
                 <div class="d-flex justify-content-center">

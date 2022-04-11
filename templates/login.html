@@ -1,11 +1,10 @@
 {% extends "index.html" %}
 
 {% block page_content %}
-<p>catch flash message here!!!</p> 
 
 <h2>Login Form</h2>
 
-<form action="{{url_for('login')}}" method='POST'>
+<form method='POST' action="{{url_for('login')}}">
   <label for="email"> Wellesley Email:</label><br>
   <input type="email" id="email" name="email" value=""><br><br>
 
@@ -16,6 +15,3 @@
 
 <p>Not registered? <a href="{{url_for('signup')}}">Sign up!</a></p>
 {% endblock %}
-
-</body>
-</html>
