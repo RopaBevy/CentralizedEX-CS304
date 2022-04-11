@@ -1,0 +1,72 @@
+{% extends "index.html"%}
+
+{% block page_content %}
+
+ <h2>Upload Form</h2>
+
+<form action="{{ url_for('upload') }}" method='POST'>
+  <label for="title"> Title:</label><br>
+  <input type="text" id="title" name="title" value="" required><br><br>
+
+  <label for="institution">Institution:</label><br>
+  <input type="text" id="institution" name="institution" value="" required><br><br>
+
+  <label for="start">Start Date:</label><br>
+  <input type="text" id="start" name="start" value="" required><br><br>
+
+  <label for="location">Location:</label><br>
+  <input type="text" id="location" name="location" value="" required><br><br>
+
+  <div id="type">
+    <p>Type of Experience:</p>
+    <input type="radio" name="type" value="Internship" required>
+    <label>Internship</label>
+    <input type="radio" name="type" value="Full-Time" required>
+    <label>Full-Time</label>
+    <input type="radio" name="type" value="Part-Time" required>
+    <label>Part-Time</label><br><br>
+  </div>
+
+  <div id="type">
+    <p>Experience Level:</p>
+    <input type="radio" name="type" value="Freshman" required>
+    <label>Freshman</label>
+    <input type="radio" name="type" value="Sophomore" required>
+    <label>Sophomore</label>
+    <input type="radio" name="type" value="Junior" required>
+    <label>Junior</label><br><br>
+    <input type="radio" name="type" value="Senior" required>
+    <label>Senior</label><br><br>
+    <input type="radio" name="type" value="Any" required>
+    <label>Any</label><br><br>
+  </div>
+
+  <label for="field">Field:</label><br>
+  <input type="text" id="field" name="field" value="" required><br><br>
+
+  <label for="description">Description:</label><br>
+  <input type="text" id="description" name="description" value="" required><br><br>
+
+  <label for="link">Application Link:</label><br>
+  <input type="text" id="link" name="link" value="" required><br><br>
+
+  <div id="type">
+    <p>Sponsorship:</p>
+    <input type="radio" name="type" value="Yes" required>
+    <label>Yes</label>
+    <input type="radio" name="type" value="No" required>
+    <label>No</label>
+    <input type="radio" name="type" value="Maybe" required>
+    <label>Maybe</label><br><br>
+  </div>
+
+  <input type="submit" value="Upload">
+</form><br><br>
+
+
+
+<p>Already have an account? <a href="{{url_for('login')}}">Login here!</a></p>
+{% endblock %}
+
+</body>
+</html>

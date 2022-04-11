@@ -19,6 +19,7 @@ ENGINE = InnoDB;
 
 create table opportunity(
     pid int,
+    email varchar(30),
     title varchar(25),
     institution varchar(30),
     `type` varchar(25),
@@ -26,7 +27,8 @@ create table opportunity(
     `description` varchar(1250),
     `location` varchar(50),
     app_link nvarchar(2000),
-    exp_level set('First year', 'Sophomore', 'Juniors', 'Seniors', 'Any'),
+    sponorship set('Yes', 'No', 'Maybe')
+    exp_level set('Freshman', 'Sophomore', 'Junior', 'Senior', 'Any'),
     primary key(pid)
 )
 ENGINE = InnoDB;
