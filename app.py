@@ -33,7 +33,7 @@ def signup():
         password2 = request.form.get('password2')
         user_type = request.form.get('type')
 
-        #add an if statement that varifies that email as a wellesley email
+        #add an if statement that verifies that email as a wellesley email
         if (password != password2):
             flash('passwords do not match')
             return redirect( url_for('signup'))
@@ -53,19 +53,20 @@ def signup():
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
+    print(request.method)
     if(request.method == 'GET'):
-        print('get method')
         return render_template("login.html")
     else:
         conn = dbi.connect()
         email = request.form.get('email')
         password = request.form.get('password')
 
-        if(not queries.user_exists(conn, email)):
+        member = queries.login(conn, email)
+        if(member == None):
             flash('Login credentials are incorrect. Please try again or sign up.')
             return redirect(url_for('login'))
 
-        stored_password = login_result['password']
+        stored_password = member['password']
         hashed_password = bcrypt.hashpw(password.encode('utf-8'),
                                 stored_password.encode('utf-8'))
                             
