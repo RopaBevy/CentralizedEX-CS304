@@ -5,7 +5,6 @@ import bcrypt
 import queries
 <<<<<<< HEAD
 import cs304dbi as dbi
-=======
 import random
 >>>>>>> 3ed4308f255d5438f71c9de0cbb68cfd81507a7b
 
