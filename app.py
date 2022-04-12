@@ -3,11 +3,7 @@ from flask import (Flask, render_template, make_response,
 import cs304dbi as dbi
 import bcrypt
 import queries
-<<<<<<< HEAD
-import cs304dbi as dbi
-=======
-import random
->>>>>>> 3ed4308f255d5438f71c9de0cbb68cfd81507a7b
+import random, re
 
 app = Flask(__name__)
 
@@ -20,13 +16,8 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
 
 # home page
 @app.route('/')
-<<<<<<< HEAD
-def get_login():
-    return render_template("login.html")
-=======
 def home():
     return render_template("index.html")
->>>>>>> 3ed4308f255d5438f71c9de0cbb68cfd81507a7b
 
 
 @app.route('/signup/', methods=['GET', 'POST'])
@@ -43,9 +34,14 @@ def signup():
         user_type = request.form.get('type')
 
         #add an if statement that verifies that email as a wellesley email
-        if (password != password2):
+        email_pattern = re.compile('@wellesley.edu$')
+        if(len(email_pattern.findall(email)) == 0):
+            flash('Please use your Wellesley College email.')
+            return redirect(url_for('signup'))
+        
+        if(password != password2):
             flash('passwords do not match')
-            return redirect( url_for('signup'))
+            return redirect(url_for('signup'))
 
         # if user is already in database, redirect back to login page
         if (queries.user_exists(conn, email)):
@@ -77,9 +73,10 @@ def login():
 
         stored_password = member['password']
         hashed_password = bcrypt.hashpw(password.encode('utf-8'),
-                                stored_password.encode('utf-8'))
-                            
+                                stored_password.encode('utf-8')).decode()
+       
         if(hashed_password == stored_password):
+            print('successfully logged in')
             flash('Successfully logged in.')
             #redirect them to the page for logged in people
             return redirect(url_for('home'))

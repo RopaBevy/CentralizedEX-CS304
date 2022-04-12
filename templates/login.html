@@ -1,20 +1,28 @@
-{% extends "index.html" %}
+{% extends "base.html" %}
 
+{% block navbar %} {% endblock %}
+ 
 {% block page_content %}
-<p>catch flash message here!!!</p> 
+<section class="signup-section" id="signup">
+  <div class="container px-4 px-lg-5">
+      <div class="row gx-4 gx-lg-5">
+          <div class="col-md-10 col-lg-8 mx-auto text-center">
+              <h2 class="text-white mb-5">Login</h2>
+                  <form class="form-signup" id="loginForm" data-sb-form-api-token="API_TOKEN" action="{{url_for('login')}}" method="POST">
+                    <!-- Email address input-->
+                        <label for="email"> Wellesley Email Address:</label><br>
+                        <input class="form-control" id="emailAddress" type="email" name="email" placeholder="wendy@wellesley.edu..." aria-label="Enter email address..." data-sb-validations="required,email" /><br><br>
+                        <label for="password"> Password:</label><br>
+                        <input class="form-control" id="password" type="password" name="password" placeholder="#wendy123!@#" aria-label="Enter email address..." data-sb-validations="required,password" /><br><br>
 
-<h2>Login Form</h2>
-
-<form action="{{url_for('login')}}" method='POST'>
-  <label for="email"> Wellesley Email:</label><br>
-  <input type="email" id="email" name="email" value=""><br><br>
-
-  <label for="password">Password:</label><br>
-  <input type="password" id="password" name="password" value=""><br><br>
-  <input type="submit" value="Login">
-</form><br><br>
-
-<p>Not registered? <a href="{{url_for('signup')}}">Sign up!</a></p>
+                        <div class="col-auto"><br><button class="btn" id="submitButton" type="submit" value="Login">Login</button></div><br>
+                  
+                    <p><b>Not registered? <a href="{{url_for('signup')}}">Sign up!</a></b></p>
+                  </form>
+                </div>
+              </div>
+          </div>
+      </section>
 {% endblock %}
 
 </body>
