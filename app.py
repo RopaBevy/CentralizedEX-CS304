@@ -3,7 +3,12 @@ from flask import (Flask, render_template, make_response,
 import cs304dbi as dbi
 import bcrypt
 import queries
+<<<<<<< HEAD
 import random, re
+=======
+import random
+
+>>>>>>> 40c4edcc7abbc47ac00a1a844794276e7d2aeab3
 
 app = Flask(__name__)
 
@@ -16,6 +21,11 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
 
 # home page
 @app.route('/')
+<<<<<<< HEAD
+=======
+def get_login():
+    return render_template("login.html")
+>>>>>>> 40c4edcc7abbc47ac00a1a844794276e7d2aeab3
 def home():
     return render_template("index.html")
 
@@ -83,6 +93,27 @@ def login():
         else:
             flash('Login unsuccessful. Please try again or sign up.')
             return redirect(url_for('login'))
+
+
+@app.route('/upload/', methods=['GET', 'POST'])
+def upload():
+    if(request.method == 'GET'):
+        return render_template("upload.html")
+    else:
+        conn = dbi.connect()
+
+        # code to gather experience info to add to the database
+        title = request.form.get('title')
+        institution = request.form.get('instituion')
+        start = 
+        location = 
+        type = 
+        field = 
+        description = 
+        link = 
+        sponsorship = 
+
+
 
 
 
