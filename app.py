@@ -3,11 +3,7 @@ from flask import (Flask, render_template, make_response,
 import cs304dbi as dbi
 import bcrypt
 import queries
-<<<<<<< HEAD
-import cs304dbi as dbi
-=======
 import random
->>>>>>> 3ed4308f255d5438f71c9de0cbb68cfd81507a7b
 
 app = Flask(__name__)
 
@@ -20,13 +16,8 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
 
 # home page
 @app.route('/')
-<<<<<<< HEAD
-def get_login():
-    return render_template("login.html")
-=======
 def home():
     return render_template("index.html")
->>>>>>> 3ed4308f255d5438f71c9de0cbb68cfd81507a7b
 
 
 @app.route('/signup/', methods=['GET', 'POST'])
@@ -65,23 +56,38 @@ def login():
     if(request.method == 'GET'):
         print('get method')
         return render_template("login.html")
-    else:
+    if(request.method == 'POST'):
+        print('post method')
         conn = dbi.connect()
         email = request.form.get('email')
         password = request.form.get('password')
 
-        if(not queries.user_exists(conn, email)):
+        print("we are at the login and printing email",email)
+        
+        member = queries.login(conn, email)
+        print("we are at the login and printing password",member)
+        if(member is None):
+            print("this should not be true")
             flash('Login credentials are incorrect. Please try again or sign up.')
             return redirect(url_for('login'))
 
-        stored_password = login_result['password']
+
+        print("member is not none")
+        stored_password = member['password']
+        print('database has stored: {} {}'.format(stored_password,type(stored_password)))
+        print('form supplied passwd: {} {}'.format(password,type(password)))
         hashed_password = bcrypt.hashpw(password.encode('utf-8'),
                                 stored_password.encode('utf-8'))
+
+        
+
+        hashed_str = hashed_password.decode('utf-8')
                             
-        if(hashed_password == stored_password):
+        if(hashed_str == stored_password):
+            print("yayyyyyyyyyyyyyy")
             flash('Successfully logged in.')
             #redirect them to the page for logged in people
-            return redirect(url_for('home'))
+            return render_template('welcomePage.html')
         else:
             flash('Login unsuccessful. Please try again or sign up.')
             return redirect(url_for('login'))
@@ -90,7 +96,7 @@ def login():
 
 if __name__ == '__main__':
     dbi.cache_cnf()
-    dbi.use('rs2_db') #centralex_db
+    dbi.use('ftahiry_db') #centralex_db
 
     import os
     port = os.getuid()

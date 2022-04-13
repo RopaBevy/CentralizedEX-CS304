@@ -1,4 +1,4 @@
-use rs2_db;
+use ftahiry_db;
 
 
 drop table if exists comment;
