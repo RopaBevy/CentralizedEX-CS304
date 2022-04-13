@@ -122,7 +122,7 @@ def upload():
 
 if __name__ == '__main__':
     dbi.cache_cnf()
-    dbi.use('ftahiry_db') #centralex_db
+    dbi.use('rs2_db') #centralex_db
 
     import os
     port = os.getuid()
