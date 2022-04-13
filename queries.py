@@ -29,8 +29,17 @@ def login(conn, email):
 
 # check the member table for someone
 
+
+# 
+def insert_experience(user_email, user_password, user_name, user_type):
+    curs = dbi.dict_cursor(conn)
+    sql = ''' INSERT INTO  opportunity (email, password, name, type)
+            values (%s, %s, %s, %s)
+        '''
+    curs.execute(sql, [user_email, user_password, user_name, user_type])
+    conn.commit()
+
+
 # to be used for testing code in this module
 if __name__ == '__main__':
-    conn = dbi.connect()
-    print(login(conn, 'rs2@wellesley.edu'))
-    print(login(conn, 'nothing here'))
+    pass
