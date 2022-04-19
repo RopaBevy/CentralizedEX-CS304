@@ -84,8 +84,6 @@ def login():
         hashed_password = bcrypt.hashpw(password.encode('utf-8'),
                                 stored_password.encode('utf-8'))
 
-        
-
         hashed_str = hashed_password.decode('utf-8')
                             
         if(hashed_str == stored_password):
@@ -105,16 +103,16 @@ def upload():
     else:
         conn = dbi.connect()
 
-        # # code to gather experience info to add to the database
-        # title = request.form.get('title')
-        # institution = request.form.get('instituion')
-        # start = 
-        # location = 
-        # type = 
-        # field = 
-        # description = 
-        # link = 
-        # sponsorship = 
+        # code to gather experience info to add to the database
+        title = request.form.get('title')
+        institution = request.form.get('institution')
+        start = request.form.get('start')
+        location = request.form.get('location')
+        experienceType = request.form.get('experienceType')
+        field = request.form.get('field')
+        description = request.form.get('description')
+        link = request.form.get('link')
+        sponsorship = request.form.get('sponsorship')
 
 
 
@@ -122,7 +120,7 @@ def upload():
 
 if __name__ == '__main__':
     dbi.cache_cnf()
-    dbi.use('rs2_db') #centralex_db
+    dbi.use('yafifi_db') #centralex_db
 
     import os
     port = os.getuid()

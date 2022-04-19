@@ -2,7 +2,6 @@
 
 {% block page_content %}
 
-
 <section class="signup-section" id="signup">
   <div class="container px-4 px-lg-5">
       <div class="row gx-4 gx-lg-5">
@@ -22,40 +21,41 @@
                         <input class="form-control" id="start" type="text" name="start" placeholder="June, 6, 2022" aria-label="Enter email address..." required /><br><br>
                         <label for="location"> Location</label><br>
                         <input class="form-control" id="location" type="text" name="location" placeholder="New York, NY" aria-label="Enter email address..." /><br><br>
-                        <div id="type">
+                        
+                        <div id="experienceType">
                           <p>Type of Experience</p>
-                          <input type="radio" name="type" value="Internship" required>
+                          <input type="radio" name="experienceType" value="Internship" required>
                           <label>Internship</label>
-                          <input type="radio" name="type" value="Full-Time" required>
+                          <input type="radio" name="experienceType" value="Full-Time" required>
                           <label>Full-Time</label>
-                          <input type="radio" name="type" value="Part-Time" required>
+                          <input type="radio" name="experienceType" value="Part-Time" required>
                           <label>Part-Time</label><br><br>
                         </div>
                       
-                        <div id="type">
+                        <div id="experienceLevel">
                           <p>Experience Level</p>
-                          <input type="radio" name="type" value="Freshman" required>
+                          <input type="radio" name="experienceLevel" value="Freshman" required>
                           <label>Freshman</label>
-                          <input type="radio" name="type" value="Sophomore" required>
+                          <input type="radio" name="experienceLevel" value="Sophomore" required>
                           <label>Sophomore</label>
-                          <input type="radio" name="type" value="Junior" required>
+                          <input type="radio" name="experienceLevel" value="Junior" required>
                           <label>Junior</label>
-                          <input type="radio" name="type" value="Senior" required>
+                          <input type="radio" name="experienceLevel" value="Senior" required>
                           <label>Senior</label>
-                          <input type="radio" name="type" value="Any" required>
+                          <input type="radio" name="experienceLevel" value="Any" required>
                           <label>Any</label>
                         </div>
                         
                         <label for="link">Application Link</label><br>
                         <input class="form-control" id="link" type="text" name="link" aria-label="Enter email address..." required /><br><br>
 
-                        <div id="type">
+                        <div id="sponsorship">
                           <p>Visa Sponsorship</p>
-                          <input type="radio" name="type" value="Yes" required>
+                          <input type="radio" name="sponsorship" value="Yes" required>
                           <label>Yes</label>
-                          <input type="radio" name="type" value="No" required>
+                          <input type="radio" name="sponsorship" value="No" required>
                           <label>No</label>
-                          <input type="radio" name="type" value="Maybe" required>
+                          <input type="radio" name="sponsorship" value="Maybe" required>
                           <label>Maybe</label><br><br>
                         </div>
                         
@@ -71,7 +71,7 @@
 
 
 
- <h2>Upload Form</h2>
+ <!-- <h2>Upload Form</h2>
 
 <form action="{{ url_for('upload') }}" method='POST'>
   <label for="title"> Title:</label><br>
@@ -134,7 +134,7 @@
 
 
 
-<p>Already have an account? <a href="{{url_for('login')}}">Login here!</a></p>
+<p>Already have an account? <a href="{{url_for('login')}}">Login here!</a></p> -->
 {% endblock %}
 
 </body>
