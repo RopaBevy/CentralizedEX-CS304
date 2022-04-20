@@ -1,12 +1,18 @@
 codeuse ftahiry_db;
 
-
+drop table if exists `session`;
 drop table if exists comment;
 drop table if exists rating;
 drop table if exists post;
 drop table if exists member;
 drop table if exists opportunity;
 
+create table `session` (
+       email varchar(30) not null primary key,
+       st timestamp,  
+       ip char(15))
+       
+ENGINE = InnoDB; 
 
 create table member(
     email varchar(30),
@@ -14,6 +20,7 @@ create table member(
     `name` varchar(40) not null,
     `type` enum('Student','Alum', 'Professor'),
     primary key(email)
+    foreign key (email) references session(email),
 )
 ENGINE = InnoDB;
 
