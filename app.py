@@ -114,13 +114,19 @@ def upload():
         link = request.form.get('link')
         sponsorship = request.form.get('sponsorship')
 
+@app.route('/display/')
+def display():
+    return render_template('display.html')
 
-
+@app.route('/')
+def logout():
+    # remove/delete/update the session
+    return redirect(url_for('home'))
 
 
 if __name__ == '__main__':
     dbi.cache_cnf()
-    dbi.use('yafifi_db') #centralex_db
+    dbi.use('rs2_db') #centralex_db
 
     import os
     port = os.getuid()

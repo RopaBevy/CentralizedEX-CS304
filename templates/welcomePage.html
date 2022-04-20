@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+{% block navbar %}
+<div class="collapse navbar-collapse" id="navbarResponsive">
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
+    </ul>
+</div>
+{% endblock %}
+
 {% block page_content %}
 <header class="masthead">
     <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
@@ -7,8 +15,8 @@
             <div class="text-center">
                 <h1 class="mx-auto my-0 text-uppercase">Central Experience</h1>
                 <span> 
-                    <a class="btn btn-primary" href="#about">Seeking Opportunities</a>
-                    <a class="btn btn-primary" href="#about">Create Job/Intership Postings</a>
+                    <a class="btn btn-primary" href="{{url_for('display')}}">Seeking Opportunities</a>
+                    <a class="btn btn-primary" href="{{url_for('upload')}}">Create Job/Intership Postings</a>
                 </span>
                                 
             </div>
