@@ -1,5 +1,5 @@
 from flask import (Flask, render_template, make_response,
-                   request, redirect, url_for, flash)
+                   request, session, redirect, url_for, flash)
 import cs304dbi as dbi
 import bcrypt
 import queries
@@ -92,6 +92,9 @@ def login():
             print("yayyyyyyyyyyyyyy")
             flash('Successfully logged in.')
             #redirect them to the page for logged in people
+            session['email'] = email
+            session['logged_in'] = True
+            session['visits'] = 1
             return render_template('welcomePage.html')
         else:
             flash('Login unsuccessful. Please try again or sign up.')
