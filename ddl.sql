@@ -1,4 +1,4 @@
-use ftahiry_db;
+codeuse ftahiry_db;
 
 
 drop table if exists comment;
