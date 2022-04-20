@@ -117,21 +117,6 @@ def upload():
         link = request.form.get('link')
         sponsorship = request.form.get('sponsorship')
 
- pid int,
-    email varchar(30),
-    title varchar(25),
-    institution varchar(30),
-    startDate date,
-    experienceType varchar(25),
-    field varchar(25),
-    `description` varchar(1250),
-    `location` varchar(50),
-    appLink nvarchar(2000),
-    sponorship set('Yes', 'No', 'Maybe')
-    experienceLevel set('Freshman', 'Sophomore', 'Junior', 'Senior', 'Any'),
-    primary key(pid)
-
-
 
 if __name__ == '__main__':
     dbi.cache_cnf()
