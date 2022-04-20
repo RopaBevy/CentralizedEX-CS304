@@ -30,14 +30,20 @@ def login(conn, email):
 # check the member table for someone
 
 
-# 
-def insert_experience(user_email, user_password, user_name, user_type):
+# Adds opportunity posting into database
+# Returns comfirmation
+def insert_opportunity(email, field, title, institution, startDate, location, experienceType,
+    experienceLevel, description, appLink, sponsorship):
     curs = dbi.dict_cursor(conn)
-    sql = ''' INSERT INTO  opportunity (email, password, name, type)
-            values (%s, %s, %s, %s)
-        '''
-    curs.execute(sql, [user_email, user_password, user_name, user_type])
+    sql = ''' INSERT INTO  opportunity (email, field, title, institution, startDate, location, 
+          experienceType, experienceLevel, description, appLink, sponsorship )
+            values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+       # '''
+    curs.execute(sql, [email, field, title, institution, startDate, location, experienceType,
+    experienceLevel, description, appLink, sponsorship])
     conn.commit()
+
+
 
 
 # to be used for testing code in this module
