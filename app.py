@@ -128,8 +128,6 @@ def upload():
         field = request.form.get('field')
         description = request.form.get('description')
         link = request.form.get('link')
-        sponsorship = request.form.get('sponsorship')
-
 
 
  """
