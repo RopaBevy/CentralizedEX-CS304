@@ -4,6 +4,7 @@ import cs304dbi as dbi
 import bcrypt
 import queries
 import random, re
+import sqlHelper
 
 app = Flask(__name__)
 
@@ -18,6 +19,21 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
 @app.route('/')
 def home():
     return render_template("index.html")
+
+@app.route('/')
+def index():
+    '''Displays home page with most recent database.'''
+    conn = dbi.connect()
+    curs = dbi.cursor(conn)
+    internships = sqlHelper.getInternships(conn)
+    total = sqlHelper.getTotal(conn)['count(*)']
+    if (session.get('uid')):
+        uid = session['uid']
+        favorites = sqlHelper.getFavorites(conn, uid)
+        return render_template('mainUID.html', internships = internships, total = total, favorites = favorites)
+    else:
+        return render_template('main.html', internships = internships, total = total)
+
 
 
 @app.route('/signup/', methods=['GET', 'POST'])
@@ -94,14 +110,14 @@ def login():
         else:
             flash('Login unsuccessful. Please try again or sign up.')
             return redirect(url_for('login'))
-
+""" 
 
 @app.route('/upload/', methods=['GET', 'POST'])
 def upload():
+    conn = dbi.connect()
     if(request.method == 'GET'):
         return render_template("upload.html")
     else:
-        conn = dbi.connect()
 
         # code to gather experience info to add to the database
         title = request.form.get('title')
@@ -116,7 +132,7 @@ def upload():
 
 
 
-
+ """
 
 if __name__ == '__main__':
     dbi.cache_cnf()

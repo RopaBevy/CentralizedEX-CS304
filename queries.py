@@ -52,6 +52,7 @@ def insert_opportunity(user_email, user_password, user_name, user_type):
         sponsorship = request.form.get('sponsorship')
 
 
+
 # to be used for testing code in this module
 if __name__ == '__main__':
     pass
