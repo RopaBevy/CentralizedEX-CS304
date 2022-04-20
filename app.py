@@ -99,6 +99,18 @@ def login():
             return redirect(url_for('login'))
 
 
+@app.route('/logout/', methods=['GET'])
+def logout():
+    if 'email' in session:
+        email = session['email']
+        session.pop('email')
+        session.pop('logged_in')
+        flash('You are logged out')
+        return redirect(url_for('/'))
+    else:
+        flash('you are not logged in. Please login or join')
+        return redirect( url_for('/') )
+
 @app.route('/upload/', methods=['GET', 'POST'])
 def upload():
     if(request.method == 'GET'):
