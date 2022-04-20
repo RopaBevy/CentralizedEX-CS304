@@ -72,3 +72,13 @@ create table rating (
     on update cascade
 )
 ENGINE = InnoDB;
+
+create table favorites (
+    link varchar(250),
+    uid varchar(15),
+    foreign key (uid) references user (uid)
+        on update restrict,
+    foreign key (link) references application (link)
+        on update restrict
+)
+ENGINE = InnoDb;
