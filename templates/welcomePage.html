@@ -9,6 +9,18 @@
 {% endblock %}
 
 {% block page_content %}
+
+<style>
+    .btn{
+        background-color: aliceblue;
+        color: black;
+        width: 80%;
+        height: 60%;
+        text-align: center;
+        border-bottom: 20%;
+    }
+</style>
+
 <header class="masthead">
     <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
         <div class="d-flex justify-content-center">
@@ -17,8 +29,7 @@
                 <span> 
                     <a class="btn btn-primary" href="{{url_for('display')}}">Seeking Opportunities</a>
                     <a class="btn btn-primary" href="{{url_for('upload')}}">Create Job/Intership Postings</a>
-                </span>
-                                
+                </span>        
             </div>
         </div>
     </div>

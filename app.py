@@ -1,5 +1,5 @@
 from flask import (Flask, render_template, make_response,
-                   request, redirect, url_for, flash)
+                   request, session, redirect, url_for, flash)
 import cs304dbi as dbi
 import bcrypt
 import queries
@@ -90,11 +90,26 @@ def login():
             print("yayyyyyyyyyyyyyy")
             flash('Successfully logged in.')
             #redirect them to the page for logged in people
+            session['email'] = email
+            session['logged_in'] = True
+            session['visits'] = 1
             return render_template('welcomePage.html')
         else:
             flash('Login unsuccessful. Please try again or sign up.')
             return redirect(url_for('login'))
 
+
+@app.route('/logout/', methods=['GET'])
+def logout():
+    if 'email' in session:
+        email = session['email']
+        session.pop('email')
+        session.pop('logged_in')
+        flash('You are logged out')
+        return redirect(url_for('/'))
+    else:
+        flash('you are not logged in. Please login or join')
+        return redirect( url_for('/') )
 
 @app.route('/upload/', methods=['GET', 'POST'])
 def upload():
@@ -102,6 +117,9 @@ def upload():
         return render_template("upload.html")
     else:
         conn = dbi.connect()
+        
+        # check if user is logged in, if not redirect them to login first
+        # otherwise, find user's email
 
         # code to gather experience info to add to the database
         title = request.form.get('title')
@@ -116,12 +134,9 @@ def upload():
 
 @app.route('/display/')
 def display():
-    return render_template('display.html')
-
-@app.route('/')
-def logout():
-    # remove/delete/update the session
-    return redirect(url_for('home'))
+    conn = dbi.connect()
+    opportunities = queries.get_opportunities(conn)
+    return render_template('display.html', opportunities=opportunities)
 
 
 if __name__ == '__main__':
