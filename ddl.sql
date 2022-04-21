@@ -1,18 +1,10 @@
 use rs2_db;
 
--- drop table if exists `session`;
 drop table if exists comment;
 drop table if exists rating;
 drop table if exists post;
 drop table if exists member;
 drop table if exists opportunity;
-
--- create table `session` (
---        email varchar(30) not null primary key,
---        st timestamp,  
---        ip char(15))
-       
--- ENGINE = InnoDB; 
 
 create table member(
     email varchar(30),
@@ -24,7 +16,7 @@ create table member(
 ENGINE = InnoDB;
 
 create table opportunity(
-    pid int not null primary key,
+    pid int not null auto_increment,
     email varchar(30),
     field varchar(25),
     title varchar(25),
@@ -35,7 +27,8 @@ create table opportunity(
     experienceLevel set('Freshman', 'Sophomore', 'Junior', 'Senior', 'Any'),
     `description` varchar(1250),
     appLink nvarchar(2000),
-    sponsorship set('Yes', 'No', 'Maybe')
+    sponsorship set('Yes', 'No', 'Maybe'),
+    primary key(pid)
 )
 ENGINE = InnoDB;
 

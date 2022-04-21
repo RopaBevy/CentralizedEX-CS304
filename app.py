@@ -4,53 +4,41 @@ import cs304dbi as dbi
 import bcrypt
 import queries
 import random, re
-# import sqlHelper
 
 app = Flask(__name__)
 
-app.secret_key = 'your secret here'
-# replace that with a random key
 app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
                                           'abcdefghijklmnopqrstuvxyz' +
                                           '0123456789'))
                            for i in range(20) ])
 
-# home page
+
 @app.route('/')
 def home():
+    '''
+    Landing page. Gives background on the app and gives the user the option to 
+    login or signup.
+    '''
     return render_template("index.html")
-
-# @app.route('/')
-# def index():
-#     # '''Displays home page with most recent database.'''
-#     # conn = dbi.connect()
-#     # curs = dbi.cursor(conn)
-#     # internships = sqlHelper.getInternships(conn)
-#     # total = sqlHelper.getTotal(conn)['count(*)']
-#     # if (session.get('uid')):
-#     #     uid = session['uid']
-#     #     favorites = sqlHelper.getFavorites(conn, uid)
-#     #     return render_template('mainUID.html', internships = internships, total = total, favorites = favorites)
-#     # else:
-#     #     return render_template('main.html', internships = internships, total = total)
-#     return render_template('index.html')
-
-
 
 @app.route('/signup/', methods=['GET', 'POST'])
 def signup():
+    '''
+    Gives the user the signup form under the get request. 
+    Collect the user's credentials and inserts the user into the database if 
+    the credentials are appropriate (user must use Wellesley College email) 
+    under the post request. 
+    '''
     if(request.method == 'GET'):
         return render_template("signup.html")
     else:
         conn = dbi.connect()
-        # code to validate and add user to database goes here
         email = request.form.get('email')
         name = request.form.get('name')
         password = request.form.get('password')
         password2 = request.form.get('password2')
         user_type = request.form.get('type')
 
-        #add an if statement that verifies that email as a wellesley email
         email_pattern = re.compile('@wellesley.edu$')
         if(len(email_pattern.findall(email)) == 0):
             flash('Please use your Wellesley College email.')
@@ -75,6 +63,13 @@ def signup():
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
+    '''
+    Gives the user the login form under the get request.
+    With post request, it collects the user's credentials and verifies they 
+    exist in the database and that their password is correct before redirecting
+    them to welcome page otherwise, if credentials are incorrect, it stays on 
+    the same page. It also updates the session appropriately.
+    '''
     if(request.method == 'GET'):
         return render_template("login.html")
 
@@ -107,6 +102,9 @@ def login():
 
 @app.route('/logout/', methods=['GET'])
 def logout():
+    '''
+    Logs out the current user and updates the session accordingly.
+    '''
     if 'email' in session:
         email = session['email']
         session.pop('email')
@@ -119,17 +117,22 @@ def logout():
 
 @app.route('/upload/', methods=['GET', 'POST'])
 def upload():
+    '''
+    Gives the user an upload form to enter the required details of an opportunity
+    under the get request.
+    Under the post request, it collects all the form inputs and inserts the 
+    opportunity into the database and redirects to the display page which
+    should be updated to include the newly added opportunity.
+    '''
     conn = dbi.connect()
     if(request.method == 'GET'):
         return render_template("upload.html")
     else:
         conn = dbi.connect()
-        
         session_value = request.cookies.get('session')
         if('email' in session):
             email = session['email']
-            print(email)
-        else: #not sure if this is necessary
+        else:
             flash('Please login again.')
             return redirect(url_for('login'))
 
@@ -149,10 +152,13 @@ def upload():
                                     startDate, location, experienceType, 
                                     experienceLevel, description, appLink, 
                                     sponsorship)
-        return redirect(url_for('display')) #not sure where we want to redirect them after they upload something
+        return redirect(url_for('display'))
 
 @app.route('/display/')
 def display():
+    '''
+    Diplays all the available opportunities in the database.
+    '''
     if('email' in session):
         conn = dbi.connect()
         opportunities = queries.get_opportunities(conn)
@@ -160,8 +166,6 @@ def display():
     else:
         flash('Please login.')
         return render_template('login.html')
-
-
 
 if __name__ == '__main__':
     dbi.cache_cnf()
