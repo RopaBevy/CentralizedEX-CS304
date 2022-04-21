@@ -19,19 +19,21 @@ table, th, td {
     <th>Experience Level</th>
     <th>Visa Sponsorship</th>
     <th>Description</th>
-    <th><a>Apply here</a></th> <!--put the applink into a button-->
+    <th></th>
   </tr>
+  {% for opportunity in opportunities %}
   <tr>
     <!--take opportunities and loop over them add them to the table a batch at a time-->
-    <td>Computer Science</td>
-    <td>Wellesley College</td>
-    <td>Research/Internship</td>
-    <td>Research Assistant</td>
-    <td>Any</td>
-    <td>Yes</td>
-    <td>Hey this is really coll </td>
-    <td>https://docs.oracle.com/cd/E26502_01/html/E29011/gmacc.html</td>
+    <td>{{ opportunity.get('field') }}</td>
+    <td>{{ opportunity.get('institution') }}</td>
+    <td>{{ opportunity.get('experienceType') }}</td>
+    <td>{{ opportunity.get('title') }}</td>
+    <td>{{ opportunity.get('experienceLevel') }}</td>
+    <td>{{ opportunity.get('sponsorship') }}</td>
+    <td>{{ opportunity.get('description') }}</td>
+    <td><a href="{{ opportunity.get('appLink') }}"> Apply here</a></td>
   </tr>
+  {% endfor %}
 </table>
 
 </body>

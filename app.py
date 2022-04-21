@@ -153,9 +153,13 @@ def upload():
 
 @app.route('/display/')
 def display():
-    conn = dbi.connect()
-    opportunities = queries.get_opportunities(conn)
-    return render_template('display.html', opportunities=opportunities)
+    if('email' in session):
+        conn = dbi.connect()
+        opportunities = queries.get_opportunities(conn)
+        return render_template('display.html', opportunities=opportunities)
+    else:
+        flash('Please login.')
+        return render_template('login.html')
 
 
 
