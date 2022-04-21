@@ -4,7 +4,7 @@ import cs304dbi as dbi
 import bcrypt
 import queries
 import random, re
-import sqlHelper
+# import sqlHelper
 
 app = Flask(__name__)
 
@@ -20,19 +20,20 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
 def home():
     return render_template("index.html")
 
-@app.route('/')
-def index():
-    '''Displays home page with most recent database.'''
-    conn = dbi.connect()
-    curs = dbi.cursor(conn)
-    internships = sqlHelper.getInternships(conn)
-    total = sqlHelper.getTotal(conn)['count(*)']
-    if (session.get('uid')):
-        uid = session['uid']
-        favorites = sqlHelper.getFavorites(conn, uid)
-        return render_template('mainUID.html', internships = internships, total = total, favorites = favorites)
-    else:
-        return render_template('main.html', internships = internships, total = total)
+# @app.route('/')
+# def index():
+#     # '''Displays home page with most recent database.'''
+#     # conn = dbi.connect()
+#     # curs = dbi.cursor(conn)
+#     # internships = sqlHelper.getInternships(conn)
+#     # total = sqlHelper.getTotal(conn)['count(*)']
+#     # if (session.get('uid')):
+#     #     uid = session['uid']
+#     #     favorites = sqlHelper.getFavorites(conn, uid)
+#     #     return render_template('mainUID.html', internships = internships, total = total, favorites = favorites)
+#     # else:
+#     #     return render_template('main.html', internships = internships, total = total)
+#     return render_template('index.html')
 
 
 
@@ -74,36 +75,26 @@ def signup():
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
-    print(request.method)
     if(request.method == 'GET'):
         return render_template("login.html")
-    if(request.method == 'POST'):
-        print('post method')
+
+    else:
         conn = dbi.connect()
         email = request.form.get('email')
-        password = request.form.get('password')
-
-        print("we are at the login and printing email",email)
-        
+        password = request.form.get('password')        
         member = queries.login(conn, email)
-        print("we are at the login and printing password",member)
+
         if(member is None):
-            print("this should not be true")
             flash('Login credentials are incorrect. Please try again or sign up.')
             return redirect(url_for('login'))
 
-
-        print("member is not none")
         stored_password = member['password']
-        print('database has stored: {} {}'.format(stored_password,type(stored_password)))
-        print('form supplied passwd: {} {}'.format(password,type(password)))
         hashed_password = bcrypt.hashpw(password.encode('utf-8'),
                                 stored_password.encode('utf-8'))
 
         hashed_str = hashed_password.decode('utf-8')
                             
         if(hashed_str == stored_password):
-            print("yayyyyyyyyyyyyyy")
             flash('Successfully logged in.')
             #redirect them to the page for logged in people
             session['email'] = email
@@ -124,7 +115,7 @@ def logout():
         return redirect(url_for('/'))
     else:
         flash('you are not logged in. Please login or join')
-        return redirect( url_for('/') )
+        return redirect( url_for('home') )
 
 @app.route('/upload/', methods=['GET', 'POST'])
 def upload():
@@ -134,19 +125,31 @@ def upload():
     else:
         conn = dbi.connect()
         
-        # check if user is logged in, if not redirect them to login first
-        # otherwise, find user's email
+        session_value = request.cookies.get('session')
+        if('email' in session):
+            email = session['email']
+            print(email)
+        else: #not sure if this is necessary
+            flash('Please login again.')
+            return redirect(url_for('login'))
 
         # code to gather experience info to add to the database
+        field = request.form.get('field')
         title = request.form.get('title')
         institution = request.form.get('institution')
-        start = request.form.get('start')
+        startDate = request.form.get('start')
         location = request.form.get('location')
         experienceType = request.form.get('experienceType')
-        field = request.form.get('field')
+        experienceLevel = request.form.get('experienceLevel')
         description = request.form.get('description')
-        link = request.form.get('link')
+        appLink = request.form.get('link')
         sponsorship = request.form.get('sponsorship')
+
+        queries.insert_opportunity(conn, email, field, title, institution, 
+                                    startDate, location, experienceType, 
+                                    experienceLevel, description, appLink, 
+                                    sponsorship)
+        return redirect(url_for('display')) #not sure where we want to redirect them after they upload something
 
 @app.route('/display/')
 def display():

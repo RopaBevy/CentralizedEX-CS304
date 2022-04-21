@@ -32,16 +32,16 @@ def login(conn, email):
 
 # Adds opportunity posting into database
 # Returns comfirmation
-def insert_opportunity(email, field, title, institution, startDate, location, 
+def insert_opportunity(conn, email, field, title, institution, startDate, location, 
                     experienceType, experienceLevel, description, appLink, 
                     sponsorship):
     curs = dbi.dict_cursor(conn)
-    sql = ''' INSERT INTO  opportunity (email, field, title, institution, startDate, location, 
-          experienceType, experienceLevel, description, appLink, sponsorship )
-            values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-       # '''
-
-    curs.execute(sql, [email, field, title, institution, startDate, location, 
+    sql = ''' INSERT INTO  opportunity (pid, email, field, title, institution, 
+            startDate, `location`, experienceType, experienceLevel, 
+            `description`, appLink, sponsorship)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) '''
+    #generate a pid and pass it ==> autoincrement maybe with concurrency handling
+    curs.execute(sql, [pid, email, field, title, institution, startDate, location, 
                         experienceType, experienceLevel, description, appLink, 
                         sponsorship])
     conn.commit()
@@ -55,4 +55,8 @@ def get_opportunities(conn):
 
 # to be used for testing code in this module
 if __name__ == '__main__':
-    pass
+    dbi.cache_cnf()
+    dbi.use('rs2_db') #centralex_db
+
+    conn = dbi.connect()
+    print(get_opportunities(conn))
