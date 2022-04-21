@@ -1,40 +1,43 @@
-<!DOCTYPE html>
-<html>
-<style>
-table, th, td {
-  border:1px solid black;
-}
-</style>
-<body>
+{% extends "base.html" %}
 
-<h2>A basic HTML table</h2>
+{% block navbar %}
+<div class="collapse navbar-collapse" id="navbarResponsive">
+  <ul class="navbar-nav ms-auto">
+      <li class="nav-item"><a class="nav-link" href="{{url_for('upload')}}">Post Opportunity</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
+  </ul>
+</div>
+{% endblock %}
 
-
-<table style="width:100%">
-  <tr>
-    <th>Field</th>
-    <th>Institution</th>
-    <th>Type</th>
-    <th>Title</th>
-    <th>Experience Level</th>
-    <th>Visa Sponsorship</th>
-    <th>Description</th>
-    <th></th>
-  </tr>
-  {% for opportunity in opportunities %}
-  <tr>
-    <!--take opportunities and loop over them add them to the table a batch at a time-->
-    <td>{{ opportunity.get('field') }}</td>
-    <td>{{ opportunity.get('institution') }}</td>
-    <td>{{ opportunity.get('experienceType') }}</td>
-    <td>{{ opportunity.get('title') }}</td>
-    <td>{{ opportunity.get('experienceLevel') }}</td>
-    <td>{{ opportunity.get('sponsorship') }}</td>
-    <td>{{ opportunity.get('description') }}</td>
-    <td><a href="{{ opportunity.get('appLink') }}"> Apply here</a></td>
-  </tr>
-  {% endfor %}
-</table>
-
+{% block page_content %}
+<div>
+  <br><br><br>
+  <table>
+    <tr>
+      <th >Field</th>
+      <th>Institution</th>
+      <th>Type</th>
+      <th>Title</th>
+      <th>Experience Level</th>
+      <th>Visa Sponsorship</th>
+      <th>Description</th>
+      <th></th>
+    </tr>
+    {% for opportunity in opportunities %}
+    <tr>
+      <!--take opportunities and loop over them add them to the table a batch at a time-->
+      <td>{{ opportunity.get('field') }}</td>
+      <td>{{ opportunity.get('institution') }}</td>
+      <td>{{ opportunity.get('experienceType') }}</td>
+      <td>{{ opportunity.get('title') }}</td>
+      <td>{{ opportunity.get('experienceLevel') }}</td>
+      <td>{{ opportunity.get('sponsorship') }}</td>
+      <td>{{ opportunity.get('description') }}</td>
+      <td><a href="{{ opportunity.get('appLink') }}"> Apply here</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}
 </body>
 </html>
