@@ -53,8 +53,6 @@ def get_opportunities(conn):
     return curs.fetchall()
 
 
-
-
 # to be used for testing code in this module
 if __name__ == '__main__':
     pass
