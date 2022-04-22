@@ -45,7 +45,7 @@ def insert_opportunity(conn, email, field, title, institution, startDate, locati
     sql = ''' INSERT INTO  opportunity (email, field, title, institution, 
             startDate, `location`, experienceType, experienceLevel, 
             `description`, appLink, sponsorship)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) '''
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) '''
     curs.execute(sql, [email, field, title, institution, startDate, location, 
                         experienceType, experienceLevel, description, appLink, 
                         sponsorship])
@@ -62,5 +62,5 @@ def get_opportunities(conn):
 
 if __name__ == '__main__':
     dbi.cache_cnf()
-    dbi.use('rs2_db') #centralex_db
+    dbi.use('centralex_db')
     conn = dbi.connect()

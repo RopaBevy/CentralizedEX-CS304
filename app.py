@@ -110,10 +110,10 @@ def logout():
         session.pop('email')
         session.pop('logged_in')
         flash('You are logged out')
-        return redirect(url_for('/'))
+        return redirect(url_for('home'))
     else:
-        flash('you are not logged in. Please login or join')
-        return redirect( url_for('home') )
+        flash('You are not logged in. Please login or join')
+        return redirect(url_for('login'))
 
 @app.route('/upload/', methods=['GET', 'POST'])
 def upload():
@@ -169,7 +169,7 @@ def display():
 
 if __name__ == '__main__':
     dbi.cache_cnf()
-    dbi.use('rs2_db') #centralex_db
+    dbi.use('centralex_db')
 
     import os
     port = os.getuid()
