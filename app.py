@@ -115,6 +115,14 @@ def addFavorite(conn, uid, link):
                 values (%s, %s);''', [uid, link])
     conn.commit()
 
+def removeFavorite(uid, link):
+    '''Removes application from users' list of favorites'''
+    conn = dbi.connect()
+    curs = dbi.cursor(conn)
+    sql = '''delete from favorites where uid = %s and link = %s'''
+    curs.execute(sql, [uid, link])
+    conn.commit()
+
 @app.route('/favorite/', methods=['POST'])
 def favorite():
     '''Adds or removes application from list of favorites when button is clicked.'''
