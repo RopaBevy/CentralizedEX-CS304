@@ -113,6 +113,28 @@ def login():
         else:
             flash('Login unsuccessful. Please try again or sign up.')
             return redirect(url_for('login'))
+
+@app.route('/favorite/', methods=['POST'])
+def favorite():
+    '''Adds or removes application from list of favorites when button is clicked.'''
+    conn = dbi.connect()
+    if (session.get('uid')): #if it exists
+        uid = session['uid']
+        # Get data from form: 
+        data = request.form
+        link = data['link']
+        print('Link:' + link)
+        # Update database
+        if sqlHelper.isFavorite(conn,uid,link) != True:
+            sqlHelper.addFavorite(conn,uid, link)
+        # response dictionary
+            resp_dic = {'link': link}
+            print("respLink:" + resp_dic['link'])
+            return jsonify(resp_dic)
+    else:
+        flash('You must be logged in to add to your favorites.')
+        return redirect(url_for('index'))
+
 """ 
 
 @app.route('/logout/', methods=['GET'])
