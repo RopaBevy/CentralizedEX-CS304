@@ -100,6 +100,24 @@ def login():
             flash('Login unsuccessful. Please try again or sign up.')
             return redirect(url_for('login'))
 
+def isFavorite(conn, uid, link):
+    # Checks if a link is a favorite
+    curs = dbi.cursor(conn)
+    sql = '''select * from favorites where uid = %s and link = %s'''
+    curs.execute(sql, [uid, link])
+    result = curs.fetchone()
+    if result == None:
+        return False
+    else:
+        return True
+
+def addFavorite(conn, uid, link):
+    # Adds application to users' list of favorites, or removes if needed
+    curs = dbi.cursor(conn)
+    curs.execute('''insert into favorites(uid, link)
+                values (%s, %s);''', [uid, link])
+    conn.commit()
+
 @app.route('/favorite/', methods=['POST'])
 def favorite():
     '''Adds or removes application from list of favorites when button is clicked.'''
@@ -111,8 +129,8 @@ def favorite():
         link = data['link']
         print('Link:' + link)
         # Update database
-        if sqlHelper.isFavorite(conn,uid,link) != True:
-            sqlHelper.addFavorite(conn,uid, link)
+        if isFavorite(conn,uid,link) != True:
+            addFavorite(conn,uid, link)
         # response dictionary
             resp_dic = {'link': link}
             print("respLink:" + resp_dic['link'])
