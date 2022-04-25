@@ -106,10 +106,7 @@ def isFavorite(conn, uid, link):
     sql = '''select * from favorites where uid = %s and link = %s'''
     curs.execute(sql, [uid, link])
     result = curs.fetchone()
-    if result == None:
-        return False
-    else:
-        return True
+    return result != None
 
 def addFavorite(conn, uid, link):
     '''Adds opportunity to users' list of favorites, or removes if needed'''
