@@ -1,18 +1,10 @@
-codeuse ftahiry_db;
+use centralex_db;
 
-drop table if exists `session`;
 drop table if exists comment;
 drop table if exists rating;
 drop table if exists post;
 drop table if exists member;
 drop table if exists opportunity;
-
-create table `session` (
-       email varchar(30) not null primary key,
-       st timestamp,  
-       ip char(15))
-       
-ENGINE = InnoDB; 
 
 create table member(
     email varchar(30),
@@ -20,28 +12,24 @@ create table member(
     `name` varchar(40) not null,
     `type` enum('Student','Alum', 'Professor'),
     primary key(email)
-    foreign key (email) references session(email),
 )
 ENGINE = InnoDB;
 
 create table opportunity(
-    pid int,
+    pid int not null auto_increment,
     email varchar(30),
+    field varchar(25),
     title varchar(25),
     institution varchar(30),
     startDate date,
-    experienceType varchar(25),
-    field varchar(25),
-    `description` varchar(1250),
     `location` varchar(50),
-    appLink nvarchar(2000),
-    sponorship set('Yes', 'No', 'Maybe')
+    experienceType varchar(25),
     experienceLevel set('Freshman', 'Sophomore', 'Junior', 'Senior', 'Any'),
+    `description` varchar(1250),
+    appLink nvarchar(2000),
+    sponsorship set('Yes', 'No', 'Maybe'),
     primary key(pid)
 )
-
-
-
 ENGINE = InnoDB;
 
 create table post(
@@ -79,13 +67,3 @@ create table rating (
     on update cascade
 )
 ENGINE = InnoDB;
-
-create table favorites (
-    link varchar(250),
-    uid varchar(15),
-    foreign key (uid) references user (uid)
-        on update restrict,
-    foreign key (link) references application (link)
-        on update restrict
-)
-ENGINE = InnoDb;
