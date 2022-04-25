@@ -101,7 +101,7 @@ def login():
             return redirect(url_for('login'))
 
 def isFavorite(conn, uid, link):
-    # Checks if a link is a favorite
+    '''Checks whether an opportunity has been favorited'''
     curs = dbi.cursor(conn)
     sql = '''select * from favorites where uid = %s and link = %s'''
     curs.execute(sql, [uid, link])
@@ -112,7 +112,7 @@ def isFavorite(conn, uid, link):
         return True
 
 def addFavorite(conn, uid, link):
-    # Adds application to users' list of favorites, or removes if needed
+    '''Adds opportunity to users' list of favorites, or removes if needed'''
     curs = dbi.cursor(conn)
     curs.execute('''insert into favorites(uid, link)
                 values (%s, %s);''', [uid, link])
