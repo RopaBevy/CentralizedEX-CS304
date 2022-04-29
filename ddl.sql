@@ -1,4 +1,4 @@
-use ftahiry_db;
+Ctrl-C -- exit!
 
 drop table if exists comment;
 drop table if exists rating;
@@ -17,23 +17,20 @@ create table member(
 ENGINE = InnoDB;
 
 create table opportunity(
-    pid int,
+    pid int not null auto_increment,
     email varchar(30),
+    field varchar(25),
     title varchar(25),
     institution varchar(30),
     startDate date,
-    experienceType varchar(25),
-    field varchar(25),
-    `description` varchar(1250),
     `location` varchar(50),
-    appLink nvarchar(2000),
-    sponorship set('Yes', 'No', 'Maybe')
+    experienceType varchar(25),
     experienceLevel set('Freshman', 'Sophomore', 'Junior', 'Senior', 'Any'),
+    `description` varchar(1250),
+    appLink nvarchar(2000),
+    sponsorship set('Yes', 'No', 'Maybe'),
     primary key(pid)
 )
-
-
-
 ENGINE = InnoDB;
 
 create table post(
@@ -63,6 +60,7 @@ create table rating (
     pid int, 
     email varchar(30),
     rating enum('1','2','3','4','5'),
+    primary key (pid,email),
     foreign key (pid) references opportunity(pid)
     on delete cascade
     on update cascade,
@@ -71,3 +69,5 @@ create table rating (
     on update cascade
 )
 ENGINE = InnoDB;
+
+ALTER TABLE opportunity ADD  averageRating float;

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+
+
+{% block navbar %}
+<div class="collapse navbar-collapse" id="navbarResponsive">
+  <ul class="navbar-nav ms-auto">
+      <li class="nav-item"><a class="nav-link" href="{{url_for('upload')}}">Post Opportunity</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
+  </ul>
+</div>
+{% endblock %}
+
+{% block page_content %}
+
+
+<div>
+  <br><br><br>
+
+  <div class="search-container">
+    <form action="{{url_for('search')}}">
+      <label> Kind 
+        <select required name="kind" >
+            <option value>Choose One</option>
+            <option value="title">Job Title</option>
+            <option value="field">Field</option>
+            <option value="institution">Institution</option>
+        </select>
+      </label>
+      <input type="text" placeholder="Search.." required name ="search">
+      <button type="submit"><i class="fa fa-search"></i></button>
+    </form>
+  </div>
+  
+
+  <table id="pid-list">
+    <tr>
+      <th>Title</th>
+      <th >Field</th>
+      <th>Institution</th>
+      <!-- <th>Type</th> -->
+      
+      <th>Rate Your Experience With This Institution/Job</th>
+      <th>averageRating</th>
+      <!-- <th>Experience Level</th>
+      <th>Visa Sponsorship</th>
+      <th>Description</th>
+      <th>Application Link</th> -->
+    </tr>
+    {% for opportunity in opportunities %}
+    <tr data-pid={{opportunity.pid}}>
+      
+      <td>{{ opportunity.get('title') }}</td>
+      <td>{{ opportunity.get('field') }}</td>
+      <td>{{ opportunity.get('institution') }}</td>
+      <!-- <td>{{ opportunity.get('experienceType') }}</td> -->
+      
+      <td><form method="post" action="{{url_for('rating')}}">
+        <input type="hidden" name="pid" value={{opportunity.pid}}>
+        
+          {% for stars in range(1,6) %}
+          <label class="pid-rating">{{stars}}
+              <input type="radio" name="stars" value="{{stars}}"></label>
+          {% endfor %}
+        
+        <input type="submit" value="rate this">
+        </form>
+    </td>
+      <td>{{ opportunity.get('averageRating') }}</td>
+      <!-- <td>{{ opportunity.get('experienceLevel') }}</td>
+      <td>{{ opportunity.get('sponsorship') }}</td>
+      <td>{{ opportunity.get('description') }}</td>
+      <td><a href="{{ opportunity.get('appLink') }}"> Apply here</a></td> -->
+    </tr>
+    <tr><td colspan="5" style="width:100%"><p>Description</p>
+    </td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}
+</body>
+</html>

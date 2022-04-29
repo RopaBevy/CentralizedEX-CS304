@@ -7,33 +7,41 @@ import random, re
 
 app = Flask(__name__)
 
-app.secret_key = 'your secret here'
-# replace that with a random key
 app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
                                           'abcdefghijklmnopqrstuvxyz' +
                                           '0123456789'))
                            for i in range(20) ])
 
-# home page
+
 @app.route('/')
 def home():
-    return render_template("index.html")
-
+    '''
+    Landing page. Gives background on the app and gives the user the option to 
+    login or signup.
+    '''
+    if 'email' in session:
+        return render_template("welcomePage.html")
+    else:
+        return render_template("index.html")
 
 @app.route('/signup/', methods=['GET', 'POST'])
 def signup():
+    '''
+    Gives the user the signup form under the get request. 
+    Collect the user's credentials and inserts the user into the database if 
+    the credentials are appropriate (user must use Wellesley College email) 
+    under the post request. 
+    '''
     if(request.method == 'GET'):
         return render_template("signup.html")
     else:
         conn = dbi.connect()
-        # code to validate and add user to database goes here
         email = request.form.get('email')
         name = request.form.get('name')
         password = request.form.get('password')
         password2 = request.form.get('password2')
         user_type = request.form.get('type')
 
-        #add an if statement that verifies that email as a wellesley email
         email_pattern = re.compile('@wellesley.edu$')
         if(len(email_pattern.findall(email)) == 0):
             flash('Please use your Wellesley College email.')
@@ -58,36 +66,33 @@ def signup():
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
-    print(request.method)
+    '''
+    Gives the user the login form under the get request.
+    With post request, it collects the user's credentials and verifies they 
+    exist in the database and that their password is correct before redirecting
+    them to welcome page otherwise, if credentials are incorrect, it stays on 
+    the same page. It also updates the session appropriately.
+    '''
     if(request.method == 'GET'):
         return render_template("login.html")
-    if(request.method == 'POST'):
-        print('post method')
+
+    else:
         conn = dbi.connect()
         email = request.form.get('email')
-        password = request.form.get('password')
-
-        print("we are at the login and printing email",email)
-        
+        password = request.form.get('password')        
         member = queries.login(conn, email)
-        print("we are at the login and printing password",member)
+
         if(member is None):
-            print("this should not be true")
             flash('Login credentials are incorrect. Please try again or sign up.')
             return redirect(url_for('login'))
 
-
-        print("member is not none")
         stored_password = member['password']
-        print('database has stored: {} {}'.format(stored_password,type(stored_password)))
-        print('form supplied passwd: {} {}'.format(password,type(password)))
         hashed_password = bcrypt.hashpw(password.encode('utf-8'),
                                 stored_password.encode('utf-8'))
 
         hashed_str = hashed_password.decode('utf-8')
                             
         if(hashed_str == stored_password):
-            print("yayyyyyyyyyyyyyy")
             flash('Successfully logged in.')
             #redirect them to the page for logged in people
             session['email'] = email
@@ -98,40 +103,141 @@ def login():
             flash('Login unsuccessful. Please try again or sign up.')
             return redirect(url_for('login'))
 
+@app.route('/favorite/', methods=['POST'])
+def favorite():
+    '''Adds or removes application from list of favorites when button is clicked.'''
+    conn = dbi.connect()
+    if (session.get('uid')): #if it exists
+        uid = session['uid']
+        # Get data from form: 
+        data = request.form
+        link = data['link']
+        print('Link:' + link)
+        # Update database
+        if sqlHelper.isFavorite(conn,uid,link) != True:
+            sqlHelper.addFavorite(conn,uid, link)
+        # response dictionary
+            resp_dic = {'link': link}
+            print("respLink:" + resp_dic['link'])
+            return jsonify(resp_dic)
+    else:
+        flash('You must be logged in to add to your favorites.')
+        return redirect(url_for('index'))
+
 
 @app.route('/logout/', methods=['GET'])
 def logout():
+    '''
+    Logs out the current user and updates the session accordingly.
+    '''
     if 'email' in session:
         email = session['email']
         session.pop('email')
         session.pop('logged_in')
         flash('You are logged out')
-        return redirect(url_for('/'))
+        return redirect(url_for('home'))
     else:
-        flash('you are not logged in. Please login or join')
-        return redirect( url_for('/') )
+        flash('You are not logged in. Please login or join')
+        return redirect(url_for('login'))
 
 @app.route('/upload/', methods=['GET', 'POST'])
 def upload():
+    '''
+    Gives the user an upload form to enter the required details of an opportunity
+    under the get request.
+    Under the post request, it collects all the form inputs and inserts the 
+    opportunity into the database and redirects to the display page which
+    should be updated to include the newly added opportunity.
+    '''
+    conn = dbi.connect()
     if(request.method == 'GET'):
         return render_template("upload.html")
     else:
         conn = dbi.connect()
-        
-        # check if user is logged in, if not redirect them to login first
-        # otherwise, find user's email
+        session_value = request.cookies.get('session')
+        if('email' in session):
+            email = session['email']
+        else:
+            flash('Please login again.')
+            return redirect(url_for('login'))
 
         # code to gather experience info to add to the database
+        field = request.form.get('field')
         title = request.form.get('title')
         institution = request.form.get('institution')
-        start = request.form.get('start')
+        startDate = request.form.get('start')
         location = request.form.get('location')
         experienceType = request.form.get('experienceType')
-        field = request.form.get('field')
+        experienceLevel = request.form.get('experienceLevel')
         description = request.form.get('description')
-        link = request.form.get('link')
+        appLink = request.form.get('link')
         sponsorship = request.form.get('sponsorship')
 
+        queries.insert_opportunity(conn, email, field, title, institution, 
+                                    startDate, location, experienceType, 
+                                    experienceLevel, description, appLink, 
+                                    sponsorship)
+        return redirect(url_for('display'))
+
+@app.route('/display/')
+def display():
+    '''
+    Diplays all the available opportunities in the database.
+    '''
+    if('email' in session):
+        conn = dbi.connect()
+        opportunities = queries.get_opportunities(conn)
+        return render_template('display.html', opportunities=opportunities)
+    else:
+        flash('Please login.')
+        return render_template('login.html')
+
+
+
+# '''rate an opportunity'''
+@app.route('/rating/', methods = ["POST"])
+def rating():
+    if('email' in session):
+        conn = dbi.connect()
+        email = session['email']
+        userRating = request.form.get("stars")
+        pid = request.form.get("pid")
+        print(pid, "pid", email, "email", userRating, "userRating")
+        queries.insert_and_update_rating(conn,email,pid,userRating)
+        avgRating = queries.average_rating(conn,pid)
+        queries.update_pid_average(conn,avgRating,pid)
+        flash("user{} is rating opportunity {} as {} stars".format(session["email"],pid,userRating))
+        return redirect(url_for('display'))
+
+    else:
+        flash('Please login.')
+        return render_template('login.html')
+
+# '''rate an opportunity'''
+@app.route('/search/', methods = ["GET"])
+def search():
+    if('email' in session):
+        conn = dbi.connect()
+        if request.args['kind'] == 'title':
+            title = request.args['search']
+            jobs = queries.look_oppor_title(conn, title)
+            return render_template('display.html', opportunities=jobs)
+
+        elif request.args['kind'] == 'field':  
+            field = request.args['search']
+            jobs = queries.look_oppor_field(conn, field)
+            print(jobs)
+            return render_template('display.html', opportunities=jobs)
+        elif request.args['kind'] == 'institution':  
+            institution = request.args['search']
+            jobs = queries.look_oppor_institution(conn, institution)
+            return render_template('display.html', opportunities=jobs)
+
+    else:
+        flash('Please login.')
+        return render_template('login.html')
+
+    
 
 if __name__ == '__main__':
     dbi.cache_cnf()
