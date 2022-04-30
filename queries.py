@@ -1,3 +1,4 @@
+import os 
 import cs304dbi as dbi
 
 def insert_member(conn, user_email, user_password, user_name, user_type):
@@ -113,7 +114,20 @@ def look_oppor_institution(conn, institution):
     institution = '%' + institution + '%'
     curs.execute(sql, [institution]) 
     return curs.fetchall()
-    
+
+
+def get_all_members(conn):
+    curs = dbi.dict_cursor(conn)
+    sql = "select * from member"
+    curs.execute(sql) 
+    return curs.fetchall()
+
+def get_one_members(conn,email):
+    curs = dbi.dict_cursor(conn)
+    sql = "select * from member where email = %s"
+    curs = dbi.dict_cursor(conn)
+    curs.execute(sql, [email]) 
+    return curs.fetchone()
 
 if __name__ == '__main__':
     dbi.cache_cnf()

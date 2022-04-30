@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+<!-- created by Farida Tahiry -->
+
+{% block navbar %}
+<div class="collapse navbar-collapse" id="navbarResponsive">
+  <ul class="navbar-nav ms-auto">
+      <li class="nav-item"><a class="nav-link" href="{{url_for('upload')}}">Post Opportunity</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
+  </ul>
+</div>
+{% endblock %}
+
+
+{% block page_content %}
+
+<div class = "image">
+    <br><br><br>
+        <form method="post" action="{{url_for('file_upload')}}" enctype="multipart/form-data">
+            <div class = child>
+                <h3>Upload a Profile Picture</h3>
+                <label><input type="file" name="pic"></label>
+
+            </div>
+            
+            <div class="image-placeholder"> 
+                <img src="{{src}}" alt="Your Picture">
+            </div>
+
+            <br><br><br>
+
+            <div class = buttonsA>
+                <input type="submit" name="submit" value="Upload Later">
+                <input type="submit" name="submit" value="Submit">
+            </div>
+            
+            
+        </form>
+
+        
+</div>
+
+
+{% endblock %}

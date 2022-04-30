@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+<!-- created by Farida Tahiry -->
+
+{% block navbar %}
+<div class="collapse navbar-collapse" id="navbarResponsive">
+  <ul class="navbar-nav ms-auto">
+      <li class="nav-item"><a class="nav-link" href="{{url_for('upload')}}">Post Opportunity</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
+  </ul>
+</div>
+{% endblock %}
+
+{% block page_content %}
+
+
+<div>
+  <br><br><br>
+
+  <div class="search-container">
+    <form action="{{url_for('search')}}">
+      <label> Kind 
+        <select required name="kind" >
+            <option value>Choose One</option>
+            <option value="Person">Job Title</option>
+            <option value="Job Title">Field</option>
+            <option value="institution">Institution</option>
+        </select>
+      </label>
+      <input type="text" placeholder="search ..." required name ="search">
+      <button type="submit"><i class="fa fa-search"></i></button>
+    </form>
+  </div>
+  
+
+  <table id="pid-list">
+    <tr>
+      <th>Name</th>
+      <th >Profession</th>
+      <th>Contact</th>
+      <th>Wellesley Affiliation</th>
+      <th>Profile Link</th>
+
+    </tr>
+    {% for member in members %}
+    <tr data-pid="{{member.get('email')}}">
+      
+      <td>{{ member.get('name') }}</td>
+      <td>{{ member.get('profession') }}</td>
+      <td>{{ member.get('email') }}</td>
+      <td>{{ member.get('type') }}</td>
+      <td><form method="get" action="{{ url_for('display_member', email = member.get('email')) }}">
+        <input type="submit" name="memberEmail" value="{{member.get('email')}}">
+      </form></td>
+      {% endfor %}
+
+  </table>
+</div>
+{% endblock %}
+</body>
+</html>

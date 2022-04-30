@@ -5,11 +5,13 @@ drop table if exists rating;
 drop table if exists post;
 drop table if exists member;
 drop table if exists opportunity;
+drop table if exists profilePic;
 
 create table member(
     email varchar(30),
     `password` varchar(200) not null,
     `name` varchar(40) not null,
+    profession varchar(100) not null,
     `type` enum('Student','Alum', 'Professor'),
     -- log_in BOOLEAN,
     primary key(email)
@@ -69,5 +71,13 @@ create table rating (
     on update cascade
 )
 ENGINE = InnoDB;
+
+
+create table profilePic (
+    email varchar(30) primary key,
+    filename varchar(50),
+    foreign key (email) references member(email) 
+        on delete cascade on update cascade
+);
 
 ALTER TABLE opportunity ADD  averageRating float;

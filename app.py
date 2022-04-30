@@ -1,5 +1,10 @@
 from flask import (Flask, render_template, make_response,
-                   request, session, redirect, url_for, flash)
+                   request, session, redirect, url_for, flash,
+                   url_for, session, send_from_directory, Response)
+
+from werkzeug.utils import secure_filename
+import imghdr
+import sys, os, random
 import cs304dbi as dbi
 import bcrypt
 import queries
@@ -62,7 +67,8 @@ def signup():
             stored_password = hashed_password.decode('utf-8')
             # add the new user to the database
             queries.insert_member(conn, email, stored_password, name, user_type)
-        return redirect(url_for('login'))
+            session['email'] = email
+        return redirect(url_for('file_upload', src=url_for('pic',email=email), email=email))
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -260,7 +266,93 @@ def search():
         flash('Please login.')
         return render_template('login.html')
 
-    
+# Farida's code 
+# page with all members of the app
+@app.route('/community/', methods=['GET'])
+def community():
+
+    if('email' in session):
+        conn = dbi.connect()
+        members = queries.get_all_members(conn)
+        return render_template("community.html", members = members)
+    else:
+        flash('Please login.')
+        return render_template('login.html')    
+
+
+# Farida's code 
+# page with all members of the app
+@app.route('/display_member/<email>', methods=['GET'])
+def display_member(email):
+    if('email' in session):
+        conn = dbi.connect()
+        # email = request.form.get('memberEmail')
+        # print("jhfsldkjfhasdfhsadklfhsadhfsdkhflasdfhjksdfhsadhf ", email)
+        member = queries.get_one_members(conn,email)
+        return render_template("memberPage.html", email = email, member = member)
+    else:
+        flash('Please login again.')
+        return redirect(url_for('login'))        
+
+@app.route('/pic/<email>')
+def pic(email):
+    conn = dbi.connect()
+    curs = dbi.dict_cursor(conn)
+    numrows = curs.execute(
+        '''select filename from profilePic where email = %s''',
+        [email])
+    if numrows == 0:
+        return send_from_directory(app.config['UPLOADS'], 'ww.jpg')
+    row = curs.fetchone()
+    return send_from_directory(app.config['UPLOADS'],row['filename'])
+
+# This gets us better error messages for certain common request errors
+app.config['TRAP_BAD_REQUEST_ERRORS'] = True
+
+# new for file upload
+app.config['UPLOADS'] = 'uploads'
+app.config['MAX_CONTENT_LENGTH'] = 1*1024*1024 # 1 MB
+
+# uploads image 
+@app.route('/file_upload/', methods=["GET", "POST"])
+def file_upload():
+    if 'email' in session:
+        email = session['email']
+        if request.method == 'GET':
+            return render_template('uploadPhoto.html',src=url_for('pic',email=email),email=email)
+            # ,src= os.path.join(app.config['UPLOADS'],'ftahirywellesley.edu.jpg'),email='')
+
+        if request.form["submit"] == "Upload Later":
+            flash('You can update your picture on your profile page')
+            return render_template("welcomePage.html")
+
+        if request.method == 'POST':
+            print("does it visit here")
+            try:
+                f = request.files['pic']
+                user_filename = f.filename
+                ext = user_filename.split('.')[-1]
+                user = email.split('@')[0]
+                filename = secure_filename('{}.{}'.format(user,ext))
+                pathname = os.path.join(app.config['UPLOADS'],filename)
+                f.save(pathname)
+                conn = dbi.connect()
+                curs = dbi.dict_cursor(conn)
+                curs.execute(
+                    '''insert into profilePic(email,filename) values (%s,%s)
+                    on duplicate key update filename = %s''',
+                    [email, filename, filename])
+                conn.commit()
+                flash('Image Upload Successful')
+                return render_template("welcomePage.html")
+                
+            except Exception as err:
+                flash('Upload failed {why}'.format(why=err))
+                session.pop('email')
+                return redirect(url_for('signup'))
+    else:
+        flash('signup unsuccessful')
+        return redirect(url_for('signup'))
 
 if __name__ == '__main__':
     dbi.cache_cnf()

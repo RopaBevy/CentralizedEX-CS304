@@ -15,6 +15,60 @@
  /* .search-container {
   float: right;
 } */
+
+.Profileimage{
+  padding: 0%;
+}
+
+.ProfileContent{
+  width: 78%;
+  float: right;
+  padding-left: 0%;
+  padding-top: 0%;
+}
+
+.child {
+  width: 78%;
+  float: right;
+  padding-left: 0%;
+
+}  
+
+.buttonsA{
+  padding-left: 20%;
+}
+
+/* profile image */
+.image{
+  padding-top: 10%;
+  padding-left: 30%;
+  padding-right: 0%;
+}
+
+.image-placeholder {
+  background-color: #eee;
+  display: flex;
+  height: 180px;
+  margin: 5px;
+  width: 180px;
+  
+}
+
+.image-placeholder img {
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  object-fit: cover;
+  }
+
+.image-placeholder > h4 {
+  align-self: center;
+  text-align: center;
+  width: 100%;
+  float: right;
+}
+
  .search-container{
   float: right;
   padding: 6px 10px;
