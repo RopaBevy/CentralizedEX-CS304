@@ -87,9 +87,25 @@ def get_opportunities(conn):
     Gets and returns all opportunities in the database.
     '''
     curs = dbi.dict_cursor(conn)
-    sql = ' SELECT * FROM opportunity'
+    sql = 'SELECT * FROM opportunity'
     curs.execute(sql)
     return curs.fetchall()
+
+def get_fields(conn):
+    '''
+    Gets and returns all fields in the database.
+    '''
+    curs = dbi.dict_cursor(conn)
+    sql = 'SELECT distinct field from opportunity'
+    curs.execute(sql)
+    return curs.fetchall()
+
+def get_institutions(conn):
+    curs = dbi.dict_cursor(conn)
+    sql = 'SELECT distinct institution from opportunity'
+    curs.execute(sql)
+    return curs.fetchall()
+
 
 def look_oppor_title(conn, title):
     curs = dbi.dict_cursor(conn)
@@ -133,3 +149,4 @@ if __name__ == '__main__':
     dbi.cache_cnf()
     dbi.use('centralex_db')
     conn = dbi.connect()
+    print(get_fields(conn))

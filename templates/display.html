@@ -1,7 +1,5 @@
 {% extends "base.html" %}
 
-
-
 {% block navbar %}
 <div class="collapse navbar-collapse" id="navbarResponsive">
   <ul class="navbar-nav ms-auto">
@@ -13,26 +11,57 @@
 
 {% block page_content %}
 
-
 <div>
   <br><br><br>
-
-  <div class="search-container">
-    <form action="{{url_for('search')}}">
-      <label> Kind 
-        <select required name="kind" >
-            <option value>Choose One</option>
-            <option value="title">Job Title</option>
-            <option value="field">Field</option>
-            <option value="institution">Institution</option>
-        </select>
-      </label>
-      <input type="text" placeholder="Search.." required name ="search">
-      <button type="submit"><i class="fa fa-search"></i></button>
-    </form>
-  </div>
+<div class="row gx-4 gx-lg-5">
+  <form class="form-signup" action="{{url_for('search')}}" >
+    <label> Field 
+      <select name="kind" >
+          <option value>All</option>
+          {% for field in fields %}
+          <option value="{{field.get('field')}}">{{field.get('field')}}</option>
+          {% endfor %}
+      </select>
+    </label>
+    <label> Type
+      <select name="kind" >
+          <option value>All</option>
+          <option value="internship">Internship</option>
+          <option value="part-time">Part Time</option>
+          <option value="fulltime">Full Time</option>
+      </select>
+    </label>
+    <label> Experience 
+      <select name="kind" >
+          <option value>Any</option>
+          <option value="first-year">First Year</option>
+          <option value="sophomore">Sophomore</option>
+          <option value="junior">Junior</option>
+          <option value="senior">Senior</option>
+      </select>
+    </label>
+    <label> Institution 
+      <select name="kind" >
+          <option value>All</option>
+          {% for institution in institutions %}
+          <option value="{{institution.get('institution')}}">{{institution.get('institution')}}</option>
+          {% endfor %}
+      </select>
+    </label>
+    <label> Visa Sponsorship 
+      <select name="kind" >
+          <option value>Any</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+          <option value="maybe">Maybe</option>
+      </select>
+    </label>
+    <input type="text" placeholder="Search..." required name ="search">
+    <button type="submit"><i class="fa fa-search"></i></button>
+  </form>
+</div>
   
-
+<div>
   <table id="pid-list">
     <tr>
       <th>Title</th>
@@ -40,8 +69,8 @@
       <th>Institution</th>
       <!-- <th>Type</th> -->
       
-      <th>Rate Your Experience With This Institution/Job</th>
-      <th>averageRating</th>
+      <th>Rate Your Experience With This Institution</th>
+      <th>Average Rating</th>
       <!-- <th>Experience Level</th>
       <th>Visa Sponsorship</th>
       <th>Description</th>

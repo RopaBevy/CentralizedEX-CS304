@@ -216,7 +216,10 @@ def display():
     if('email' in session):
         conn = dbi.connect()
         opportunities = queries.get_opportunities(conn)
-        return render_template('display.html', opportunities=opportunities)
+        fields = queries.get_fields(conn)
+        institutions = queries.get_institutions(conn)
+        return render_template('display.html', opportunities=opportunities,
+                                fields=fields, institutions=institutions)
     else:
         flash('Please login.')
         return render_template('login.html')
@@ -257,6 +260,7 @@ def search():
             jobs = queries.look_oppor_field(conn, field)
             print(jobs)
             return render_template('display.html', opportunities=jobs)
+
         elif request.args['kind'] == 'institution':  
             institution = request.args['search']
             jobs = queries.look_oppor_institution(conn, institution)
@@ -356,7 +360,7 @@ def file_upload():
 
 if __name__ == '__main__':
     dbi.cache_cnf()
-    dbi.use('ftahiry_db') #centralex_db
+    dbi.use('rs2_db') #centralex_db
 
     import os
     port = os.getuid()
