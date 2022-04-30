@@ -43,6 +43,7 @@ def signup():
         conn = dbi.connect()
         email = request.form.get('email')
         name = request.form.get('name')
+        institution = request.form.get('institution')
         password = request.form.get('password')
         password2 = request.form.get('password2')
         user_type = request.form.get('type')
@@ -66,7 +67,7 @@ def signup():
                                             bcrypt.gensalt())
             stored_password = hashed_password.decode('utf-8')
             # add the new user to the database
-            queries.insert_member(conn, email, stored_password, name, user_type)
+            queries.insert_member(conn, email, stored_password, name, institution, user_type)
             session['email'] = email
         return redirect(url_for('file_upload', src=url_for('pic',email=email), email=email))
 
@@ -217,7 +218,7 @@ def display():
         conn = dbi.connect()
         opportunities = queries.get_opportunities(conn)
         fields = queries.get_fields(conn)
-        institutions = queries.get_institutions(conn)
+        institutions = queries.get_institutions_opportunity(conn)
         return render_template('display.html', opportunities=opportunities,
                                 fields=fields, institutions=institutions)
     else:
@@ -274,11 +275,16 @@ def search():
 # page with all members of the app
 @app.route('/community/', methods=['GET'])
 def community():
-
     if('email' in session):
         conn = dbi.connect()
         members = queries.get_all_members(conn)
-        return render_template("community.html", members = members)
+        professions = queries.get_professions(conn)
+        affiliations = queries.get_affiliations(conn)
+        institutions = queries.get_institutions_member(conn)
+        return render_template("community.html", members=members, 
+                                professions=professions, 
+                                affiliations=affiliations,
+                                institutions=institutions)
     else:
         flash('Please login.')
         return render_template('login.html')    

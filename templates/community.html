@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 
-<!-- created by Farida Tahiry -->
+<!-- created by Farida Tahiry and Ropafadzo Shava-->
 
 {% block navbar %}
 <div class="collapse navbar-collapse" id="navbarResponsive">
   <ul class="navbar-nav ms-auto">
+      <li class="nav-item"><a class="nav-link" href="{{url_for('display')}}">View Opportunities</a></li>
       <li class="nav-item"><a class="nav-link" href="{{url_for('upload')}}">Post Opportunity</a></li>
       <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
   </ul>
@@ -13,18 +14,32 @@
 
 {% block page_content %}
 
-
 <div>
   <br><br><br>
-
   <div class="search-container">
     <form action="{{url_for('search')}}">
-      <label> Kind 
+      <label> Wellesley Affliation 
         <select required name="kind" >
-            <option value>Choose One</option>
-            <option value="Person">Job Title</option>
-            <option value="Job Title">Field</option>
-            <option value="institution">Institution</option>
+            <option value>Any</option>
+            {% for affiliation in affiliations %}
+            <option value="{{affiliation}}">{{affiliation.get('affiliation')}}</option>
+            {% endfor %}
+        </select>
+      </label>
+      <label> Proffession 
+        <select required name="kind" >
+            <option value>Any</option>
+            {% for prof in professions %}
+            <option value="{{prof.get('profession')}}">{{prof.get('profession')}}</option>
+            {% endfor %}
+        </select>
+      </label>
+      <label> Institution 
+        <select required name="kind" >
+            <option value>Any</option>
+            {% for inst in institutions %}
+            <option value="{{inst.get('institution')}}">{{inst.get('institution')}}</option>
+            {% endfor %}
         </select>
       </label>
       <input type="text" placeholder="search ..." required name ="search">
@@ -53,9 +68,8 @@
         <input type="submit" name="memberEmail" value="{{member.get('email')}}">
       </form></td>
       {% endfor %}
-
   </table>
 </div>
+
 {% endblock %}
-</body>
-</html>
+

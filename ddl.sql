@@ -1,20 +1,22 @@
-Ctrl-C -- exit!
+use rs2_db; --centralex_db
 
 drop table if exists comment;
 drop table if exists rating;
 drop table if exists post;
+drop table if exists profilePic;
 drop table if exists member;
 drop table if exists opportunity;
-drop table if exists profilePic;
+
 
 create table member(
     email varchar(30),
     `password` varchar(200) not null,
     `name` varchar(40) not null,
     profession varchar(100) not null,
+    institution varchar(30),
     `type` enum('Student','Alum', 'Professor'),
-    -- log_in BOOLEAN,
     primary key(email)
+
 )
 ENGINE = InnoDB;
 

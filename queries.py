@@ -1,15 +1,15 @@
 import os 
 import cs304dbi as dbi
 
-def insert_member(conn, user_email, user_password, user_name, user_type):
+def insert_member(conn, user_email, user_password, user_name,institution, user_type):
     '''
     Inserts a new member into the database. 
     '''
     curs = dbi.dict_cursor(conn)
-    sql = ''' INSERT INTO  member (email, password, name, type)
-            values (%s, %s, %s, %s)
+    sql = ''' INSERT INTO  member (email, password, name, institution, type)
+            values (%s, %s, %s, %s, %s)
         '''
-    curs.execute(sql, [user_email, user_password, user_name, user_type])
+    curs.execute(sql, [user_email, user_password, user_name, institution, user_type])
     conn.commit()
 
 def user_exists(conn, email):
@@ -52,18 +52,16 @@ def insert_opportunity(conn, email, field, title, institution, startDate, locati
                         sponsorship])
     conn.commit()
 
-
-'''inserts and updates '''
 def insert_and_update_rating(conn,email,pid,userRating):
+    '''inserts and updates '''
     curs = dbi.dict_cursor(conn)
     curs.execute('''INSERT INTO rating(email,pid,rating) VALUES (%s,%s,%s)
                             ON DUPLICATE KEY UPDATE rating = %s''', 
                             [email, pid, userRating, userRating])
     conn.commit()
 
-
-'''compute average rating for opportunities'''
 def average_rating(conn,pid):
+    '''compute average rating for opportunities'''
     curs = dbi.dict_cursor(conn)
     curs.execute('''SELECT avg(rating)
                 FROM rating
@@ -100,12 +98,29 @@ def get_fields(conn):
     curs.execute(sql)
     return curs.fetchall()
 
-def get_institutions(conn):
+def get_institutions_opportunity(conn):
     curs = dbi.dict_cursor(conn)
     sql = 'SELECT distinct institution from opportunity'
     curs.execute(sql)
     return curs.fetchall()
 
+def get_professions(conn):
+    curs = dbi.dict_cursor(conn)
+    sql = 'SELECT distinct profession from member'
+    curs.execute(sql)
+    return curs.fetchall()
+
+def get_institutions_member(conn):
+    curs = dbi.dict_cursor(conn)
+    sql = 'SELECT distinct institution from member'
+    curs.execute(sql)
+    return curs.fetchall()
+
+def get_affiliations(conn):
+    curs = dbi.dict_cursor(conn)
+    sql = 'SELECT distinct `type` from member'
+    curs.execute(sql)
+    return curs.fetchall()
 
 def look_oppor_title(conn, title):
     curs = dbi.dict_cursor(conn)
@@ -149,4 +164,4 @@ if __name__ == '__main__':
     dbi.cache_cnf()
     dbi.use('centralex_db')
     conn = dbi.connect()
-    print(get_fields(conn))
+    print(get_institutions_member(conn))
