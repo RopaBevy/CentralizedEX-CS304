@@ -36,10 +36,8 @@ def home():
 
 @app.route('/about/')
 def about():
-    '''
-    about page 
-    '''
     return render_template("index.html")
+
 
 @app.route('/signup/', methods=['GET', 'POST'])
 def signup():
@@ -71,23 +69,31 @@ def signup():
             flash('passwords do not match')
             return redirect(url_for('signup'))
 
+        # create a new user with the form data.
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'),
+                                        bcrypt.gensalt())
+        stored_password = hashed_password.decode('utf-8')
+            # add the new user to the database
+
         # if user is already in database, redirect back to login page
         if (queries.user_exists(conn, email)):
-            flash('An account with this email already exists. Please login.')
-            return redirect(url_for('login'))
+            if 'email' in session:
+                flash('Account updated')
+                queries.update_member(conn, email, profession, institution, stored_password, name, user_type, about)
+                member = queries.get_one_members(conn,session['email'])
+                return render_template('yourProfile.html', src=url_for('pic',email=email), member=member)
+            else:
+                flash('An account with this email already exists. Please Log in ')
+                return redirect(url_for('login'))
+            
         else:
-            # create a new user with the form data.
-            hashed_password = bcrypt.hashpw(password.encode('utf-8'),
-                                            bcrypt.gensalt())
-            stored_password = hashed_password.decode('utf-8')
-            # add the new user to the database
             queries.insert_member(conn, email, profession, institution, stored_password, name, user_type,about)
             session['email'] = email
         return redirect(url_for('file_upload', src=url_for('pic',email=email), email=email))
 
 
 
-@app.route('/member_Profile_Update/', methods=['GET', 'POST'])
+@app.route('/member_Profile_Update/')
 def member_Profile_Update():
     '''
     Gives the user the signup form under the get request. 
@@ -99,17 +105,7 @@ def member_Profile_Update():
         email = session['email']
         conn = dbi.connect()
         member = queries.get_one_members(conn,email)
-        if(request.method == 'GET'):
-            return render_template("yourProfile.html",src=url_for('pic',email=email), member=member)
-        else:
-            name = request.form.get('name')
-            profession = request.form.get('profession')
-            institution = request.form.get('institution')
-            about = request.form.get('about')
-            user_type = request.form.get('type')
-
-            member = queries.update_member(conn, email, profession, institution, name, user_type, about)
-            return render_template('yourProfile.html', src=url_for('pic',email=email), member=member)
+        return render_template("yourProfile.html",src=url_for('pic',email=email), member=member)
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -221,35 +217,42 @@ def upload():
     opportunity into the database and redirects to the display page which
     should be updated to include the newly added opportunity.
     '''
-    conn = dbi.connect()
-    if(request.method == 'GET'):
-        return render_template("upload.html")
-    else:
+    if 'email' in session:
         conn = dbi.connect()
-        session_value = request.cookies.get('session')
-        if('email' in session):
-            email = session['email']
+        if(request.method == 'GET'):
+            member = queries.get_one_members(conn,session['email'])
+            return render_template("upload.html", member = member)
         else:
-            flash('Please login again.')
-            return redirect(url_for('login'))
+            conn = dbi.connect()
+            session_value = request.cookies.get('session')
+            if('email' in session):
+                email = session['email']
+            else:
+                flash('Please login again.')
+                return redirect(url_for('login'))
 
-        # code to gather experience info to add to the database
-        field = request.form.get('field')
-        title = request.form.get('title')
-        institution = request.form.get('institution')
-        startDate = request.form.get('start')
-        location = request.form.get('location')
-        experienceType = request.form.get('experienceType')
-        experienceLevel = request.form.get('experienceLevel')
-        description = request.form.get('description')
-        appLink = request.form.get('link')
-        sponsorship = request.form.get('sponsorship')
+            # code to gather experience info to add to the database
+            field = request.form.get('field')
+            title = request.form.get('title')
+            institution = request.form.get('institution')
+            startDate = request.form.get('start')
+            location = request.form.get('location')
+            experienceType = request.form.get('experienceType')
+            experienceLevel = request.form.get('experienceLevel')
+            description = request.form.get('description')
+            appLink = request.form.get('link')
+            sponsorship = request.form.get('sponsorship')
 
-        queries.insert_opportunity(conn, email, field, title, institution, 
-                                    startDate, location, experienceType, 
-                                    experienceLevel, description, appLink, 
-                                    sponsorship)
-        return redirect(url_for('display'))
+            queries.insert_opportunity(conn, email, field, title, institution, 
+                                        startDate, location, experienceType, 
+                                        experienceLevel, description, appLink, 
+                                        sponsorship)
+            member = queries.get_one_members(conn,session['email'])
+            return redirect(url_for('display', member = member))
+    else:
+        flash('Please login.')
+        return render_template('login.html')
+        
 
 @app.route('/display/')
 def display():
@@ -259,7 +262,8 @@ def display():
     if('email' in session):
         conn = dbi.connect()
         opportunities = queries.get_opportunities(conn)
-        return render_template('display.html', opportunities=opportunities)
+        member = queries.get_one_members(conn,session['email'])
+        return render_template('display.html', opportunities=opportunities, member = member)
     else:
         flash('Please login.')
         return render_template('login.html')
@@ -279,35 +283,73 @@ def rating():
         avgRating = queries.average_rating(conn,pid)
         queries.update_pid_average(conn,avgRating,pid)
         flash("user{} is rating opportunity {} as {} stars".format(session["email"],pid,userRating))
-        return redirect(url_for('display'))
+        member = queries.get_one_members(conn,session['email'])
+        return redirect(url_for('display', member= member))
 
     else:
         flash('Please login.')
         return render_template('login.html')
 
+# Farida/Ropah code 
 # '''rate an opportunity'''
 @app.route('/search/', methods = ["GET"])
 def search():
     if('email' in session):
         conn = dbi.connect()
+        member = queries.get_one_members(conn,session['email'])
         if request.args['kind'] == 'title':
             title = request.args['search']
             jobs = queries.look_oppor_title(conn, title)
-            return render_template('display.html', opportunities=jobs)
+            return render_template('display.html', opportunities=jobs, member = member)
 
         elif request.args['kind'] == 'field':  
             field = request.args['search']
             jobs = queries.look_oppor_field(conn, field)
             print(jobs)
-            return render_template('display.html', opportunities=jobs)
+            return render_template('display.html', opportunities=jobs, member = member)
         elif request.args['kind'] == 'institution':  
             institution = request.args['search']
             jobs = queries.look_oppor_institution(conn, institution)
-            return render_template('display.html', opportunities=jobs)
+            return render_template('display.html', opportunities=jobs, member = member)
 
     else:
         flash('Please login.')
         return render_template('login.html')
+
+# Farida/Ropah code 
+# page with all members of the app
+@app.route('/filter_members/', methods=['GET'])
+def filter_members():
+    if('email' in session):
+        conn = dbi.connect()
+        user = queries.get_one_members(conn,session['email'])
+        if request.args['kind'] == 'Person':
+            name = request.args['search']
+            members = queries.look_member_name(conn, name)
+            return render_template("community.html", members = members, name = user)
+
+        elif request.args['kind'] == 'profession':  
+            profession = request.args['search']
+            members = queries.look_member_profession(conn, profession)
+            return render_template("community.html", members = members, name = user)
+        elif request.args['kind'] == 'type':  
+            type = request.args['search']
+            members = queries.look_member_type(conn, type)
+            return render_template("community.html", members = members, name = user)
+
+    else:
+        flash('Please login.')
+        return render_template('login.html')
+
+
+    if('email' in session):
+        conn = dbi.connect()
+        name = queries.get_one_members(conn,session['email'])
+        members = queries.get_all_members(conn)
+        return render_template("community.html", members = members, name = name)
+    else:
+        flash('Please login.')
+        return render_template('login.html') 
 
 # Farida's code 
 # page with all members of the app
@@ -316,8 +358,9 @@ def community():
 
     if('email' in session):
         conn = dbi.connect()
+        name = queries.get_one_members(conn,session['email'])
         members = queries.get_all_members(conn)
-        return render_template("community.html", members = members)
+        return render_template("community.html", members = members, name = name)
     else:
         flash('Please login.')
         return render_template('login.html')    
@@ -331,7 +374,7 @@ def display_member(email):
         conn = dbi.connect()
         # email = request.form.get('memberEmail')
         # print("jhfsldkjfhasdfhsadklfhsadhfsdkhflasdfhjksdfhsadhf ", email)
-        member = queries.get_one_members(conn,email)
+        member = queries.get_one_members(conn,session['email'])
         return render_template("memberPage.html", src=url_for('pic',email=email), email = email, member = member)
     else:
         flash('Please login again.')
@@ -369,6 +412,7 @@ def file_upload():
             # ,src= os.path.join(app.config['UPLOADS'],'ftahirywellesley.edu.jpg'),email='')
 
         if request.form["submit"] == "Upload Later":
+            conn = dbi.connect()
             flash('You can update your picture on your profile page')
             member = queries.get_one_members(conn,session['email'])
             return render_template("welcomePage.html", member = member)

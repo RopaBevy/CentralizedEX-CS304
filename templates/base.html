@@ -27,16 +27,17 @@
             let title = $target.closest("tr").prev().find("td:first");
             let current = $(title).html();
 
-            if ( $target.closest("td").attr("colspan") > 5 ) {
+            if ( $target.closest("td").attr("colspan") > 100000000) {
+                console.log($target.closest("td").attr("colspan") )
                 $target.slideUp();
-                $(title).html("+  " +current);
+                $(title).html(current);
                 // $target.closest("tr").prev().find("td:first").html("+");
             } else {
                 $target.closest("tr").next().find("p").slideToggle();
-                if (title == $(title).html("+  " +current))
-                $(title).html("-  " +current);
+                if (title == $(title).html(current))
+                $(title).html(current);
                 else
-                $(title).html("+  " +current);               
+                $(title).html(current);               
             }                    
         });
     });

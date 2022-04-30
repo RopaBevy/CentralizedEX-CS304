@@ -4,10 +4,11 @@
 
 {% block navbar %}
 <div class="collapse navbar-collapse" id="navbarResponsive">
-  <ul class="navbar-nav ms-auto">
-      <li class="nav-item"><a class="nav-link" href="{{url_for('upload')}}">Post Opportunity</a></li>
-      <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
-  </ul>
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="{{url_for('member_Profile_Update', email = email)}}">{{name.get('name')}} <i class="fas fa-user-alt"></i></a>  </li>
+        <li class="nav-item"><a class="nav-link" href="{{url_for('home')}}">Home</a></li>  
+        <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
+    </ul>
 </div>
 {% endblock %}
 
@@ -18,13 +19,13 @@
   <br><br><br>
 
   <div class="search-container">
-    <form action="{{url_for('search')}}">
+    <form action="{{url_for('filter_members')}}">
       <label> Kind 
         <select required name="kind" >
             <option value>Choose One</option>
-            <option value="Person">Job Title</option>
-            <option value="Job Title">Field</option>
-            <option value="institution">Institution</option>
+            <option value="Person">Person</option>
+            <option value="profession">Profession</option>
+            <option value="type">Wellesley Affiliation</option>
         </select>
       </label>
       <input type="text" placeholder="search ..." required name ="search">

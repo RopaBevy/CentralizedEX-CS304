@@ -26,27 +26,22 @@
                 <img src="{{src}}" alt="Your Picture">
             </div>
         </form>
-        <form method="get" action="{{ url_for('file_upload') }}"> <i class="fas fa-user-alt"></i>Update Image 
-            <input type="submit" name="Update Image">
+        <form method="get" action="{{ url_for('file_upload') }}"> <button class="btn">Update Photo<i class="fas fa-user-alt"></i></button>  
         </form>   
+        
     </div>
 
     <div class="ProfileContent">
-        <form action="/action_page.php">
-            <label for="name">Name:</label><br>
-            <input type="text" id="name" name="name" value="{{ member.get('name') }}"><br>
-            <label for="profession">Profession:</label><br>
-            <input type="text" id="profession" name="profession" value="{{ member.get('profession') }}"><br>
-            <label for="email">Contact:</label><br>
-            <input type="text" id="email" name="email" value="{{ member.get('email') }}"><br>
-            <label for="institution">Institution:</label><br>
-            <input type="text" id="institution" name="institution" value="{{ member.get('institution') }}"><br>
-            <label for="about">About:</label><br>
-            <input type="text" id="about" name="about" value="{{ member.get('about') }}"><br>
-            <label for="type">Wellesley Affiliation:</label><br>
-            <input type="text" id="type" name="type" value="{{ member.get('type') }}"><br><br>
-            <input type="submit" value="Submit">
-          </form> 
+        <p>Name: {{ member.get('name') }} </p>
+        <p>Profession: {{ member.get('profession') }} </p>
+        <p>Contact: {{ member.get('email') }} </p>
+        <p>Institution: {{ member.get('institution') }} </p>
+        <p>Wellesley Affiliation: {{ member.get('type') }} </p>
+        <p>About: {{ member.get('about') }} </p>
+
+    <form method="get" action="{{ url_for('signup') }}"> 
+        <button class="btn">Update You Information<i class="fas fa-user-alt"></i></button>  
+    </form>  
     </div>
 
 
