@@ -1,3 +1,4 @@
+from ssl import SSL_ERROR_SSL
 from flask import (Flask, render_template, make_response,
                    request, session, redirect, url_for, flash,
                    url_for, session, send_from_directory, Response)
@@ -25,9 +26,20 @@ def home():
     login or signup.
     '''
     if 'email' in session:
-        return render_template("welcomePage.html")
+        conn = dbi.connect()
+        email = session['email']
+        member = queries.get_one_members(conn,email)
+        return render_template("welcomePage.html", email = email, member= member)
     else:
         return render_template("index.html")
+
+
+@app.route('/about/')
+def about():
+    '''
+    about page 
+    '''
+    return render_template("index.html")
 
 @app.route('/signup/', methods=['GET', 'POST'])
 def signup():
@@ -43,9 +55,12 @@ def signup():
         conn = dbi.connect()
         email = request.form.get('email')
         name = request.form.get('name')
+        profession = request.form.get('profession')
+        institution = request.form.get('institution')
         password = request.form.get('password')
         password2 = request.form.get('password2')
         user_type = request.form.get('type')
+        about = request.form.get('about')
 
         email_pattern = re.compile('@wellesley.edu$')
         if(len(email_pattern.findall(email)) == 0):
@@ -66,9 +81,35 @@ def signup():
                                             bcrypt.gensalt())
             stored_password = hashed_password.decode('utf-8')
             # add the new user to the database
-            queries.insert_member(conn, email, stored_password, name, user_type)
+            queries.insert_member(conn, email, profession, institution, stored_password, name, user_type,about)
             session['email'] = email
         return redirect(url_for('file_upload', src=url_for('pic',email=email), email=email))
+
+
+
+@app.route('/member_Profile_Update/', methods=['GET', 'POST'])
+def member_Profile_Update():
+    '''
+    Gives the user the signup form under the get request. 
+    Collect the user's credentials and inserts the user into the database if 
+    the credentials are appropriate (user must use Wellesley College email) 
+    under the post request. 
+    '''
+    if 'email' in session:
+        email = session['email']
+        conn = dbi.connect()
+        member = queries.get_one_members(conn,email)
+        if(request.method == 'GET'):
+            return render_template("yourProfile.html",src=url_for('pic',email=email), member=member)
+        else:
+            name = request.form.get('name')
+            profession = request.form.get('profession')
+            institution = request.form.get('institution')
+            about = request.form.get('about')
+            user_type = request.form.get('type')
+
+            member = queries.update_member(conn, email, profession, institution, name, user_type, about)
+            return render_template('yourProfile.html', src=url_for('pic',email=email), member=member)
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -104,7 +145,9 @@ def login():
             session['email'] = email
             session['logged_in'] = True
             session['visits'] = 1
-            return render_template('welcomePage.html')
+            email = session['email']
+            member = queries.get_one_members(conn,email)
+            return render_template('welcomePage.html',member = member, email =email )
         else:
             flash('Login unsuccessful. Please try again or sign up.')
             return redirect(url_for('login'))
@@ -289,7 +332,7 @@ def display_member(email):
         # email = request.form.get('memberEmail')
         # print("jhfsldkjfhasdfhsadklfhsadhfsdkhflasdfhjksdfhsadhf ", email)
         member = queries.get_one_members(conn,email)
-        return render_template("memberPage.html", email = email, member = member)
+        return render_template("memberPage.html", src=url_for('pic',email=email), email = email, member = member)
     else:
         flash('Please login again.')
         return redirect(url_for('login'))        
@@ -305,6 +348,9 @@ def pic(email):
         return send_from_directory(app.config['UPLOADS'], 'ww.jpg')
     row = curs.fetchone()
     return send_from_directory(app.config['UPLOADS'],row['filename'])
+
+
+
 
 # This gets us better error messages for certain common request errors
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
@@ -324,7 +370,8 @@ def file_upload():
 
         if request.form["submit"] == "Upload Later":
             flash('You can update your picture on your profile page')
-            return render_template("welcomePage.html")
+            member = queries.get_one_members(conn,session['email'])
+            return render_template("welcomePage.html", member = member)
 
         if request.method == 'POST':
             print("does it visit here")
@@ -344,7 +391,8 @@ def file_upload():
                     [email, filename, filename])
                 conn.commit()
                 flash('Image Upload Successful')
-                return render_template("welcomePage.html")
+                member = queries.get_one_members(conn,session['email'])
+                return render_template("welcomePage.html", member = member)
                 
             except Exception as err:
                 flash('Upload failed {why}'.format(why=err))

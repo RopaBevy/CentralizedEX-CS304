@@ -14,28 +14,25 @@
 {% block page_content %}
 
 
-<div>
+<div class="memberPage">
   <br><br><br>
 
     <div class = "Profileimage">
-        <form method="get" action="{{ url_for('pic', email = member.get('email'))}}" enctype="multipart/form-data">            
+        <form method="get" action="{{url_for('file_upload')}}" enctype="multipart/form-data">            
             <div class="image-placeholder"> 
                 <img src="{{src}}" alt="Your Picture">
             </div>
         </form>
-        <form method="get" action="{{ url_for('file_upload') }}"> <i class="fas fa-user-alt"></i>Update Image 
-            <input type="submit" name="Update Image">
-        </form>   
     </div>
 
     <div class="ProfileContent">
         <p>Name: {{ member.get('name') }}</p>
-        <p>Profession: {{ member.get('name') }}</p>
-        <p>Contact: {{ member.get('name') }}</p>
-        <p>Institution: {{ member.get('name') }}</p>
-        <p>About: {{ member.get('name') }}</p>
+        <p>Profession: {{ member.get('profession') }}</p>
+        <p>Contact: {{ member.get('email') }}</p>
+        <p>Institution: {{ member.get('institution') }}</p>
+        <p>Wellesley Affiliation: {{ member.get('type') }}</p>
+        <p>About: {{ member.get('about') }}</p>
     </div>
-
 
 </div>
  

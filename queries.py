@@ -1,15 +1,28 @@
 import os 
 import cs304dbi as dbi
 
-def insert_member(conn, user_email, user_password, user_name, user_type):
+def insert_member(conn, user_email, profession, institution, user_password, user_name, user_type, about):
     '''
     Inserts a new member into the database. 
     '''
     curs = dbi.dict_cursor(conn)
-    sql = ''' INSERT INTO  member (email, password, name, type)
-            values (%s, %s, %s, %s)
+    sql = ''' INSERT INTO  member (email, profession, institution, password, name, type, about)
+            values (%s, %s, %s, %s,%s,%s,%s)
         '''
-    curs.execute(sql, [user_email, user_password, user_name, user_type])
+    curs.execute(sql, [user_email, profession, institution, user_password, user_name, user_type, about])
+    conn.commit()
+
+
+def update_member(conn, user_email, profession, institution, user_name, user_type, about):
+    '''
+    update a member in the database. 
+    '''
+    curs = dbi.dict_cursor(conn)
+
+    sql = ''' UPDATE member SET profession = %s, institution = %s,  name = %s, type = %s, about= %s
+            where email = %s
+        '''
+    curs.execute(sql, [profession, institution, user_name, user_type, about, user_email])
     conn.commit()
 
 def user_exists(conn, email):

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+<!-- created by Farida Tahiry -->
+
+{% block navbar %}
+<div class="collapse navbar-collapse" id="navbarResponsive">
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="{{url_for('member_Profile_Update', email = email)}}">{{member.get('name')}} <i class="fas fa-user-alt"></i></a>  </li>
+        <li class="nav-item"><a class="nav-link" href="{{url_for('home')}}">Home</a></li>  
+        <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
+        
+        
+    </ul>
+</div>
+{% endblock %}
+
+{% block page_content %}
+
+
+<div class="memberPage">
+  <br><br><br>
+    <div class = "Profileimage">
+        <h3>Update Your Profile</h3>
+        <form method="get" action="{{ url_for('pic', email = member.get('email'))}}" enctype="multipart/form-data">            
+            <div class="image-placeholder"> 
+                <img src="{{src}}" alt="Your Picture">
+            </div>
+        </form>
+        <form method="get" action="{{ url_for('file_upload') }}"> <i class="fas fa-user-alt"></i>Update Image 
+            <input type="submit" name="Update Image">
+        </form>   
+    </div>
+
+    <div class="ProfileContent">
+        <form action="/action_page.php">
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name" value="{{ member.get('name') }}"><br>
+            <label for="profession">Profession:</label><br>
+            <input type="text" id="profession" name="profession" value="{{ member.get('profession') }}"><br>
+            <label for="email">Contact:</label><br>
+            <input type="text" id="email" name="email" value="{{ member.get('email') }}"><br>
+            <label for="institution">Institution:</label><br>
+            <input type="text" id="institution" name="institution" value="{{ member.get('institution') }}"><br>
+            <label for="about">About:</label><br>
+            <input type="text" id="about" name="about" value="{{ member.get('about') }}"><br>
+            <label for="type">Wellesley Affiliation:</label><br>
+            <input type="text" id="type" name="type" value="{{ member.get('type') }}"><br><br>
+            <input type="submit" value="Submit">
+          </form> 
+    </div>
+
+
+</div>
+ 
+{% endblock %}
+</body>
+</html>

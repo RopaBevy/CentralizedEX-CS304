@@ -1,17 +1,19 @@
-Ctrl-C -- exit!
 
 drop table if exists comment;
 drop table if exists rating;
 drop table if exists post;
+drop table if exists profilePic;
 drop table if exists member;
 drop table if exists opportunity;
-drop table if exists profilePic;
+
 
 create table member(
     email varchar(30),
+    profession varchar(50) not null,
+    institution varchar(70) not null,
     `password` varchar(200) not null,
     `name` varchar(40) not null,
-    profession varchar(100) not null,
+    about varchar(400) not null,
     `type` enum('Student','Alum', 'Professor'),
     -- log_in BOOLEAN,
     primary key(email)
