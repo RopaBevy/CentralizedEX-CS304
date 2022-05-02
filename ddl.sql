@@ -10,15 +10,13 @@ drop table if exists opportunity;
 
 create table member(
     email varchar(30),
+    `name` varchar(40) not null,
+    `password` varchar(200) not null,
+    `type` enum('Student','Alum', 'Professor'),
     profession varchar(50) not null,
     institution varchar(70) not null,
-    `password` varchar(200) not null,
-    `name` varchar(40) not null,
-    profession varchar(100) not null,
-    institution varchar(30),
-    `type` enum('Student','Alum', 'Professor'),
+    about varchar(100),
     primary key(email)
-
 )
 ENGINE = InnoDB;
 
@@ -42,6 +40,7 @@ ENGINE = InnoDB;
 create table post(
     email varchar(30),
     pid int,
+    primary key (email, pid),
     foreign key (email) references member(email)
     on delete cascade 
     on update cascade,
@@ -52,10 +51,16 @@ create table post(
 ENGINE = InnoDB;
 
 create table comment(
+    comment_id int not null auto_increment,
+    email varchar(30),
     pid int,
     institution varchar(30),
     title varchar(25),
     comment varchar(250),
+    primary key(comment_id),
+    foreign key (email) references member(email)
+    on delete cascade
+    on update cascade,
     foreign key (pid) references opportunity(pid)
     on delete cascade
     on update cascade

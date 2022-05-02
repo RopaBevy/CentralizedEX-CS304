@@ -3,8 +3,7 @@
 {% block navbar %}
 <div class="collapse navbar-collapse" id="navbarResponsive">
   <ul class="navbar-nav ms-auto">
-      <li class="nav-item"><a class="nav-link" href="{{url_for('member_Profile_Update', email = email)}}">{{member.get('name')}} <i class="fas fa-user-alt"></i></a>  </li>
-      <li class="nav-item"><a class="nav-link" href="{{url_for('home')}}">Home</a></li>  
+      <li class="nav-item"><a class="nav-link" href="{{url_for('member_profile_update')}}">{{member.get('name')}}</a>  </li>
       <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
   </ul>
 </div>
@@ -18,9 +17,8 @@
           <div class="col-md-10 col-lg-8 mx-auto text-center">
               <h2 class="text-white mb-5">Post an Opportunity</h2>
                   <form class="form-signup" id="uploadForm" action="{{url_for('upload')}}" method="POST">
-                    <!-- Email address input-->
                         <label for="field"> Field</label><br>
-                        <input class="form-control" id="field" type="text" name="field" aria-label="Enter email address..." required /><br><br>
+                        <input class="form-control" id="field" type="text" name="field" aria-label="Enter email address..." placeholder="Computer Science" required /><br><br>
                         <label for="title"> Title</label><br>
                         <input class="form-control" id="title" type="text" name="title" placeholder="Design internship" aria-label="Enter email address..." required /><br><br>
                         <label for="description"> Description</label><br>
@@ -31,48 +29,40 @@
                         <input class="form-control" id="start" type="text" name="start" placeholder="June, 6, 2022" aria-label="Enter email address..." required /><br><br>
                         <label for="location"> Location</label><br>
                         <input class="form-control" id="location" type="text" name="location" placeholder="New York, NY" aria-label="Enter email address..." /><br><br>
-                        
-                        <div id="experienceType">
-                          <p>Type of Experience</p>
-                          <input type="radio" name="experienceType" value="Internship" required>
-                          <label>Internship</label>
-                          <input type="radio" name="experienceType" value="Full-Time" required>
-                          <label>Full-Time</label>
-                          <input type="radio" name="experienceType" value="Part-Time" required>
-                          <label>Part-Time</label><br><br>
-                        </div>
-                      
-                        <div id="experienceLevel">
-                          <p>Experience Level</p>
-                          <input type="checkbox" name="experienceLevel" value="Freshman" required>
-                          <label>Freshman</label>
-                          <input type="checkbox" name="experienceLevel" value="Sophomore" required>
-                          <label>Sophomore</label>
-                          <input type="checkbox" name="experienceLevel" value="Junior" required>
-                          <label>Junior</label>
-                          <input type="checkbox" name="experienceLevel" value="Senior" required>
-                          <label>Senior</label>
-                          <input type="checkbox" name="experienceLevel" value="Any" required>
-                          <label>Any</label>
-                        </div>
-                        
                         <label for="link">Application Link</label><br>
                         <input class="form-control" id="link" type="text" name="link" aria-label="Enter email address..." required /><br><br>
-
-                        <div id="sponsorship">
-                          <p>Visa Sponsorship</p>
-                          <input type="radio" name="sponsorship" value="Yes" required>
-                          <label>Yes</label>
-                          <input type="radio" name="sponsorship" value="No" required>
-                          <label>No</label>
-                          <input type="radio" name="sponsorship" value="Maybe" required>
-                          <label>Maybe</label><br><br>
-                        </div>
-                        
-
-                        <div class="col-auto"><br><button class="btn" id="submitButton" type="submit" value="Post">Post</button></div><br>
+                  </form>
+                  <form>
+                  <p><b>Type of Experience</b></p>
+                  <input type="radio" name="experienceType" value="Internship" required>
+                  <label>Internship</label>
+                  <input type="radio" name="experienceType" value="Full-Time" required>
+                  <label>Full-Time</label>
+                  <input type="radio" name="experienceType" value="Part-Time" required>
+                  <label>Part-Time</label><br><br><br>
+                  <p><b>Experience Level</b></p>
+                  <input type="checkbox" name="experienceLevel" value="Freshman" required>
+                  <label>Freshman</label>
+                  <input type="checkbox" name="experienceLevel" value="Sophomore" required>
+                  <label>Sophomore</label>
+                  <input type="checkbox" name="experienceLevel" value="Junior" required>
+                  <label>Junior</label>
+                  <input type="checkbox" name="experienceLevel" value="Senior" required>
+                  <label>Senior</label>
+                  <input type="checkbox" name="experienceLevel" value="Any" required>
+                  <label>Any</label><br><br><br>
+                  <p><b>Visa Sponsorship</b></p>
+                  <input type="radio" name="sponsorship" value="Yes" required>
+                  <label>Yes</label>
+                  <input type="radio" name="sponsorship" value="No" required>
+                  <label>No</label>
+                  <input type="radio" name="sponsorship" value="Maybe" required>
+                  <label>Maybe</label>
+                </form><br><br><br>
+                       
+                <div class="col-auto"><br><button class="btn" id="submitButton" type="submit" value="Post">Post</button></div><br>
                   
-                    <p><b>Not registered? <a href="{{url_for('signup')}}">Sign up!</a></b></p>
+                    <p style="color: aliceblue;"><b>Not registered? <a href="{{url_for('signup')}}">Sign up!</a></b></p>
                   </form>
                 </div>
               </div>
