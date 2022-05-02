@@ -1,11 +1,16 @@
 import os 
 import cs304dbi as dbi
 
+<<<<<<< HEAD
 def insert_member(conn, user_email, profession, institution, user_password, user_name, user_type, about):
+=======
+def insert_member(conn, user_email, user_password, user_name,institution, user_type):
+>>>>>>> fe96754bb7b7a41acc8f1cde3baaa32cb5d32fc8
     '''
     Inserts a new member into the database. 
     '''
     curs = dbi.dict_cursor(conn)
+<<<<<<< HEAD
     sql = ''' INSERT INTO  member (email, profession, institution, password, name, type, about)
             values (%s, %s, %s, %s,%s,%s,%s)
         '''
@@ -23,6 +28,12 @@ def update_member(conn, user_email, profession, institution,stored_password, use
             where email = %s
         '''
     curs.execute(sql, [profession, institution, stored_password,user_name, user_type, about, user_email])
+=======
+    sql = ''' INSERT INTO  member (email, password, name, institution, type)
+            values (%s, %s, %s, %s, %s)
+        '''
+    curs.execute(sql, [user_email, user_password, user_name, institution, user_type])
+>>>>>>> fe96754bb7b7a41acc8f1cde3baaa32cb5d32fc8
     conn.commit()
 
 def user_exists(conn, email):
@@ -65,18 +76,16 @@ def insert_opportunity(conn, email, field, title, institution, startDate, locati
                         sponsorship])
     conn.commit()
 
-
-'''inserts and updates '''
 def insert_and_update_rating(conn,email,pid,userRating):
+    '''inserts and updates '''
     curs = dbi.dict_cursor(conn)
     curs.execute('''INSERT INTO rating(email,pid,rating) VALUES (%s,%s,%s)
                             ON DUPLICATE KEY UPDATE rating = %s''', 
                             [email, pid, userRating, userRating])
     conn.commit()
 
-
-'''compute average rating for opportunities'''
 def average_rating(conn,pid):
+    '''compute average rating for opportunities'''
     curs = dbi.dict_cursor(conn)
     curs.execute('''SELECT avg(rating)
                 FROM rating
@@ -100,7 +109,40 @@ def get_opportunities(conn):
     Gets and returns all opportunities in the database.
     '''
     curs = dbi.dict_cursor(conn)
-    sql = ' SELECT * FROM opportunity'
+    sql = 'SELECT * FROM opportunity'
+    curs.execute(sql)
+    return curs.fetchall()
+
+def get_fields(conn):
+    '''
+    Gets and returns all fields in the database.
+    '''
+    curs = dbi.dict_cursor(conn)
+    sql = 'SELECT distinct field from opportunity'
+    curs.execute(sql)
+    return curs.fetchall()
+
+def get_institutions_opportunity(conn):
+    curs = dbi.dict_cursor(conn)
+    sql = 'SELECT distinct institution from opportunity'
+    curs.execute(sql)
+    return curs.fetchall()
+
+def get_professions(conn):
+    curs = dbi.dict_cursor(conn)
+    sql = 'SELECT distinct profession from member'
+    curs.execute(sql)
+    return curs.fetchall()
+
+def get_institutions_member(conn):
+    curs = dbi.dict_cursor(conn)
+    sql = 'SELECT distinct institution from member'
+    curs.execute(sql)
+    return curs.fetchall()
+
+def get_affiliations(conn):
+    curs = dbi.dict_cursor(conn)
+    sql = 'SELECT distinct `type` from member'
     curs.execute(sql)
     return curs.fetchall()
 
@@ -170,3 +212,4 @@ if __name__ == '__main__':
     dbi.cache_cnf()
     dbi.use('centralex_db')
     conn = dbi.connect()
+    print(get_institutions_member(conn))

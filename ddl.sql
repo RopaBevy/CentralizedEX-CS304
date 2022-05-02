@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+use rs2_db; --centralex_db
+>>>>>>> fe96754bb7b7a41acc8f1cde3baaa32cb5d32fc8
 
 drop table if exists comment;
 drop table if exists rating;
@@ -13,10 +17,15 @@ create table member(
     institution varchar(70) not null,
     `password` varchar(200) not null,
     `name` varchar(40) not null,
+<<<<<<< HEAD
     about varchar(400) not null,
+=======
+    profession varchar(100) not null,
+    institution varchar(30),
+>>>>>>> fe96754bb7b7a41acc8f1cde3baaa32cb5d32fc8
     `type` enum('Student','Alum', 'Professor'),
-    -- log_in BOOLEAN,
     primary key(email)
+
 )
 ENGINE = InnoDB;
 

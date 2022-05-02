@@ -53,7 +53,10 @@ def signup():
         conn = dbi.connect()
         email = request.form.get('email')
         name = request.form.get('name')
+<<<<<<< HEAD
         profession = request.form.get('profession')
+=======
+>>>>>>> fe96754bb7b7a41acc8f1cde3baaa32cb5d32fc8
         institution = request.form.get('institution')
         password = request.form.get('password')
         password2 = request.form.get('password2')
@@ -87,7 +90,16 @@ def signup():
                 return redirect(url_for('login'))
             
         else:
+<<<<<<< HEAD
             queries.insert_member(conn, email, profession, institution, stored_password, name, user_type,about)
+=======
+            # create a new user with the form data.
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'),
+                                            bcrypt.gensalt())
+            stored_password = hashed_password.decode('utf-8')
+            # add the new user to the database
+            queries.insert_member(conn, email, stored_password, name, institution, user_type)
+>>>>>>> fe96754bb7b7a41acc8f1cde3baaa32cb5d32fc8
             session['email'] = email
         return redirect(url_for('file_upload', src=url_for('pic',email=email), email=email))
 
@@ -262,8 +274,15 @@ def display():
     if('email' in session):
         conn = dbi.connect()
         opportunities = queries.get_opportunities(conn)
+<<<<<<< HEAD
         member = queries.get_one_members(conn,session['email'])
         return render_template('display.html', opportunities=opportunities, member = member)
+=======
+        fields = queries.get_fields(conn)
+        institutions = queries.get_institutions_opportunity(conn)
+        return render_template('display.html', opportunities=opportunities,
+                                fields=fields, institutions=institutions)
+>>>>>>> fe96754bb7b7a41acc8f1cde3baaa32cb5d32fc8
     else:
         flash('Please login.')
         return render_template('login.html')
@@ -306,7 +325,12 @@ def search():
             field = request.args['search']
             jobs = queries.look_oppor_field(conn, field)
             print(jobs)
+<<<<<<< HEAD
             return render_template('display.html', opportunities=jobs, member = member)
+=======
+            return render_template('display.html', opportunities=jobs)
+
+>>>>>>> fe96754bb7b7a41acc8f1cde3baaa32cb5d32fc8
         elif request.args['kind'] == 'institution':  
             institution = request.args['search']
             jobs = queries.look_oppor_institution(conn, institution)
@@ -355,12 +379,21 @@ def filter_members():
 # page with all members of the app
 @app.route('/community/', methods=['GET'])
 def community():
-
     if('email' in session):
         conn = dbi.connect()
         name = queries.get_one_members(conn,session['email'])
         members = queries.get_all_members(conn)
+<<<<<<< HEAD
         return render_template("community.html", members = members, name = name)
+=======
+        professions = queries.get_professions(conn)
+        affiliations = queries.get_affiliations(conn)
+        institutions = queries.get_institutions_member(conn)
+        return render_template("community.html", members=members, 
+                                professions=professions, 
+                                affiliations=affiliations,
+                                institutions=institutions)
+>>>>>>> fe96754bb7b7a41acc8f1cde3baaa32cb5d32fc8
     else:
         flash('Please login.')
         return render_template('login.html')    
@@ -448,7 +481,7 @@ def file_upload():
 
 if __name__ == '__main__':
     dbi.cache_cnf()
-    dbi.use('ftahiry_db') #centralex_db
+    dbi.use('rs2_db') #centralex_db
 
     import os
     port = os.getuid()

@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
-<!-- created by Farida Tahiry -->
+<!-- created by Farida Tahiry and Ropafadzo Shava-->
 
 {% block navbar %}
 <div class="collapse navbar-collapse" id="navbarResponsive">
+<<<<<<< HEAD
     <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a class="nav-link" href="{{url_for('member_Profile_Update', email = email)}}">{{member.get('name')}} <i class="fas fa-user-alt"></i></a>  </li>
         <li class="nav-item"><a class="nav-link" href="{{url_for('home')}}">Home</a></li>  
@@ -11,11 +12,19 @@
         
         
     </ul>
+=======
+  <ul class="navbar-nav ms-auto">
+     <li class="nav-item"><a class="nav-link" href="{{url_for('display')}}">View Opportunities</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{url_for('upload')}}">Post Opportunity</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
+  </ul>
+>>>>>>> fe96754bb7b7a41acc8f1cde3baaa32cb5d32fc8
 </div>
 {% endblock %}
 
 {% block page_content %}
 
+<<<<<<< HEAD
 
 <div class="memberPage">
   <br><br><br>
@@ -37,8 +46,18 @@
         <p>About: {{ member.get('about') }}</p>
     </div>
 
+=======
+<div class = "image">
+    <form method="post" action="{{url_for('file_upload')}}" enctype="multipart/form-data">
+        <div class="image-placeholder"> 
+            <img src="{{src}}" alt="Your Picture">
+        </div>
+    </form>
+    <p>Name: {{ member.get('name') }}</p>
+    <p>Profession: {{ member.get('type') }}</p>
+    <p>Contact: {{ member.get('email') }}</p>
+    <p>Institution: {{ member.get('institution') }}</p>
+>>>>>>> fe96754bb7b7a41acc8f1cde3baaa32cb5d32fc8
 </div>
  
 {% endblock %}
-</body>
-</html>
