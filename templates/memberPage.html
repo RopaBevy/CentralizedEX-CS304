@@ -4,16 +4,49 @@
 
 {% block navbar %}
 <div class="collapse navbar-collapse" id="navbarResponsive">
+<<<<<<< HEAD
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="{{url_for('member_Profile_Update', email = email)}}">{{member.get('name')}} <i class="fas fa-user-alt"></i></a>  </li>
+        <li class="nav-item"><a class="nav-link" href="{{url_for('home')}}">Home</a></li>  
+        <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
+        
+        
+    </ul>
+=======
   <ul class="navbar-nav ms-auto">
      <li class="nav-item"><a class="nav-link" href="{{url_for('display')}}">View Opportunities</a></li>
       <li class="nav-item"><a class="nav-link" href="{{url_for('upload')}}">Post Opportunity</a></li>
       <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
   </ul>
+>>>>>>> fe96754bb7b7a41acc8f1cde3baaa32cb5d32fc8
 </div>
 {% endblock %}
 
 {% block page_content %}
 
+<<<<<<< HEAD
+
+<div class="memberPage">
+  <br><br><br>
+
+    <div class = "Profileimage">
+        <form method="get" action="{{url_for('file_upload')}}" enctype="multipart/form-data">            
+            <div class="image-placeholder"> 
+                <img src="{{src}}" alt="Your Picture">
+            </div>
+        </form>
+    </div>
+
+    <div class="ProfileContent">
+        <p>Name: {{ member.get('name') }}</p>
+        <p>Profession: {{ member.get('profession') }}</p>
+        <p>Contact: {{ member.get('email') }}</p>
+        <p>Institution: {{ member.get('institution') }}</p>
+        <p>Wellesley Affiliation: {{ member.get('type') }}</p>
+        <p>About: {{ member.get('about') }}</p>
+    </div>
+
+=======
 <div class = "image">
     <form method="post" action="{{url_for('file_upload')}}" enctype="multipart/form-data">
         <div class="image-placeholder"> 
@@ -24,6 +57,7 @@
     <p>Profession: {{ member.get('type') }}</p>
     <p>Contact: {{ member.get('email') }}</p>
     <p>Institution: {{ member.get('institution') }}</p>
+>>>>>>> fe96754bb7b7a41acc8f1cde3baaa32cb5d32fc8
 </div>
  
 {% endblock %}

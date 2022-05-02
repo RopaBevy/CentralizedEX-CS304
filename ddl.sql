@@ -10,6 +10,8 @@ drop table if exists opportunity;
 
 create table member(
     email varchar(30),
+    profession varchar(50) not null,
+    institution varchar(70) not null,
     `password` varchar(200) not null,
     `name` varchar(40) not null,
     profession varchar(100) not null,

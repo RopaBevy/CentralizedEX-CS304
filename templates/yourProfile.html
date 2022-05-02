@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+<!-- created by Farida Tahiry -->
+
+{% block navbar %}
+<div class="collapse navbar-collapse" id="navbarResponsive">
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="{{url_for('member_Profile_Update', email = email)}}">{{member.get('name')}} <i class="fas fa-user-alt"></i></a>  </li>
+        <li class="nav-item"><a class="nav-link" href="{{url_for('home')}}">Home</a></li>  
+        <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
+        
+        
+    </ul>
+</div>
+{% endblock %}
+
+{% block page_content %}
+
+
+<div class="memberPage">
+  <br><br><br>
+    <div class = "Profileimage">
+        <h3>Update Your Profile</h3>
+        <form method="get" action="{{ url_for('pic', email = member.get('email'))}}" enctype="multipart/form-data">            
+            <div class="image-placeholder"> 
+                <img src="{{src}}" alt="Your Picture">
+            </div>
+        </form>
+        <form method="get" action="{{ url_for('file_upload') }}"> <button class="btn">Update Photo<i class="fas fa-user-alt"></i></button>  
+        </form>   
+        
+    </div>
+
+    <div class="ProfileContent">
+        <p>Name: {{ member.get('name') }} </p>
+        <p>Profession: {{ member.get('profession') }} </p>
+        <p>Contact: {{ member.get('email') }} </p>
+        <p>Institution: {{ member.get('institution') }} </p>
+        <p>Wellesley Affiliation: {{ member.get('type') }} </p>
+        <p>About: {{ member.get('about') }} </p>
+
+    <form method="get" action="{{ url_for('signup') }}"> 
+        <button class="btn">Update You Information<i class="fas fa-user-alt"></i></button>  
+    </form>  
+    </div>
+
+
+</div>
+ 
+{% endblock %}
+</body>
+</html>

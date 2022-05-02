@@ -1,15 +1,28 @@
 import os 
 import cs304dbi as dbi
 
-def insert_member(conn, user_email, user_password, user_name,institution, user_type):
+def insert_member(conn, user_email, profession, institution, user_password, user_name, user_type, about):
     '''
     Inserts a new member into the database. 
     '''
     curs = dbi.dict_cursor(conn)
-    sql = ''' INSERT INTO  member (email, password, name, institution, type)
-            values (%s, %s, %s, %s, %s)
+    sql = ''' INSERT INTO  member (email, profession, institution, password, name, type, about)
+            values (%s, %s, %s, %s,%s,%s,%s)
         '''
-    curs.execute(sql, [user_email, user_password, user_name, institution, user_type])
+    curs.execute(sql, [user_email, profession, institution, user_password, user_name, user_type, about])
+    conn.commit()
+
+
+def update_member(conn, user_email, profession, institution,stored_password, user_name, user_type, about):
+    '''
+    update a member in the database. 
+    '''
+    curs = dbi.dict_cursor(conn)
+
+    sql = ''' UPDATE member SET profession = %s, institution = %s, password = %s, name = %s, type = %s, about= %s
+            where email = %s
+        '''
+    curs.execute(sql, [profession, institution, stored_password,user_name, user_type, about, user_email])
     conn.commit()
 
 def user_exists(conn, email):
@@ -181,6 +194,29 @@ def removeFavorite(uid, link):
     sql = '''delete from favorites where uid = %s and link = %s'''
     curs.execute(sql, [uid, link])
     conn.commit()
+
+def look_member_name(conn, name):
+    curs = dbi.dict_cursor(conn)
+    sql = "select * from member where name like %s"
+    curs = dbi.dict_cursor(conn)
+    name = '%' + name + '%'
+    curs.execute(sql, [name]) 
+    return curs.fetchall()
+
+def look_member_profession(conn, profession):
+    curs = dbi.dict_cursor(conn)
+    sql = "select * from member where profession like %s"
+    curs = dbi.dict_cursor(conn)
+    profession = '%' + profession + '%'
+    curs.execute(sql, [profession]) 
+    return curs.fetchall()
+
+def look_member_type(conn, type):
+    curs = dbi.dict_cursor(conn)
+    sql = "select * from member where type = %s"
+    curs = dbi.dict_cursor(conn)
+    curs.execute(sql, [type]) 
+    return curs.fetchall()
 
 if __name__ == '__main__':
     dbi.cache_cnf()
