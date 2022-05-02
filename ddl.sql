@@ -32,7 +32,7 @@ create table opportunity(
     experienceLevel set('Freshman', 'Sophomore', 'Junior', 'Senior', 'Any'),
     `description` varchar(1250),
     appLink nvarchar(2000),
-    sponsorship set('Yes', 'No', 'Maybe'),
+    sponsorship enum('Yes', 'No', 'Maybe'),
     primary key(pid)
 )
 ENGINE = InnoDB;

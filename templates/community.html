@@ -22,7 +22,7 @@
         <select required name="kind" >
             <option value>Any</option>
             {% for affiliation in affiliations %}
-            <option value="{{affiliation}}">{{affiliation.get('affiliation')}}</option>
+            <option value="{{affiliation}}">{{affiliation.get('type')}}</option>
             {% endfor %}
         </select>
       </label>
@@ -72,4 +72,6 @@
 </div>
 
 {% endblock %}
+
+{% block footer%} {% endblock %}
 

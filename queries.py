@@ -146,19 +146,41 @@ def look_oppor_institution(conn, institution):
     curs.execute(sql, [institution]) 
     return curs.fetchall()
 
-
 def get_all_members(conn):
     curs = dbi.dict_cursor(conn)
     sql = "select * from member"
     curs.execute(sql) 
     return curs.fetchall()
 
-def get_one_members(conn,email):
+def get_one_member(conn,email):
     curs = dbi.dict_cursor(conn)
     sql = "select * from member where email = %s"
     curs = dbi.dict_cursor(conn)
     curs.execute(sql, [email]) 
     return curs.fetchone()
+
+def isFavorite(conn, uid, link):
+    '''Checks whether an opportunity has been favorited'''
+    curs = dbi.cursor(conn)
+    sql = '''select * from favorites where uid = %s and link = %s'''
+    curs.execute(sql, [uid, link])
+    result = curs.fetchone()
+    return result != None
+
+def addFavorite(conn, uid, link):
+    '''Adds opportunity to users' list of favorites, or removes if needed'''
+    curs = dbi.cursor(conn)
+    curs.execute('''insert into favorites(uid, link)
+                values (%s, %s);''', [uid, link])
+    conn.commit()
+
+def removeFavorite(uid, link):
+    '''Removes application from users' list of favorites'''
+    conn = dbi.connect()
+    curs = dbi.cursor(conn)
+    sql = '''delete from favorites where uid = %s and link = %s'''
+    curs.execute(sql, [uid, link])
+    conn.commit()
 
 if __name__ == '__main__':
     dbi.cache_cnf()

@@ -15,7 +15,7 @@
       <div class="row gx-4 gx-lg-5">
           <div class="col-md-10 col-lg-8 mx-auto text-center">
               <h2 class="text-white mb-5">Post an Opportunity</h2>
-                  <form class="form-signup" id="uploadForm" data-sb-form-api-token="API_TOKEN" action="{{url_for('upload')}}" method="POST">
+                  <form class="form-signup" id="uploadForm" action="{{url_for('upload')}}" method="POST">
                     <!-- Email address input-->
                         <label for="field"> Field</label><br>
                         <input class="form-control" id="field" type="text" name="field" aria-label="Enter email address..." required /><br><br>
@@ -42,15 +42,15 @@
                       
                         <div id="experienceLevel">
                           <p>Experience Level</p>
-                          <input type="radio" name="experienceLevel" value="Freshman" required>
+                          <input type="checkbox" name="experienceLevel" value="Freshman" required>
                           <label>Freshman</label>
-                          <input type="radio" name="experienceLevel" value="Sophomore" required>
+                          <input type="checkbox" name="experienceLevel" value="Sophomore" required>
                           <label>Sophomore</label>
-                          <input type="radio" name="experienceLevel" value="Junior" required>
+                          <input type="checkbox" name="experienceLevel" value="Junior" required>
                           <label>Junior</label>
-                          <input type="radio" name="experienceLevel" value="Senior" required>
+                          <input type="checkbox" name="experienceLevel" value="Senior" required>
                           <label>Senior</label>
-                          <input type="radio" name="experienceLevel" value="Any" required>
+                          <input type="checkbox" name="experienceLevel" value="Any" required>
                           <label>Any</label>
                         </div>
                         
@@ -76,8 +76,4 @@
               </div>
           </div>
       </section>
-
 {% endblock %}
-
-</body>
-</html>

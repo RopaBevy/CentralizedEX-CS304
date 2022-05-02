@@ -19,13 +19,13 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
 
 
 @app.route('/')
-def home():
+def index():
     '''
     Landing page. Gives background on the app and gives the user the option to 
     login or signup.
     '''
     if 'email' in session:
-        return render_template("welcomePage.html")
+        return redirect(url_for('home'))
     else:
         return render_template("index.html")
 
@@ -54,7 +54,7 @@ def signup():
             return redirect(url_for('signup'))
         
         if(password != password2):
-            flash('passwords do not match')
+            flash('Passwords do not match')
             return redirect(url_for('signup'))
 
         # if user is already in database, redirect back to login page
@@ -105,33 +105,17 @@ def login():
             session['email'] = email
             session['logged_in'] = True
             session['visits'] = 1
-            return render_template('welcomePage.html')
+            return redirect(url_for('home'))
         else:
             flash('Login unsuccessful. Please try again or sign up.')
             return redirect(url_for('login'))
 
-def isFavorite(conn, uid, link):
-    '''Checks whether an opportunity has been favorited'''
-    curs = dbi.cursor(conn)
-    sql = '''select * from favorites where uid = %s and link = %s'''
-    curs.execute(sql, [uid, link])
-    result = curs.fetchone()
-    return result != None
-
-def addFavorite(conn, uid, link):
-    '''Adds opportunity to users' list of favorites, or removes if needed'''
-    curs = dbi.cursor(conn)
-    curs.execute('''insert into favorites(uid, link)
-                values (%s, %s);''', [uid, link])
-    conn.commit()
-
-def removeFavorite(uid, link):
-    '''Removes application from users' list of favorites'''
-    conn = dbi.connect()
-    curs = dbi.cursor(conn)
-    sql = '''delete from favorites where uid = %s and link = %s'''
-    curs.execute(sql, [uid, link])
-    conn.commit()
+@app.route('/home/')
+def home():
+    if 'email' in session:
+        return render_template('welcomePage.html')
+    else:
+        return redirect(url_for('index'))
 
 @app.route('/favorite/', methods=['POST'])
 def favorite():
@@ -165,7 +149,7 @@ def logout():
         session.pop('email')
         session.pop('logged_in')
         flash('You are logged out')
-        return redirect(url_for('home'))
+        return redirect(url_for('index'))
     else:
         flash('You are not logged in. Please login or join')
         return redirect(url_for('login'))
@@ -224,7 +208,6 @@ def display():
     else:
         flash('Please login.')
         return render_template('login.html')
-
 
 
 # '''rate an opportunity'''
@@ -298,7 +281,7 @@ def display_member(email):
         conn = dbi.connect()
         # email = request.form.get('memberEmail')
         # print("jhfsldkjfhasdfhsadklfhsadhfsdkhflasdfhjksdfhsadhf ", email)
-        member = queries.get_one_members(conn,email)
+        member = queries.get_one_member(conn,email)
         return render_template("memberPage.html", email = email, member = member)
     else:
         flash('Please login again.')
@@ -334,7 +317,7 @@ def file_upload():
 
         if request.form["submit"] == "Upload Later":
             flash('You can update your picture on your profile page')
-            return render_template("welcomePage.html")
+            return redirect(url_for('home'))
 
         if request.method == 'POST':
             print("does it visit here")
@@ -354,7 +337,7 @@ def file_upload():
                     [email, filename, filename])
                 conn.commit()
                 flash('Image Upload Successful')
-                return render_template("welcomePage.html")
+                return redirect(url_for('home'))
                 
             except Exception as err:
                 flash('Upload failed {why}'.format(why=err))

@@ -8,7 +8,7 @@
       <div class="row gx-4 gx-lg-5">
           <div class="col-md-10 col-lg-8 mx-auto text-center">
               <h2 class="text-white mb-5">Login</h2>
-                  <form class="form-signup" id="loginForm" data-sb-form-api-token="API_TOKEN" action="{{url_for('login')}}" method="POST">
+                  <form class="form-signup" id="loginForm" action="{{url_for('login')}}" method="POST">
                     <!-- Email address input-->
                         <label for="email"> Wellesley Email Address</label><br>
                         <input class="form-control" id="emailAddress" type="email" name="email" placeholder="wendy@wellesley.edu..." aria-label="Enter email address..." data-sb-validations="required,email" /><br><br>
@@ -24,6 +24,3 @@
           </div>
       </section>
 {% endblock %}
-
-</body>
-</html>

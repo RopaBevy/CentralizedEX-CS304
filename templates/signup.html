@@ -6,7 +6,7 @@
       <div class="row gx-4 gx-lg-5">
           <div class="col-md-10 col-lg-8 mx-auto text-center">
               <h2 class="text-white mb-5">Sign Up</h2>
-                  <form class="form-signup" id="signupForm" data-sb-form-api-token="API_TOKEN" action="{{url_for('signup')}}" method="POST">
+                  <form class="form-signup" id="signupForm" action="{{url_for('signup')}}" method="POST">
                     <!-- Email address input-->
                         <label for="name"> Name</label><br>
                         <input class="form-control" id="name" type="text" name="name" placeholder="Wendy Wellesley" aria-label="Enter email address..." data-sb-validations="required,name" /><br><br>
@@ -38,6 +38,3 @@
           </div>
       </section>
 {% endblock %}
-
-</body>
-</html>
