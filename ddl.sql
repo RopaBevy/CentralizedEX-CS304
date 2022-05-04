@@ -1,4 +1,4 @@
-use rs2_db; --centralex_db
+use yafifi_db; --centralex_db
 
 drop table if exists comment;
 drop table if exists rating;
@@ -14,9 +14,8 @@ create table member(
     institution varchar(70) not null,
     `password` varchar(200) not null,
     `name` varchar(40) not null,
-    profession varchar(100) not null,
-    institution varchar(30),
     `type` enum('Student','Alum', 'Professor'),
+    about varchar(100) not null,
     primary key(email)
 
 )

@@ -89,7 +89,7 @@ def signup():
                                             bcrypt.gensalt())
             stored_password = hashed_password.decode('utf-8')
             # add the new user to the database
-            queries.insert_member(conn, email, stored_password, name, institution, user_type)
+            queries.insert_member(conn,email, profession, institution, stored_password, name, user_type, about)
             session['email'] = email
         return redirect(url_for('file_upload', src=url_for('pic',email=email), email=email))
 
@@ -441,7 +441,7 @@ def file_upload():
 
 if __name__ == '__main__':
     dbi.cache_cnf()
-    dbi.use('rs2_db') #centralex_db
+    dbi.use('yafifi_db') #centralex_db
 
     import os
     port = os.getuid()

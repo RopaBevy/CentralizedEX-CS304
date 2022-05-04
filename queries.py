@@ -220,6 +220,6 @@ def look_member_type(conn, type):
 
 if __name__ == '__main__':
     dbi.cache_cnf()
-    dbi.use('centralex_db')
+    dbi.use('yafifi_db')
     conn = dbi.connect()
     print(get_institutions_member(conn))
