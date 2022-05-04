@@ -3,7 +3,8 @@
 {% block navbar %}
 <div class="collapse navbar-collapse" id="navbarResponsive">
   <ul class="navbar-nav ms-auto">
-      <li class="nav-item"><a class="nav-link" href="{{url_for('member_profile_update')}}">{{member.get('name')}}</a>  </li>
+      <li class="nav-item"><a class="nav-link" href="{{url_for('member_profile_update')}}">{{member.get('name')}}</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{url_for('display')}}">View Opportunities</a></li>
       <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
   </ul>
 </div>
@@ -31,8 +32,8 @@
                         <input class="form-control" id="location" type="text" name="location" placeholder="New York, NY" aria-label="Enter email address..." /><br><br>
                         <label for="link">Application Link</label><br>
                         <input class="form-control" id="link" type="text" name="link" aria-label="Enter email address..." required /><br><br>
-                  </form>
-                  <form>
+                  <!-- </form> -->
+                  <!-- <form> -->
                   <p><b>Type of Experience</b></p>
                   <input type="radio" name="experienceType" value="Internship" required>
                   <label>Internship</label>
@@ -58,12 +59,9 @@
                   <label>No</label>
                   <input type="radio" name="sponsorship" value="Maybe" required>
                   <label>Maybe</label>
-                </form><br><br><br>
-                       
-                <div class="col-auto"><br><button class="btn" id="submitButton" type="submit" value="Post">Post</button></div><br>
-                  
-                    <p style="color: aliceblue;"><b>Not registered? <a href="{{url_for('signup')}}">Sign up!</a></b></p>
-                  </form>
+                <!-- </form><br><br><br> -->
+                <br><button class="btn btn-primary" id="submitButton" type="submit" value="Post">Post</button><br>
+              </form>
                 </div>
               </div>
           </div>

@@ -156,6 +156,7 @@ def login():
 @app.route('/home/')
 def home():
     if 'email' in session:
+        conn = dbi.connect()
         email = session['email']
         member = queries.get_one_member(conn,email)
         return render_template('welcomePage.html', member=member)
@@ -285,25 +286,48 @@ def rating():
 
 # Farida/Ropah code 
 # '''rate an opportunity'''
-@app.route('/search/', methods = ["GET"])
+@app.route('/search/')
 def search():
     if('email' in session):
         conn = dbi.connect()
         member = queries.get_one_member(conn,session['email'])
-        if request.args['kind'] == 'title':
-            title = request.args['search']
-            jobs = queries.look_oppor_title(conn, title)
-            return render_template('display.html', opportunities=jobs, member = member)
 
-        elif request.args['kind'] == 'field':  
-            field = request.args['search']
-            jobs = queries.look_oppor_field(conn, field)
-            print(jobs)
-            return render_template('display.html', opportunities=jobs, member = member)
-        elif request.args['kind'] == 'institution':  
-            institution = request.args['search']
-            jobs = queries.look_oppor_institution(conn, institution)
-            return render_template('display.html', opportunities=jobs, member = member)
+        #options used in filtering
+        fields = queries.get_fields(conn)
+        institutions = queries.get_institutions_opportunity(conn)
+
+        #collect filter responses
+        field = request.args.get('field')
+        kind = request.args.get('kind')
+        exp = request.args.get('exp')
+        institution = request.args.get('institution')
+        sponsorship = request.args.get('sponsorship')
+        keyword = request.args.get('search')
+
+        #filter by all columns is not necessary, this handles the empty columns
+        if field is None:
+            field = '%'
+        if kind is None:
+            kind = '%'
+        if exp is None:
+            exp = '%'
+        if institution is None:
+            institution = '%'
+        if sponsorship is None:
+            sponsorship = '%'
+        if keyword is None:
+            keyword = '%'
+
+        
+
+        opportunities = queries.get_filtered_oppor(conn, field, kind, exp, 
+                                                    institution, sponsorship,
+                                                    keyword)
+
+        print(opportunities)
+        
+        return render_template('display.html', member = member, 
+                                opportunities=opportunities, institutions=institutions)
 
     else:
         flash('Please login.')
@@ -317,23 +341,33 @@ def filter_members():
         conn = dbi.connect()
         email = session.get('email')
         member = queries.get_one_member(conn,email)
-        print(member)
+
+        #used as filter options
         affiliations = queries.get_affiliations(conn)
         professions = queries.get_professions(conn)
-        opportunities = queries.get_opportunities_member(conn)
+        institutions = queries.get_institutions_member(conn)
 
-        if request.args['kind'] == 'Person':
-            name = request.args['search']
-            members = queries.look_member_name(conn, name)
-            return render_template("community.html", member=member)
-        elif request.args['kind'] == 'profession':  
-            profession = request.args['search']
-            members = queries.look_member_profession(conn, profession)
-            return render_template("community.html", member=member)
-        elif request.args['kind'] == 'type':  
-            type = request.args['search']
-            members = queries.look_member_type(conn, type)
-            return render_template("community.html", member=member)
+        #collect the filter choices
+        affiliation = request.args.get('affiliation')
+        profession = request.args.get('profession')
+        institution = request.args.get('institution')
+        name = request.args.get('keyword')
+
+        #if filter fields are empty, select everything for that field
+        if affiliation is None:
+            affiliation = '%'
+        if profession is None:
+            profession = '%'
+        if institution is None:
+            institution = '%'
+        if name is None:
+            name = '%'
+
+        members = queries.get_filtered_members(conn, affiliation, profession, institution, name)
+
+        return render_template("community.html", member=member, 
+                            affiliations=affiliations, professions=professions,
+                            institutions=institutions, members=members)
 
     else:
         flash('Please login.')
@@ -342,25 +376,25 @@ def filter_members():
 
     if('email' in session):
         conn = dbi.connect()
-        name = queries.get_one_member(conn,session['email'])
+        member = queries.get_one_member(conn,session['email'])
         members = queries.get_all_members(conn)
-        return render_template("community.html", members = members, name = name)
+        return render_template("community.html", members = members, member = name)
     else:
         flash('Please login.')
         return render_template('login.html') 
 
-# Farida's code 
+# Farida's code and Ropah
 # page with all members of the app
 @app.route('/community/', methods=['GET'])
 def community():
     if('email' in session):
         conn = dbi.connect()
-        name = queries.get_one_member(conn,session['email'])
+        member = queries.get_one_member(conn,session['email'])
         members = queries.get_all_members(conn)
         professions = queries.get_professions(conn)
         affiliations = queries.get_affiliations(conn)
         institutions = queries.get_institutions_member(conn)
-        return render_template("community.html", members=members, 
+        return render_template("community.html", members=members, member=member,
                                 professions=professions, 
                                 affiliations=affiliations,
                                 institutions=institutions)

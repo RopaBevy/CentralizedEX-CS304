@@ -135,29 +135,80 @@ def get_affiliations(conn):
     curs.execute(sql)
     return curs.fetchall()
 
-def look_oppor_title(conn, title):
+def get_filtered_oppor(conn, field, kind, exp,institution, sponsorship,keyword):
+    conn = dbi.connect()
     curs = dbi.dict_cursor(conn)
-    sql = "select * from opportunity where title like %s"
-    curs = dbi.dict_cursor(conn)
-    title = '%' + title + '%'
-    curs.execute(sql, [title]) 
+    sql = '''
+        select * from opportunity where field like %s and field in (
+            select field from opportunity where experienceType like  %s and experienceType in (
+                select experienceType from opportunity where experienceLevel like %s and experienceLevel in (
+                    select experienceLevel from opportunity where institution like %s and institution in (
+                        select institution from opportunity where sponsorship like %s and sponsorship in (
+                            select sponsorship from opportunity where title like %s
+                        )
+                    )
+                )
+            )
+        )
+        '''
+    curs.execute(sql, ['%'+field+'%', '%'+kind+'%', '%'+exp+'%', '%'+institution+'%', '%'+sponsorship+'%','%'+keyword+'%'])
     return curs.fetchall()
 
-def look_oppor_field(conn, field):
+
+def get_filtered_members(conn, affiliation, profession, institution, name):
+    conn = dbi.connect()
     curs = dbi.dict_cursor(conn)
-    sql = "select * from opportunity where field like %s"
-    curs = dbi.dict_cursor(conn)
-    field = '%' + field + '%'
-    curs.execute(sql, [field]) 
+    sql = '''
+        select * from member where `type` like %s and `type` in (
+            select `type` from member where profession like  %s and profession in (
+                select profession from member where institution like %s and institution in (
+                    select institution from member where `name` like %s
+                    )
+                )
+            )
+        '''
+    curs.execute(sql, ['%'+affiliation+'%', '%'+profession+'%', '%'+institution+'%', '%'+name+'%'])
     return curs.fetchall()
 
-def look_oppor_institution(conn, institution):
-    curs = dbi.dict_cursor(conn)
-    sql = "select * from opportunity where institution like %s"
-    curs = dbi.dict_cursor(conn)
-    institution = '%' + institution + '%'
-    curs.execute(sql, [institution]) 
-    return curs.fetchall()
+# def look_oppor_title(conn, title):
+#     curs = dbi.dict_cursor(conn)
+#     sql = "select * from opportunity where title like %s"
+#     curs.execute(sql, ['%'+title+'%']) 
+#     return curs.fetchall()
+
+# def look_oppor_field(conn, field):
+#     curs = dbi.dict_cursor(conn)
+#     sql = "select * from opportunity where field like %s"
+#     field = '%' + field + '%'
+#     curs.execute(sql, [field]) 
+#     return curs.fetchall()
+
+# def look_oppor_institution(conn, institution):
+#     curs = dbi.dict_cursor(conn)
+#     sql = "select * from opportunity where institution like %s"
+#     institution = '%' + institution + '%'
+#     curs.execute(sql, [institution]) 
+#     return curs.fetchall()
+
+# def look_oppor_sponsorship(conn, sponsorship):
+#     curs = dbi.dict_cursor(conn)
+#     sql = "select * from opportunity where sponsorship like %s"
+#     curs.execute(sql, ['%'+sponsorship+'%']) 
+#     return curs.fetchall()
+
+# def look_oppor_type(conn, kind):
+#     curs = dbi.dict_cursor(conn)
+#     sql = "select * from opportunity where experienceType like %s"
+#     curs.execute(sql, ['%'+kind+'%']) 
+#     return curs.fetchall()
+
+
+# def look_oppor_exp(conn, exp):
+#     curs = dbi.dict_cursor(conn)
+#     sql = "select * from opportunity where experienceLevel like %s"
+#     curs.execute(sql, ['%'+exp+'%']) 
+#     return curs.fetchall()
+
 
 def get_all_members(conn):
     curs = dbi.dict_cursor(conn)
@@ -223,3 +274,5 @@ if __name__ == '__main__':
     dbi.use('centralex_db')
     conn = dbi.connect()
     print(get_institutions_member(conn))
+
+

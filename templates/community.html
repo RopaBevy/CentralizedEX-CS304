@@ -18,9 +18,9 @@
 <div>
   <br><br><br>
   <div class="search-container">
-    <form action="{{url_for('search')}}">
+    <form action="{{url_for('filter_members')}}" class="form-signup" style="background-color: rgb(176, 199, 230); width: 100%; border: none;">
       <label> Wellesley Affliation 
-        <select required name="kind" >
+        <select name="affliation" class="form-control">
             <option value>Any</option>
             {% for affiliation in affiliations %}
             <option value="{{affiliation}}">{{affiliation.get('type')}}</option>
@@ -28,7 +28,7 @@
         </select>
       </label>
       <label> Proffession 
-        <select required name="kind" >
+        <select name="profession" class="form-control">
             <option value>Any</option>
             {% for prof in professions %}
             <option value="{{prof.get('profession')}}">{{prof.get('profession')}}</option>
@@ -36,15 +36,15 @@
         </select>
       </label>
       <label> Institution 
-        <select required name="kind" >
+        <select name="institution" class="form-control">
             <option value>Any</option>
             {% for inst in institutions %}
             <option value="{{inst.get('institution')}}">{{inst.get('institution')}}</option>
             {% endfor %}
         </select>
       </label>
-      <input type="text" placeholder="search ..." required name ="search">
-      <button type="submit"><i class="fa fa-search"></i></button>
+      <input type="text" placeholder="Search name..." name="keyword" class="form-control">
+      <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
     </form>
   </div>
   

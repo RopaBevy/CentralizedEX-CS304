@@ -3,8 +3,8 @@
 {% block navbar %}
 <div class="collapse navbar-collapse" id="navbarResponsive">
   <ul class="navbar-nav ms-auto">
-      <li class="nav-item"><a class="nav-link" href="{{url_for('member_Profile_Update', email = email)}}">{{member.get('name')}} <i class="fas fa-user-alt"></i></a>  </li>
-      <li class="nav-item"><a class="nav-link" href="{{url_for('home')}}">Home</a></li>  
+      <li class="nav-item"><a class="nav-link" href="{{url_for('member_profile_update')}}">{{member.get('name')}} <i class="fas fa-user-alt"></i></a>  </li>
+      <li class="nav-item"><a class="nav-link" href="{{url_for('upload')}}">Post Opportunity</a></li>  
       <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
   </ul>
 </div>
@@ -14,10 +14,10 @@
 
 <div>
   <br><br><br>
-<div class="row gx-4 gx-lg-5">
+  <div class="search-container">
   <form class="form-signup" action="{{url_for('search')}}" >
     <label> Field 
-      <select name="kind" >
+      <select name="field" class="form-control">
           <option value>All</option>
           {% for field in fields %}
           <option value="{{field.get('field')}}">{{field.get('field')}}</option>
@@ -25,7 +25,7 @@
       </select>
     </label>
     <label> Type
-      <select name="kind" >
+      <select name="kind" class="form-control">
           <option value>All</option>
           <option value="internship">Internship</option>
           <option value="part-time">Part Time</option>
@@ -33,7 +33,7 @@
       </select>
     </label>
     <label> Experience 
-      <select name="kind" >
+      <select name="exp" class="form-control">
           <option value>Any</option>
           <option value="first-year">First Year</option>
           <option value="sophomore">Sophomore</option>
@@ -42,7 +42,7 @@
       </select>
     </label>
     <label> Institution 
-      <select name="kind" >
+      <select name="institution" class="form-control">
           <option value>All</option>
           {% for institution in institutions %}
           <option value="{{institution.get('institution')}}">{{institution.get('institution')}}</option>
@@ -50,15 +50,15 @@
       </select>
     </label>
     <label> Visa Sponsorship 
-      <select name="kind" >
+      <select name="sponsorship" class="form-control">
           <option value>Any</option>
           <option value="yes">Yes</option>
           <option value="no">No</option>
           <option value="maybe">Maybe</option>
       </select>
     </label>
-    <input type="text" placeholder="Search..." required name ="search">
-    <button type="submit"><i class="fa fa-search"></i></button>
+    <input type="text" placeholder="Search..." name ="search" class="search-bar">
+    <button type="submit" class='btn btn-primary'><i class="fa fa-search"></i></button>
   </form>
 </div>
   
