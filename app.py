@@ -278,6 +278,26 @@ def rating():
         flash('Please login.')
         return render_template('login.html')
 
+# '''comment about an opportunity'''
+@app.route('/comment/', methods = ["POST"])
+def comment():
+    if('email' in session):
+        conn = dbi.connect()
+        email = session['email']
+        userComment = request.form.get("comments")
+        pid = request.form.get("pid")
+        print(pid, "pid", email, "email", userComment, "userComment")
+        queries.insert_comment(conn,email,pid,userComment)
+        flash("user{} added a comment about opportunity {}".format(session["email"],pid))
+        member = queries.get_one_member(conn,session['email'])
+        return redirect(url_for('display', member= member))
+    else:
+        flash('Please login.')
+        return render_template('login.html')
+
+
+
+
 # Farida/Ropah code 
 # '''rate an opportunity'''
 @app.route('/search/', methods = ["GET"])

@@ -72,6 +72,7 @@
       
       <th>Rate Your Experience With This Institution</th>
       <th>Average Rating</th>
+      <th>Comments</th>
       <!-- <th>Experience Level</th>
       <th>Visa Sponsorship</th>
       <th>Description</th>
@@ -85,7 +86,8 @@
       <td>{{ opportunity.get('institution') }}</td>
       <!-- <td>{{ opportunity.get('experienceType') }}</td> -->
       
-      <td><form method="post" action="{{url_for('rating')}}">
+      <td>
+        <form method="post" action="{{url_for('rating')}}">
         <input type="hidden" name="pid" value={{opportunity.pid}}>
         
           {% for stars in range(1,6) %}
@@ -96,14 +98,29 @@
         <input type="submit" value="rate this">
         </form>
     </td>
+
       <td>{{ opportunity.get('averageRating') }}</td>
       <!-- <td>{{ opportunity.get('experienceLevel') }}</td>
       <td>{{ opportunity.get('sponsorship') }}</td>
       <td>{{ opportunity.get('description') }}</td>
       <td><a href="{{ opportunity.get('appLink') }}"> Apply here</a></td> -->
-    </tr>
-    <tr><td colspan="5" style="width:100%"><p>Description</p>
-    </td></tr>
+     </tr>
+
+     <td>
+      <form method="post" action="{{url_for('comment')}}">
+      <input type="hidden" name="pid" value={{opportunity.pid}}>
+      
+      <input type="text" placeholder="Comments about this experience..." name ="comments"></label>
+
+      <input type="submit" value="comment">
+      </form>
+    </td>
+    
+    <td>
+      <td colspan="5" style="width:100%"><p>Description</p>
+    </td>
+
+  </tr>
     {% endfor %}
   </table>
 </div>

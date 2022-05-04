@@ -52,8 +52,7 @@ ENGINE = InnoDB;
 
 create table comment(
     pid int,
-    institution varchar(30),
-    title varchar(25),
+    email varchar(30),
     comment varchar(250),
     foreign key (pid) references opportunity(pid)
     on delete cascade
