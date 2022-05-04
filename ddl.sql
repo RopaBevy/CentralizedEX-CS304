@@ -1,4 +1,4 @@
-use rs2_db; --centralex_db
+use yafifi_db; --centralex_db
 
 drop table if exists comment;
 drop table if exists rating;
@@ -54,8 +54,7 @@ create table comment(
     comment_id int not null auto_increment,
     email varchar(30),
     pid int,
-    institution varchar(30),
-    title varchar(25),
+    email varchar(30),
     comment varchar(250),
     primary key(comment_id),
     foreign key (email) references member(email)

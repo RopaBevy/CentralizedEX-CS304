@@ -73,6 +73,13 @@ def insert_and_update_rating(conn,email,pid,userRating):
                             [email, pid, userRating, userRating])
     conn.commit()
 
+def insert_comment(conn,email,pid,userComment):
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''INSERT INTO comment(email,pid,rating) VALUES (%s,%s,%s)''', 
+                            [email, pid, userComment, userComment])
+    conn.commit()
+
+
 def average_rating(conn,pid):
     '''compute average rating for opportunities'''
     curs = dbi.dict_cursor(conn)
@@ -271,7 +278,7 @@ def look_member_type(conn, type):
 
 if __name__ == '__main__':
     dbi.cache_cnf()
-    dbi.use('centralex_db')
+    dbi.use('yafifi_db')
     conn = dbi.connect()
     print(get_institutions_member(conn))
 

@@ -14,7 +14,6 @@
 
 <div>
   <br><br><br>
-  <!-- <div class="search-container"> -->
   <form class="form-signup" action="{{url_for('search')}}" >
     <label> Field 
       <select name="field" class="form-control">
@@ -60,7 +59,6 @@
     <input type="text" placeholder="Search..." name ="search" class="search-bar" style='width: 62.5%;'>
     <button type="submit" class='btn btn-primary'><i class="fa fa-search"></i></button>
   </form>
-<!-- </div> -->
   
 <div>
   <table id="pid-list">
@@ -68,14 +66,11 @@
       <th>Title</th>
       <th >Field</th>
       <th>Institution</th>
-      <!-- <th>Type</th> -->
       
       <th>Rate Your Experience With This Institution</th>
       <th>Average Rating</th>
-      <!-- <th>Experience Level</th>
-      <th>Visa Sponsorship</th>
-      <th>Description</th>
-      <th>Application Link</th> -->
+      <th>Provide Comments About This Experience</th>
+      <th>Comments</th>
     </tr>
     {% for opportunity in opportunities %}
     <tr data-pid={{opportunity.pid}}>
@@ -83,9 +78,9 @@
       <td>{{ opportunity.get('title') }}</td>
       <td>{{ opportunity.get('field') }}</td>
       <td>{{ opportunity.get('institution') }}</td>
-      <!-- <td>{{ opportunity.get('experienceType') }}</td> -->
       
-      <td><form method="post" action="{{url_for('rating')}}">
+      <td>
+        <form method="post" action="{{url_for('rating')}}">
         <input type="hidden" name="pid" value={{opportunity.pid}}>
         
           {% for stars in range(1,6) %}
@@ -96,14 +91,27 @@
         <input type="submit" value="rate this">
         </form>
     </td>
+
       <td>{{ opportunity.get('averageRating') }}</td>
-      <!-- <td>{{ opportunity.get('experienceLevel') }}</td>
-      <td>{{ opportunity.get('sponsorship') }}</td>
-      <td>{{ opportunity.get('description') }}</td>
-      <td><a href="{{ opportunity.get('appLink') }}"> Apply here</a></td> -->
+    
+     <td>
+      <form method="post" action="{{url_for('comment')}}">
+      <input type="hidden" name="pid" value={{opportunity.pid}}>
+      
+      <input type="text" placeholder="Comments about this experience..." name ="comments"></label>
+
+      <input type="submit" value="comment">
+      </form>
+    </td>
+
     </tr>
-    <tr><td colspan="5" style="width:100%"><p>Description</p>
-    </td></tr>
+
+    <td>
+      <td colspan="5" style="width:100%"><p>Description</p>
+    </td>
+
+
+  </tr>
     {% endfor %}
   </table>
 </div>

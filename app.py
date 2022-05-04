@@ -4,7 +4,6 @@ from flask import (Flask, render_template, make_response,
                    url_for, session, send_from_directory, Response)
 
 from werkzeug.utils import secure_filename
-import imghdr
 import sys, os, random
 import cs304dbi as dbi
 import bcrypt
@@ -284,6 +283,26 @@ def rating():
         flash('Please login.')
         return render_template('login.html')
 
+# '''comment about an opportunity'''
+@app.route('/comment/', methods = ["POST"])
+def comment():
+    if('email' in session):
+        conn = dbi.connect()
+        email = session['email']
+        userComment = request.form.get("comments")
+        pid = request.form.get("pid")
+        print(pid, "pid", email, "email", userComment, "userComment")
+        queries.insert_comment(conn,email,pid,userComment)
+        flash("user{} added a comment about opportunity {}".format(session["email"],pid))
+        member = queries.get_one_member(conn,session['email'])
+        return redirect(url_for('display', member= member))
+    else:
+        flash('Please login.')
+        return render_template('login.html')
+
+
+
+
 # Farida/Ropah code 
 # '''rate an opportunity'''
 @app.route('/search/')
@@ -372,16 +391,6 @@ def filter_members():
     else:
         flash('Please login.')
         return render_template('login.html')
-
-
-    if('email' in session):
-        conn = dbi.connect()
-        member = queries.get_one_member(conn,session['email'])
-        members = queries.get_all_members(conn)
-        return render_template("community.html", members = members, member = name)
-    else:
-        flash('Please login.')
-        return render_template('login.html') 
 
 # Farida's code and Ropah
 # page with all members of the app
@@ -485,7 +494,7 @@ def file_upload():
 
 if __name__ == '__main__':
     dbi.cache_cnf()
-    dbi.use('rs2_db') #centralex_db
+    dbi.use('yafifi_db') #centralex_db
 
     import os
     port = os.getuid()
