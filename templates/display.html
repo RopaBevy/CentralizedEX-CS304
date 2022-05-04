@@ -14,7 +14,7 @@
 
 <div>
   <br><br><br>
-  <div class="search-container">
+  <!-- <div class="search-container"> -->
   <form class="form-signup" action="{{url_for('search')}}" >
     <label> Field 
       <select name="field" class="form-control">
@@ -56,11 +56,11 @@
           <option value="no">No</option>
           <option value="maybe">Maybe</option>
       </select>
-    </label>
-    <input type="text" placeholder="Search..." name ="search" class="search-bar">
+    </label><br>
+    <input type="text" placeholder="Search..." name ="search" class="search-bar" style='width: 62.5%;'>
     <button type="submit" class='btn btn-primary'><i class="fa fa-search"></i></button>
   </form>
-</div>
+<!-- </div> -->
   
 <div>
   <table id="pid-list">

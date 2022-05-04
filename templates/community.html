@@ -17,7 +17,7 @@
 
 <div>
   <br><br><br>
-  <div class="search-container">
+  <!-- <div class="search-container"> -->
     <form action="{{url_for('filter_members')}}" class="form-signup" style="background-color: rgb(176, 199, 230); width: 100%; border: none;">
       <label> Wellesley Affliation 
         <select name="affliation" class="form-control">
@@ -43,10 +43,10 @@
             {% endfor %}
         </select>
       </label>
-      <input type="text" placeholder="Search name..." name="keyword" class="form-control">
+      <input type="text" placeholder="Search name..." name="keyword" class="form-control" style="width: 40%;">
       <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
     </form>
-  </div>
+  <!-- </div> -->
   
 
   <table id="pid-list">
