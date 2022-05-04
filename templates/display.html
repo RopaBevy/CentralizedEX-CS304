@@ -72,11 +72,12 @@
       
       <th>Rate Your Experience With This Institution</th>
       <th>Average Rating</th>
-      <th>Comments</th>
+      <th>Provide Comments About This Experience</th>
       <!-- <th>Experience Level</th>
       <th>Visa Sponsorship</th>
       <th>Description</th>
       <th>Application Link</th> -->
+      <th>Comments</th>
     </tr>
     {% for opportunity in opportunities %}
     <tr data-pid={{opportunity.pid}}>
@@ -115,13 +116,14 @@
       <input type="submit" value="comment">
       </form>
     </td>
+
+    <!-- <td>{{ opportunity.get('comment') }}</td> -->
+
     </tr>
 
     <td>
       <td colspan="5" style="width:100%"><p>Description</p>
     </td>
-
-    
 
 
   </tr>
