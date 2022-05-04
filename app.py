@@ -77,7 +77,7 @@ def signup():
             if 'email' in session:
                 flash('Account updated')
                 queries.update_member(conn, email, profession, institution, stored_password, name, user_type, about)
-                member = queries.get_one_members(conn,session['email'])
+                member = queries.get_one_member(conn,session['email'])
                 return render_template('yourProfile.html', src=url_for('pic',email=email), member=member)
             else:
                 flash('An account with this email already exists. Please Log in ')
@@ -106,7 +106,7 @@ def member_Profile_Update():
     if 'email' in session:
         email = session['email']
         conn = dbi.connect()
-        member = queries.get_one_members(conn,email)
+        member = queries.get_one_member(conn,email)
         return render_template("yourProfile.html",src=url_for('pic',email=email), member=member)
 
 @app.route('/login/', methods=['GET', 'POST'])
@@ -144,7 +144,7 @@ def login():
             session['logged_in'] = True
             session['visits'] = 1
             email = session['email']
-            member = queries.get_one_members(conn,email)
+            member = queries.get_one_member(conn,email)
             return render_template('welcomePage.html',member = member, email =email )
         else:
             flash('Login unsuccessful. Please try again or sign up.')
@@ -206,7 +206,7 @@ def upload():
     if 'email' in session:
         conn = dbi.connect()
         if(request.method == 'GET'):
-            member = queries.get_one_members(conn,session['email'])
+            member = queries.get_one_member(conn,session['email'])
             return render_template("upload.html", member = member)
         else:
             conn = dbi.connect()
@@ -233,7 +233,7 @@ def upload():
                                         startDate, location, experienceType, 
                                         experienceLevel, description, appLink, 
                                         sponsorship)
-            member = queries.get_one_members(conn,session['email'])
+            member = queries.get_one_member(conn,session['email'])
             return redirect(url_for('display', member = member))
     else:
         flash('Please login.')
@@ -248,7 +248,7 @@ def display():
     if('email' in session):
         conn = dbi.connect()
         opportunities = queries.get_opportunities(conn)
-        member = queries.get_one_members(conn,session['email'])
+        member = queries.get_one_member(conn,session['email'])
         fields = queries.get_fields(conn)
         institutions = queries.get_institutions_opportunity(conn)
         return render_template('display.html', opportunities=opportunities,
@@ -271,7 +271,7 @@ def rating():
         avgRating = queries.average_rating(conn,pid)
         queries.update_pid_average(conn,avgRating,pid)
         flash("user{} is rating opportunity {} as {} stars".format(session["email"],pid,userRating))
-        member = queries.get_one_members(conn,session['email'])
+        member = queries.get_one_member(conn,session['email'])
         return redirect(url_for('display', member= member))
 
     else:
@@ -284,7 +284,7 @@ def rating():
 def search():
     if('email' in session):
         conn = dbi.connect()
-        member = queries.get_one_members(conn,session['email'])
+        member = queries.get_one_member(conn,session['email'])
         if request.args['kind'] == 'title':
             title = request.args['search']
             jobs = queries.look_oppor_title(conn, title)
@@ -310,7 +310,7 @@ def search():
 def filter_members():
     if('email' in session):
         conn = dbi.connect()
-        user = queries.get_one_members(conn,session['email'])
+        user = queries.get_one_member(conn,session['email'])
         if request.args['kind'] == 'Person':
             name = request.args['search']
             members = queries.look_member_name(conn, name)
@@ -332,7 +332,7 @@ def filter_members():
 
     if('email' in session):
         conn = dbi.connect()
-        name = queries.get_one_members(conn,session['email'])
+        name = queries.get_one_member(conn,session['email'])
         members = queries.get_all_members(conn)
         return render_template("community.html", members = members, name = name)
     else:
@@ -345,7 +345,7 @@ def filter_members():
 def community():
     if('email' in session):
         conn = dbi.connect()
-        name = queries.get_one_members(conn,session['email'])
+        name = queries.get_one_member(conn,session['email'])
         members = queries.get_all_members(conn)
         professions = queries.get_professions(conn)
         affiliations = queries.get_affiliations(conn)
@@ -367,7 +367,7 @@ def display_member(email):
         conn = dbi.connect()
         # email = request.form.get('memberEmail')
         # print("jhfsldkjfhasdfhsadklfhsadhfsdkhflasdfhjksdfhsadhf ", email)
-        member = queries.get_one_members(conn,session['email'])
+        member = queries.get_one_member(conn,session['email'])
         return render_template("memberPage.html", src=url_for('pic',email=email), email = email, member = member)
     else:
         flash('Please login again.')
@@ -407,7 +407,7 @@ def file_upload():
         if request.form["submit"] == "Upload Later":
             conn = dbi.connect()
             flash('You can update your picture on your profile page')
-            member = queries.get_one_members(conn,session['email'])
+            member = queries.get_one_member(conn,session['email'])
             return render_template("welcomePage.html", member = member)
 
         if request.method == 'POST':
@@ -428,7 +428,7 @@ def file_upload():
                     [email, filename, filename])
                 conn.commit()
                 flash('Image Upload Successful')
-                member = queries.get_one_members(conn,session['email'])
+                member = queries.get_one_member(conn,session['email'])
                 return render_template("welcomePage.html", member = member)
                 
             except Exception as err:
