@@ -91,7 +91,7 @@ def signup():
             # add the new user to the database
             queries.insert_member(conn, email, profession, institution, stored_password, name, user_type, about)
             session['email'] = email
-        return redirect(url_for('file_upload', src=url_for('pic',email=email), email=email))
+        return redirect(url_for('file_upload', src=url_for('pic', email=email)))
 
 
 
@@ -418,8 +418,7 @@ def community():
 def display_member(email):
     if('email' in session):
         conn = dbi.connect()
-        # email = request.form.get('memberEmail')
-        # print("jhfsldkjfhasdfhsadklfhsadhfsdkhflasdfhjksdfhsadhf ", email)
+
         member = queries.get_one_member(conn,session['email'])
         return render_template("memberPage.html", src=url_for('pic',email=email), email = email, member = member)
     else:
@@ -464,7 +463,6 @@ def file_upload():
             return render_template("welcomePage.html", member=member)
 
         if request.method == 'POST':
-            print("does it visit here")
             try:
                 f = request.files['pic']
                 user_filename = f.filename
@@ -494,7 +492,7 @@ def file_upload():
 
 if __name__ == '__main__':
     dbi.cache_cnf()
-    dbi.use('yafifi_db') #centralex_db
+    dbi.use('centralex_db') #centralex_db
 
     import os
     port = os.getuid()
