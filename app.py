@@ -55,13 +55,28 @@ def signup():
         password = request.form.get('password')
         password2 = request.form.get('password2')
         user_type = request.form.get('type')
-        about = request.form.get('about')
 
+        # Checks whether mandatory fields are filled out
+        if not name:
+            error = 'Name is required.'
+            flash(error)
+        elif not email:
+            error = 'Email is required.'
+            flash(error)
+        elif not password:
+            error = 'Password is required.'
+            flash(error)
+        elif not password2:
+            error = 'Confirming your password is required.'
+            flash(error)
+
+        # Checks whether email is a Wellesley College email
         email_pattern = re.compile('@wellesley.edu$')
         if(len(email_pattern.findall(email)) == 0):
             flash('Please use your Wellesley College email.')
             return redirect(url_for('signup'))
         
+        # Checks whether passwords match
         if(password != password2):
             flash('Passwords do not match')
             return redirect(url_for('signup'))
@@ -80,7 +95,7 @@ def signup():
                 member = queries.get_one_member(conn,session['email'])
                 return render_template('yourProfile.html', src=url_for('pic',email=email), member=member)
             else:
-                flash('An account with this email already exists. Please Log in ')
+                flash('An account with this email already exists. Please login.')
                 return redirect(url_for('login'))
             
         else:
@@ -165,9 +180,10 @@ def home():
 @app.route('/favorite/', methods=['POST'])
 def favorite():
     '''Adds or removes application from list of favorites when button is clicked.'''
-    conn = dbi.connect()
-    if (session.get('uid')): #if it exists
-        uid = session['uid']
+    if('email' in session):
+        conn = dbi.connect()
+        member = queries.get_one_member(conn,session['email'])
+    
         # Get data from form: 
         data = request.form
         link = data['link']
@@ -179,9 +195,12 @@ def favorite():
             resp_dic = {'link': link}
             print("respLink:" + resp_dic['link'])
             return jsonify(resp_dic)
+        return render_template('display.html', member = member, 
+                                opportunities = opportunities, institutions = institutions)
+
     else:
-        flash('You must be logged in to add to your favorites.')
-        return redirect(url_for('index'))
+        flash('Please login.')
+        return render_template('login.html')
 
 
 @app.route('/logout/', methods=['GET'])
@@ -299,9 +318,6 @@ def comment():
     else:
         flash('Please login.')
         return render_template('login.html')
-
-
-
 
 # Farida/Ropah code 
 # '''rate an opportunity'''

@@ -1,4 +1,4 @@
-use yafifi_db; --centralex_db
+use centralex_db;
 
 drop table if exists comment;
 drop table if exists rating;
@@ -25,8 +25,9 @@ create table opportunity(
     email varchar(30),
     field varchar(25),
     title varchar(25),
-    institution varchar(30),
-    startDate date,
+    institution varchar(40),
+    season set ('Fall', 'Winter', 'Spring', 'Summer'),
+    year char(4),
     `location` varchar(50),
     experienceType varchar(25),
     experienceLevel set('Freshman', 'Sophomore', 'Junior', 'Senior', 'Any'),
@@ -54,7 +55,6 @@ create table comment(
     comment_id int not null auto_increment,
     email varchar(30),
     pid int,
-    email varchar(30),
     comment varchar(250),
     primary key(comment_id),
     foreign key (email) references member(email)
