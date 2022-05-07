@@ -15,7 +15,8 @@
 
 <h1 style="padding-top:20%">Saved Opportunities</h1>
 
-<table id="saved-table">
+<br>
+<table id="saved-table" style="width:90%; margin-left:auto; margin-right:auto">
     <tr>
       <th>Title</th>
       <th>Company</th>
@@ -32,7 +33,7 @@
       <td>{{ fav.get('averageRating') }}</td>
       
       <td>
-        <form class="save-form" metrod="post" action="{{url_for('save')}}">
+        <form class="save-form" method="post" action="{{url_for('save')}}">
             <label class="star">
                 <!-- <span><i class="fa fa-star" id="saveicon"> Save</i></span> -->
                 <input type="hidden" class="savebutton" name="pid" value={{fav.pid}}>

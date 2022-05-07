@@ -74,8 +74,9 @@
     <button type="submit" class='btn btn-primary'><i class="fa fa-search"></i></button>
   </form>
   
+<br>
 <div>
-  <table id="pid-list">
+  <table id="pid-list" style="width:90%; margin-left:auto; margin-right:auto">
     <tr>
       <th>Title</th>
       <th >Field</th>
@@ -102,7 +103,8 @@
               <input type="radio" name="stars" value="{{stars}}"></label>
           {% endfor %}
         
-        <input type="submit" value="rate this">
+        <br>
+        <input type="submit" style="size:5%; font-size: 10px" value="Rate">
         </form>
     </td>
 
@@ -111,23 +113,18 @@
      <td>
       <form method="post" action="{{url_for('comment')}}">
       <input type="hidden" name="pid" value={{opportunity.pid}}>
-      
-      <input type="text" style="overflow:hidden; padding:0%" placeholder="Type..." name ="comments"></label>
-
-      <input type="submit" value="comment">
+      <input class="center" type="text" style="width:40%; margin-left:auto;
+      margin-right:auto" placeholder="Type..." name ="comments"></label>
+      <br>  
+      <input type="submit" style="size:5%; font-size: 10px" value="Comment">
       </form>
     </td>
-
-    </tr>
-
     <!-- <td>
       <td colspan="5" style="width:100%"><p>Description</p>
     </td> -->
     <td>
         <form class="save-form" method="post" action="{{url_for('fav')}}">
-            <label class="star">
-                <input type="hidden" class="savebutton" name="pid" value={{opportunity.pid}}>
-            </label>
+            <input type="hidden" class="savebutton" name="pid" value={{opportunity.pid}}>
             <input type="submit" name="submit" value="Save"/>
         </form>
     </td>

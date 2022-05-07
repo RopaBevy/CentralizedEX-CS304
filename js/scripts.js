@@ -58,11 +58,10 @@ $("input[type=submit]").hide();
 
 
 // delegated event handler
-$("#pid-list").on('click','i', function (event) {
+$("#job-list").on('click','i', function (event) {
     $(this).closest('i').css('color','orange');
     var link = $(this).closest('tr').attr('data-pid');
     console.log(link);
-    // $(this).css('background-color', '#4CAF50');
     $.post(fav_url, {'link' : link}, updateSingleJob);
 });
 
@@ -76,7 +75,7 @@ $("#saved-list").on('click','i', function (event) {
 });
 
 function updateSingleJob(resp) {
-    var link = resp.pid;
+    var link = resp.link;
     console.log('response is',resp);
     // $('[data-tt=' + link + ']').find('.favbutton').value(1);
 };
@@ -85,12 +84,10 @@ function updateSingleJob(resp) {
 // when loading the page, show which posts are already saved
 function revealButtons(){
     var saved = document.getElementById('savelink').value;
-    var internship = document.getElementById('intlink').value;
-    console.log('saved: ' + saved);
-    console.log('internship: ' + internship);
-    console.log("revealButtons");
-    if (saved == internship){
+    var opp = document.getElementById('intlink').value;
+    console.log('Saving:' + saved);
+    console.log('Opp: ' + opp);
+    if (saved == opp){
         console.log("match");
-        $("#saveicon").css("color","orange");
     }
 }

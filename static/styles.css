@@ -197,12 +197,17 @@ body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+.center{
+  margin-left:auto;
+  margin-right:auto;
+}
+
 hr {
   margin: 1rem 0;
   color: inherit;
   background-color: currentColor;
   border: 0;
-  opacity: 0.25;
+  opacity: .3;
 }
 
 hr:not([size]) {
@@ -2065,7 +2070,7 @@ th, td {
 }
 
 
-table, tr, .pid-list{
+table, tr, td, .pid-list{
   border-spacing: 5px;
   border-collapse: collapse;
   background-color: white;
