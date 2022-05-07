@@ -56,24 +56,7 @@ window.addEventListener('DOMContentLoaded', event => {
 // Save
 $("input[type=submit]").hide();
 
-$("#saved-list").on('click','i', function (event) {
-    console.log('clicking recognized');
-    var link = $(this).closest('tr').attr('data-pid');
-    console.log(link);
-    $.post(saved_url, {'link' : link}, updateSingleJob);
-});
-
-function updateSingleJob(resp) {
-    var link = resp.link;
-    console.log('response is',resp);
-};
-
-function revealButtons(){
-    var saved = document.getElementById('savelink').value;
-    var opp = document.getElementById('intlink').value;
-    console.log('Saving:' + saved);
-    console.log('Opp: ' + opp);
-    if (saved == opp){
-        console.log("match");
-    }
-}
+$("#saved-list").on('click','i', function(event) {
+    var pid = $(this).closest('tr').attr('data-pid');
+    $.post(saved_url, {'pid':pid});
+})
