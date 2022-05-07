@@ -17,6 +17,7 @@
 
 <br>
 <table id="saved-table" style="width:90%; margin-left:auto; margin-right:auto">
+    <!-- Column titles -->
     <tr>
       <th>Title</th>
       <th>Company</th>
@@ -31,11 +32,9 @@
       <td>{{ fav.get('institution') }}</td>
       <td>{{ fav.get('field') }}</td>
       <td>{{ fav.get('averageRating') }}</td>
-      
       <td>
         <form class="save-form" method="post" action="{{url_for('save')}}">
             <label class="star">
-                <!-- <span><i class="fa fa-star" id="saveicon"> Save</i></span> -->
                 <input type="hidden" class="savebutton" name="pid" value={{fav.pid}}>
             </label>
             <input type="submit" name="submit" value="Unsave"/>
