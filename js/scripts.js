@@ -53,16 +53,8 @@ window.addEventListener('DOMContentLoaded', event => {
 
 });
 
-// Favorite
+// Save
 $("input[type=submit]").hide();
-
-
-// delegated event handler
-$("#job-list").on('click','i', function (event) {
-    var link = $(this).closest('tr').attr('data-pid');
-    console.log(link);
-    $.post(fav_url, {'link' : link}, updateSingleJob);
-});
 
 $("#saved-list").on('click','i', function (event) {
     console.log('clicking recognized');
