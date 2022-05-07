@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+<div class="collapse navbar-collapse" id="navbarResponsive">
+  <ul class="navbar-nav ms-auto">
+      <li class="nav-item"><a class="nav-link" href="{{url_for('member_profile_update')}}">{{member.get('name')}} <i class="fas fa-user-alt"></i></a>  </li>
+      <li class="nav-item"><a class="nav-link" href="{{url_for('display')}}">View Opportunities</a></li>  
+      <li class="nav-item"><a class="nav-link" href="{{url_for('upload')}}">Post Opportunity</a></li>  
+      <li class="nav-item"><a class="nav-link" href="{{url_for('community')}}">Connect</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
+  </ul>
+</div>
+{% endblock %}
+{% block page_content %}
+
+<h1 style="padding-top:20%">Saved Opportunities</h1>
+
+<table id="saved-table">
+    <tr>
+      <th>Title</th>
+      <th>Company</th>
+      <th>Field</th>
+      <th>Average Rating</th>
+      <th>Unsave</th>
+    </tr>
+    <tbody id="saved-list">
+    {% for fav in saved %}
+    <tr data-pid={{saved.pid}}>
+      <td>{{ fav.get('title') }}</td>
+      <td>{{ fav.get('institution') }}</td>
+      <td>{{ fav.get('field') }}</td>
+      <td>{{ fav.get('averageRating') }}</td>
+      
+      <td>
+        <form class="save-form" metrod="post" action="{{url_for('save')}}">
+            <label class="star">
+                <!-- <span><i class="fa fa-star" id="saveicon"> Save</i></span> -->
+                <input type="hidden" class="savebutton" name="pid" value={{fav.pid}}>
+            </label>
+            <input type="submit" name="submit" value="Unsave"/>
+        </form>
+    </td>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+{% block footer%} {% endblock %}

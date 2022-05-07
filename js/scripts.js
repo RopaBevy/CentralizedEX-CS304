@@ -52,3 +52,45 @@ window.addEventListener('DOMContentLoaded', event => {
     });
 
 });
+
+// Favorite
+$("input[type=submit]").hide();
+
+
+// delegated event handler
+$("#pid-list").on('click','i', function (event) {
+    $(this).closest('i').css('color','orange');
+    var link = $(this).closest('tr').attr('data-pid');
+    console.log(link);
+    // $(this).css('background-color', '#4CAF50');
+    $.post(fav_url, {'link' : link}, updateSingleJob);
+});
+
+// for saved list
+$("#saved-list").on('click','i', function (event) {
+    console.log('clicking recognized');
+    $(this).closest('i').css('color','grey');
+    var link = $(this).closest('tr').attr('data-pid');
+    console.log(link);
+    $.post(saved_url, {'link' : link}, updateSingleJob);
+});
+
+function updateSingleJob(resp) {
+    var link = resp.pid;
+    console.log('response is',resp);
+    // $('[data-tt=' + link + ']').find('.favbutton').value(1);
+};
+
+
+// when loading the page, show which posts are already saved
+function revealButtons(){
+    var saved = document.getElementById('savelink').value;
+    var internship = document.getElementById('intlink').value;
+    console.log('saved: ' + saved);
+    console.log('internship: ' + internship);
+    console.log("revealButtons");
+    if (saved == internship){
+        console.log("match");
+        $("#saveicon").css("color","orange");
+    }
+}

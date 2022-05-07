@@ -80,6 +80,18 @@ create table rating (
 )
 ENGINE = InnoDB;
 
+create table favorites(
+    pid int,
+    email varchar(30),
+    primary key(pid, email),
+    foreign key (pid) references opportunity(pid)
+        on delete cascade
+        on update cascade,
+    foreign key (email) references member(email)
+        on delete cascade
+        on update cascade
+)
+ENGINE = InnoDb;
 
 create table profilePic (
     email varchar(30) primary key,

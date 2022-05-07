@@ -5,6 +5,8 @@
   <ul class="navbar-nav ms-auto">
       <li class="nav-item"><a class="nav-link" href="{{url_for('member_profile_update')}}">{{member.get('name')}} <i class="fas fa-user-alt"></i></a>  </li>
       <li class="nav-item"><a class="nav-link" href="{{url_for('upload')}}">Post Opportunity</a></li>  
+      <li class="nav-item"><a class="nav-link" href="{{url_for('community')}}">Connect</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{url_for('save')}}">Saved</a></li>
       <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
   </ul>
 </div>
@@ -12,9 +14,12 @@
 
 {% block page_content %}
 
+<h1 style="padding-top: 20%">All Opportunities</h1>
 <div>
-  <br><br><br>
   <form class="form-signup" action="{{url_for('search')}}" >
+    <style>
+      .form-signup{width: 100%}
+    </style>
     <label> Field 
       <select name="field" class="form-control">
           <option value>All</option>
@@ -48,6 +53,15 @@
           {% endfor %}
       </select>
     </label>
+    <label> Season 
+      <select name="exp" class="form-control">
+          <option value>Any</option>
+          <option value="Fall">Fall</option>
+          <option value="Spring">Spring</option>
+          <option value="Summer">Summer</option>
+          <option value="winter">Winter</option>
+      </select>
+    </label>
     <label> Visa Sponsorship 
       <select name="sponsorship" class="form-control">
           <option value>Any</option>
@@ -65,12 +79,12 @@
     <tr>
       <th>Title</th>
       <th >Field</th>
-      <th>Institution</th>
+      <th>Company</th>
       
-      <th>Rate Your Experience With This Institution</th>
+      <th>Rate</th>
       <th>Average Rating</th>
-      <th>Provide Comments About This Experience</th>
-      <th>Comments</th>
+      <th>Comment</th>
+      <th>Save</th>
     </tr>
     {% for opportunity in opportunities %}
     <tr data-pid={{opportunity.pid}}>
@@ -98,7 +112,7 @@
       <form method="post" action="{{url_for('comment')}}">
       <input type="hidden" name="pid" value={{opportunity.pid}}>
       
-      <input type="text" placeholder="Comments about this experience..." name ="comments"></label>
+      <input type="text" style="overflow:hidden; padding:0%" placeholder="Type..." name ="comments"></label>
 
       <input type="submit" value="comment">
       </form>
@@ -106,8 +120,16 @@
 
     </tr>
 
-    <td>
+    <!-- <td>
       <td colspan="5" style="width:100%"><p>Description</p>
+    </td> -->
+    <td>
+        <form class="save-form" method="post" action="{{url_for('fav')}}">
+            <label class="star">
+                <input type="hidden" class="savebutton" name="pid" value={{opportunity.pid}}>
+            </label>
+            <input type="submit" name="submit" value="Save"/>
+        </form>
     </td>
 
 

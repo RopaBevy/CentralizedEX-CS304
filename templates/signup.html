@@ -1,4 +1,11 @@
 {% extends "base.html"%}
+{% block navbar %}
+<div class="collapse navbar-collapse" id="navbarResponsive">
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="{{url_for('login')}}">Login</a></li>
+    </ul>
+</div>
+{% endblock %}
 
 {% block page_content %}
 <section class="signup-section" id="signup">
@@ -8,41 +15,34 @@
               <h2 class="text-white mb-5">Sign Up</h2>
                   <form class="form-signup" id="signupForm" action="{{url_for('signup')}}" method="POST">
                     <!-- Email address input-->
-                        <p><label for="name"> Name (required)</label><br>
+                        <p><label for="name"> Name</label><br>
                         <input class="form-control" id="name" type="text" name="name" placeholder="Wendy Wellesley" aria-label="Enter email address..." data-sb-validations="required,name" /><br></p>
-                        <p><label for="profession"> Wellesley College Affiliation (required)</label><br>
+                        <p><label for="profession"> Profession</label><br>
                         <input class="form-control" id="profession" type="text" name="profession" placeholder="Student of Computer Science" data-sb-validations="required,name" /><br></p>
                         <p><label for="about"> Institution</label><br>
                         <input class="form-control" id="institution" type="text" name="institution" placeholder="Wellesley College" data-sb-validations="required,name" /><br></p>
                         <p><label for="about"> About You</label><br>
-                        <input class="form-control" id="about" type="text" name="about" placeholder="ex. Class of 2010" data-sb-validations="required,name" /><br></p>
-                        <p><label for="email"> Wellesley Email Address (required)</label><br>
+                        <input class="form-control" id="about" type="text" name="about" placeholder="What would you like the Wellesley community to know about you " data-sb-validations="required,name" /><br></p>
+                        <p><label for="email"> Wellesley Email Address</label><br>
                         <input class="form-control" id="emailAddress" type="email" name="email" placeholder="wendy@wellesley.edu..." aria-label="Enter email address..." data-sb-validations="required,email" /><br></p>
-                        <p><label for="password"> Password (required)</label><br>
+                        <p><label for="password"> Password</label><br>
                         <input class="form-control" id="password" type="password" name="password" placeholder="#wendy123!@#"  aria-label="Enter email address..." data-sb-validations="required,password" /><br></p>
-                        <p><label for="password2"> Enter password again (required)</label><br>
+                        <p><label for="password2"> Enter password again</label><br>
                         <input class="form-control" id="password2" type="password" name="password2" placeholder="#wendy123!@#"  aria-label="Enter email address..." data-sb-validations="required,password" /><br><br></p>
-                  <!-- </form> -->
                         <br>
-<<<<<<< HEAD
-                      <!-- <form> -->
                           <h4>Affiliation to Wellesley College</h4>
-=======
-                      <form>
-                          <h4>Wellesley College Affiliation (required)</h4>
->>>>>>> 0ac3e85d84a3168177c524731f802e4a8ba310c0
                         <div id="type">
                           <input type="radio" name="type" value="Student" required>
                           <label>Student</label>
                           <input type="radio" name="type" value="Professor" required>
                           <label>Professor</label>
                           <input type="radio" name="type" value="Alum" required>
-                          <label>Alum</label><br><br>
+                          <label>Alumn</label><br><br>
                         </div>
                         
                         <div><button class="btn btn-primary" id="submitButton" type="submit" value="Sign Up">Sign Up</button></div>
                         <br><br>
-                        <p style="color: aliceblue;"><b>Already have an account? <a href="{{url_for('login')}}" style="color: #7257bb;">Login here!</a></b></p>
+                        <p style="color: aliceblue;"><b>Already have an account? <a href="{{url_for('login')}}" style="color: #9377df;">Login here!</a></b></p>
                   </form>
                 </div>
               </div>

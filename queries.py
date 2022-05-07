@@ -1,4 +1,3 @@
-import os 
 import cs304dbi as dbi
 
 def insert_member(conn, user_email, profession, institution, user_password, user_name, user_type, about):
@@ -177,46 +176,6 @@ def get_filtered_members(conn, affiliation, profession, institution, name):
     curs.execute(sql, ['%'+affiliation+'%', '%'+profession+'%', '%'+institution+'%', '%'+name+'%'])
     return curs.fetchall()
 
-# def look_oppor_title(conn, title):
-#     curs = dbi.dict_cursor(conn)
-#     sql = "select * from opportunity where title like %s"
-#     curs.execute(sql, ['%'+title+'%']) 
-#     return curs.fetchall()
-
-# def look_oppor_field(conn, field):
-#     curs = dbi.dict_cursor(conn)
-#     sql = "select * from opportunity where field like %s"
-#     field = '%' + field + '%'
-#     curs.execute(sql, [field]) 
-#     return curs.fetchall()
-
-# def look_oppor_institution(conn, institution):
-#     curs = dbi.dict_cursor(conn)
-#     sql = "select * from opportunity where institution like %s"
-#     institution = '%' + institution + '%'
-#     curs.execute(sql, [institution]) 
-#     return curs.fetchall()
-
-# def look_oppor_sponsorship(conn, sponsorship):
-#     curs = dbi.dict_cursor(conn)
-#     sql = "select * from opportunity where sponsorship like %s"
-#     curs.execute(sql, ['%'+sponsorship+'%']) 
-#     return curs.fetchall()
-
-# def look_oppor_type(conn, kind):
-#     curs = dbi.dict_cursor(conn)
-#     sql = "select * from opportunity where experienceType like %s"
-#     curs.execute(sql, ['%'+kind+'%']) 
-#     return curs.fetchall()
-
-
-# def look_oppor_exp(conn, exp):
-#     curs = dbi.dict_cursor(conn)
-#     sql = "select * from opportunity where experienceLevel like %s"
-#     curs.execute(sql, ['%'+exp+'%']) 
-#     return curs.fetchall()
-
-
 def get_all_members(conn):
     curs = dbi.dict_cursor(conn)
     sql = "select * from member"
@@ -230,27 +189,33 @@ def get_one_member(conn,email):
     curs.execute(sql, [email]) 
     return curs.fetchone()
 
-def isFavorite(conn, uid, link):
+def isFavorite(conn, email, pid):
     '''Checks whether an opportunity has been favorited'''
     curs = dbi.cursor(conn)
-    sql = '''select * from favorites where uid = %s and link = %s'''
-    curs.execute(sql, [uid, link])
+    sql = '''select * from favorites where email = %s and pid = %s'''
+    curs.execute(sql, [email, pid])
     result = curs.fetchone()
     return result != None
 
-def addFavorite(conn, uid, link):
+def getFavorites(conn, email):
+    curs = dbi.dict_cursor(conn)
+    sql = '''select * from opportunity inner join favorites using (pid) where favorites.email = %s;'''
+    curs.execute(sql, [email])
+    return curs.fetchall()
+
+def addFavorite(conn, email, pid):
     '''Adds opportunity to users' list of favorites, or removes if needed'''
     curs = dbi.cursor(conn)
-    curs.execute('''insert into favorites(uid, link)
-                values (%s, %s);''', [uid, link])
+    curs.execute('''insert into favorites(email, pid)
+                values (%s, %s);''', [email, pid])
     conn.commit()
 
-def removeFavorite(uid, link):
-    '''Removes application from users' list of favorites'''
+def removeFavorite(email, pid):
+    '''Removes opportunity from users' list of favorites'''
     conn = dbi.connect()
     curs = dbi.cursor(conn)
-    sql = '''delete from favorites where uid = %s and link = %s'''
-    curs.execute(sql, [uid, link])
+    sql = '''delete from favorites where email = %s and pid = %s'''
+    curs.execute(sql, [email, pid])
     conn.commit()
 
 def look_member_name(conn, name):
@@ -275,11 +240,5 @@ def look_member_type(conn, type):
     curs = dbi.dict_cursor(conn)
     curs.execute(sql, [type]) 
     return curs.fetchall()
-
-if __name__ == '__main__':
-    dbi.cache_cnf()
-    dbi.use('yafifi_db')
-    conn = dbi.connect()
-    print(get_institutions_member(conn))
 
 

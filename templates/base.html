@@ -60,6 +60,7 @@
         </div>
     </nav>
 
+    
 {% with messages = get_flashed_messages() %}
 {% if messages %}
    {% for message in messages %}
@@ -79,4 +80,9 @@
 <!-- Core theme JS-->
 <!-- <script src="../js/scripts.js"></script> -->
 </body>
+<script>
+    var fav_url = "{{url_for('fav')}}";
+    var saved_url = "{{url_for('save')}}";
+    
+    </script>
 </html>

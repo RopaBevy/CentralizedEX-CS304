@@ -8,6 +8,7 @@
       <li class="nav-item"><a class="nav-link" href="{{url_for('member_profile_update')}}">{{member.get('name')}}</a></li>
       <li class="nav-item"><a class="nav-link" href="{{url_for('display')}}">View Opportunities</a></li>
       <li class="nav-item"><a class="nav-link" href="{{url_for('upload')}}">Post Opportunity</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{url_for('save')}}">Saved</a></li>
       <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
   </ul>
 </div>
@@ -16,9 +17,9 @@
 {% block page_content %}
 
 <div>
-  <br><br><br>
+  <h1 style="padding-top: 20%">CentralEx Members</h1>
   <!-- <div class="search-container"> -->
-    <form action="{{url_for('filter_members')}}" class="form-signup" style="background-color: rgb(176, 199, 230); width: 100%; border: none;">
+    <form action="{{url_for('filter_members')}}" class="form-signup" style="background-color: rgb(176, 199, 230); width: 95%; border: none;">
       <label> Wellesley Affliation 
         <select name="affliation" class="form-control">
             <option value>Any</option>
@@ -27,7 +28,7 @@
             {% endfor %}
         </select>
       </label>
-      <label> Proffession 
+      <label> Profession 
         <select name="profession" class="form-control">
             <option value>Any</option>
             {% for prof in professions %}

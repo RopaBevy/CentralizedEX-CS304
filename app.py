@@ -1,7 +1,7 @@
 from ssl import SSL_ERROR_SSL
 from flask import (Flask, render_template, make_response,
                    request, session, redirect, url_for, flash,
-                   url_for, session, send_from_directory, Response)
+                   url_for, session, send_from_directory, Response, jsonify)
 
 from werkzeug.utils import secure_filename
 import sys, os, random
@@ -39,7 +39,7 @@ def about():
 def signup():
     '''
     Gives the user the signup form under the get request. 
-    Collect the user's credentials and inserts the user into the database if 
+    Collects the user's credentials and inserts the user into the database if 
     the credentials are appropriate (user must use Wellesley College email) 
     under the post request. 
     '''
@@ -177,31 +177,49 @@ def home():
     else:
         return redirect(url_for('index'))
 
-@app.route('/favorite/', methods=['POST'])
-def favorite():
-    '''Adds or removes application from list of favorites when button is clicked.'''
-    if('email' in session):
-        conn = dbi.connect()
-        member = queries.get_one_member(conn,session['email'])
-    
-        # Get data from form: 
-        data = request.form
-        link = data['link']
-        print('Link:' + link)
-        # Update database
-        if isFavorite(conn,uid,link) != True:
-            addFavorite(conn,uid, link)
-        # response dictionary
-            resp_dic = {'link': link}
-            print("respLink:" + resp_dic['link'])
-            return jsonify(resp_dic)
-        return render_template('display.html', member = member, 
-                                opportunities = opportunities, institutions = institutions)
-
+@app.route('/fav/', methods=['POST'])
+def fav():
+    '''
+    Adds opportunities to list of favorites when button is clicked.
+    '''
+    conn = dbi.connect()
+    if 'email' in session:
+        email = session['email']
+        member = queries.get_one_member(conn, session['email'])
+        pid = request.form.get('pid')
+        print('PID:' + pid)
+        if not queries.isFavorite(conn, email, pid):
+            queries.addFavorite(conn, email, pid)
+        return redirect(url_for('display'))
     else:
         flash('Please login.')
         return render_template('login.html')
 
+@app.route('/save/', methods=['GET','POST'])
+def save():
+    '''
+    Displays saved opportunities or unsaves a given opportunity.
+    '''
+    conn = dbi.connect()
+    if request.method == 'GET':
+        if 'email' in session:
+            # Displaying saved opportunities
+            email = session['email']
+            member = queries.get_one_member(conn,session['email'])
+            saved = queries.getFavorites(conn, email)
+            return render_template('saved.html', member = member, saved = saved)
+        else:
+            flash('Please login.')
+            return render_template('login.html')
+    else:
+        # Unsaving opportunity
+        if (session.get('email')): 
+            email = session['email']
+            pid = request.form.get('pid')
+            print('PID:' + pid)
+            queries.removeFavorite(email, pid)
+        # Returns to main page of opportunities 
+        return redirect(url_for('display'))
 
 @app.route('/logout/', methods=['GET'])
 def logout():
@@ -245,7 +263,8 @@ def upload():
             field = request.form.get('field')
             title = request.form.get('title')
             institution = request.form.get('institution')
-            startDate = request.form.get('start')
+            season = request.form.get('season')
+            year = request.form.get('year')
             location = request.form.get('location')
             experienceType = request.form.get('experienceType')
             experienceLevel = request.form.get('experienceLevel')
@@ -254,7 +273,7 @@ def upload():
             sponsorship = request.form.get('sponsorship')
 
             queries.insert_opportunity(conn, email, field, title, institution, 
-                                        startDate, location, experienceType, 
+                                        season, year, location, experienceType, 
                                         experienceLevel, description, appLink, 
                                         sponsorship)
             member = queries.get_one_member(conn,session['email'])
@@ -338,6 +357,7 @@ def search():
         institution = request.args.get('institution')
         sponsorship = request.args.get('sponsorship')
         keyword = request.args.get('search')
+        season = request.args.get('season')
 
         #filter by all columns is not necessary, this handles the empty columns
         if field is None:
@@ -352,12 +372,13 @@ def search():
             sponsorship = '%'
         if keyword is None:
             keyword = '%'
+        if season is None:
+            season = '%'
 
-        
 
         opportunities = queries.get_filtered_oppor(conn, field, kind, exp, 
                                                     institution, sponsorship,
-                                                    keyword)
+                                                    keyword, season)
 
         print(opportunities)
         
@@ -368,7 +389,6 @@ def search():
         flash('Please login.')
         return render_template('login.html')
 
-# Farida/Ropah code 
 # page with all members of the app
 @app.route('/filter_members/', methods=['GET'])
 def filter_members():
@@ -511,6 +531,7 @@ if __name__ == '__main__':
     dbi.use('centralex_db') #centralex_db
 
     import os
-    port = os.getuid()
+    # port = os.getuid()
+    port = 8258
     app.debug = True
     app.run('0.0.0.0',port)

@@ -16,6 +16,16 @@
   float: right;
 } */
 
+.comment-box{
+  box-sizing: border-box;
+  -webkit-box-sizing:border-box;
+  -moz-box-sizing: border-box;
+}
+
+.form-signup{
+  padding-top: 20%;
+  margin-top: 50%
+}
 
 
 .memberPage{
@@ -399,11 +409,6 @@ svg {
   vertical-align: middle;
 }
 
-table {
-  caption-side: bottom;
-  border-collapse: collapse;
-}
-
 caption {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -419,12 +424,12 @@ th {
 thead,
 tbody,
 tfoot,
-tr,
 td,
 th {
   border-color: inherit;
   border-style: solid;
   border-width: 0;
+  width: auto;
 }
 
 label {
@@ -2055,9 +2060,20 @@ progress {
   }
 }
 
+th, td {
+  text-align: left;
+}
 
-table, th, td {
-  --bs-table-bg: transparent;
+
+table, tr, .pid-list{
+  border-spacing: 5px;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 25px;
+  width: auto;
+  color: var(--color-table-text);
+  overflow: hidden;
+  /* --bs-table-bg: transparent;
   --bs-table-accent-bg: transparent;
   --bs-table-striped-color: #212529;
   --bs-table-striped-bg: rgba(0, 0, 0, 0.05);
@@ -2071,9 +2087,9 @@ table, th, td {
   margin-bottom: 1rem;
   color: #212529;
   vertical-align: top;
-  border: 1.5px solid rgb(12, 12, 12);
+  border: 1.5px solid rgb(12, 12, 12); */
 }
-.table > :not(caption) > * > * {
+/* .table > :not(caption) > * > * {
   padding: 0.5rem 0.5rem;
   background-color: var(--bs-table-bg);
   border-bottom-width: 1px;
@@ -2081,7 +2097,7 @@ table, th, td {
 }
 .table > tbody {
   vertical-align: inherit;
-}
+} */
 .table > thead {
   vertical-align: bottom;
 }
@@ -4263,7 +4279,7 @@ textarea.form-control-lg {
   align-items: center;
   justify-content: space-between;
   padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: 20rem;
 }
 .navbar > .container,
 .navbar > .container-fluid,

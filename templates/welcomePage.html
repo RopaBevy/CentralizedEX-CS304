@@ -4,8 +4,11 @@
 <div class="collapse navbar-collapse" id="navbarResponsive">
     <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a class="nav-link" href="{{url_for('member_profile_update')}}">{{member.get('name')}} <i class="fas fa-user-alt"></i></a>  </li>
+        <li class="nav-item"><a class="nav-link" href="{{url_for('display')}}">View Opportunities</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{url_for('upload')}}">Share An Opportunity</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{url_for('community')}}">Connect</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{url_for('save')}}">Saved</a></li>
         <li class="nav-item"><a class="nav-link" href="{{url_for('logout')}}">Log Out</a></li>
-       
         
     </ul>
 </div>
@@ -31,8 +34,8 @@
                 <h1 class="mx-auto my-0 text-uppercase">Central Experience</h1>
                 <span> 
                     <p><a class="btn btn-primary" href="{{url_for('display')}}">View Opportunities</a></p>
-                    <p><a class="btn btn-primary" href="{{url_for('upload')}}">Post Job and Intership Opportunities</a></p>
-                    <p><a class="btn btn-primary" href="{{url_for('community')}}">CentralEx Community</a></p>
+                    <p><a class="btn btn-primary" href="{{url_for('upload')}}">Share Opportunities</a></p>
+                    <p><a class="btn btn-primary" href="{{url_for('community')}}">Connect</a></p>
                 </span>        
             </div>
         </div>
