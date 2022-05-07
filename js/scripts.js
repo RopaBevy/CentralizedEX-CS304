@@ -59,16 +59,13 @@ $("input[type=submit]").hide();
 
 // delegated event handler
 $("#job-list").on('click','i', function (event) {
-    $(this).closest('i').css('color','orange');
     var link = $(this).closest('tr').attr('data-pid');
     console.log(link);
     $.post(fav_url, {'link' : link}, updateSingleJob);
 });
 
-// for saved list
 $("#saved-list").on('click','i', function (event) {
     console.log('clicking recognized');
-    $(this).closest('i').css('color','grey');
     var link = $(this).closest('tr').attr('data-pid');
     console.log(link);
     $.post(saved_url, {'link' : link}, updateSingleJob);
@@ -77,11 +74,8 @@ $("#saved-list").on('click','i', function (event) {
 function updateSingleJob(resp) {
     var link = resp.link;
     console.log('response is',resp);
-    // $('[data-tt=' + link + ']').find('.favbutton').value(1);
 };
 
-
-// when loading the page, show which posts are already saved
 function revealButtons(){
     var saved = document.getElementById('savelink').value;
     var opp = document.getElementById('intlink').value;
