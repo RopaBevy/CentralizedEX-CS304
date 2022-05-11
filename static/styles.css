@@ -23,7 +23,7 @@
 }
 
 .form-signup{
-  padding-top: 10%;
+  width: 100%
 }
 
 
@@ -2071,7 +2071,7 @@ th, td {
 
 table, tr, td, .pid-list{
   overflow: hidden;
-  bs-table-bg: transparent;
+  --bs-table-bg: transparent;
   --bs-table-accent-bg: transparent;
   --bs-table-striped-color: #212529;
   --bs-table-striped-bg: rgba(0, 0, 0, 0.05);
@@ -2623,6 +2623,7 @@ textarea.form-control-lg {
   -webkit-print-color-adjust: exact;
           color-adjust: exact;
 }
+
 .form-check-input[type=checkbox] {
   border-radius: 0.25em;
 }
@@ -4277,7 +4278,6 @@ textarea.form-control-lg {
   align-items: center;
   justify-content: space-between;
   padding-top: 0.5rem;
-  padding-bottom: 20rem;
 }
 .navbar > .container,
 .navbar > .container-fluid,
@@ -11780,7 +11780,7 @@ body {
 .signup-section .form-signup input {
   padding-top: 0%;
   box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0.1) !important;
-  padding: 1.25rem 2rem;
+  /*padding: 1.25rem 2rem; */
   height: auto;
   font-family: "Varela Round", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 80%;
