@@ -263,7 +263,6 @@ def upload():
             field = request.form.get('field')
             title = request.form.get('title')
             institution = request.form.get('institution')
-            season = request.form.get('season')
             year = request.form.get('year')
             location = request.form.get('location')
             experienceType = request.form.get('experienceType')
@@ -273,7 +272,7 @@ def upload():
             sponsorship = request.form.get('sponsorship')
 
             queries.insert_opportunity(conn, email, field, title, institution, 
-                                        season, year, location, experienceType, 
+                                        year, location, experienceType, 
                                         experienceLevel, description, appLink, 
                                         sponsorship)
             member = queries.get_one_member(conn,session['email'])
@@ -357,7 +356,6 @@ def search():
         institution = request.args.get('institution')
         sponsorship = request.args.get('sponsorship')
         keyword = request.args.get('search')
-        season = request.args.get('season')
 
         #filter by all columns is not necessary, this handles the empty columns
         if field is None:
@@ -372,13 +370,11 @@ def search():
             sponsorship = '%'
         if keyword is None:
             keyword = '%'
-        if season is None:
-            season = '%'
 
 
         opportunities = queries.get_filtered_oppor(conn, field, kind, exp, 
                                                     institution, sponsorship,
-                                                    keyword, season)
+                                                    keyword)
 
         print(opportunities)
         
@@ -449,7 +445,7 @@ def community():
 
 
 # Farida's code 
-# page with all members of the app
+# page with one member of the app
 @app.route('/display_member/<email>', methods=['GET'])
 def display_member(email):
     if('email' in session):
@@ -472,8 +468,6 @@ def pic(email):
         return send_from_directory(app.config['UPLOADS'], 'ww.jpg')
     row = curs.fetchone()
     return send_from_directory(app.config['UPLOADS'],row['filename'])
-
-
 
 
 # This gets us better error messages for certain common request errors
@@ -531,7 +525,6 @@ if __name__ == '__main__':
     dbi.use('centralex_db') #centralex_db
 
     import os
-    # port = os.getuid()
-    port = 8258
+    port = os.getuid()
     app.debug = True
     app.run('0.0.0.0',port)

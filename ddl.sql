@@ -26,8 +26,6 @@ create table opportunity(
     field varchar(25),
     title varchar(25),
     institution varchar(40),
-    season set ('Fall', 'Winter', 'Spring', 'Summer'),
-    year char(4),
     `location` varchar(50),
     experienceType varchar(25),
     experienceLevel set('Freshman', 'Sophomore', 'Junior', 'Senior', 'Any'),

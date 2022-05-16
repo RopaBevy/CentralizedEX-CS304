@@ -1,0 +1,48 @@
+{% extends "base.html"%}
+{% block navbar %}
+<div class="collapse navbar-collapse" id="navbarResponsive">
+    <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="{{url_for('login')}}">Login</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block page_content %}
+<section class="signup-section" id="update">
+  <div class="container px-4 px-lg-5">
+      <div class="row gx-4 gx-lg-5">
+          <div class="col-md-10 col-lg-8 mx-auto text-center">
+              <h2 class="text-white mb-5">Update Profile</h2>
+                  <form class="form-signup" id="signupForm" action="{{url_for('updateProfile')}}" method="POST">
+                    <!-- Email address input-->
+                        <p><label for="name"> Name</label><br>
+                        <input class="form-control" id="name" type="text" name="name" placeholder="{{member.name}}" aria-label="Enter email address..." data-sb-validations="required,name" /><br></p>
+                        <p><label for="profession"> Profession</label><br>
+                        <input class="form-control" id="profession" type="text" name="profession" placeholder="{{member.profession}}" data-sb-validations="required,name" /><br></p>
+                        <p><label for="about"> Institution</label><br>
+                        <input class="form-control" id="institution" type="text" name="institution" placeholder="{{member.institution}}" data-sb-validations="required,name" /><br></p>
+                        <p><label for="about"> About You</label><br>
+                        <input class="form-control" id="about" type="text" name="about" placeholder="{{member.about}}" data-sb-validations="required,name" /><br></p>
+                        <p><label for="password"> Password</label><br>
+                        <input class="form-control" id="password" type="password" name="password" placeholder="#wendy123!@#"  aria-label="Enter email address..." data-sb-validations="required,password" /><br></p>
+                        <p><label for="password2"> Enter password again</label><br>
+                        <input class="form-control" id="password2" type="password" name="password2" placeholder="#wendy123!@#"  aria-label="Enter email address..." data-sb-validations="required,password" /><br><br></p>
+                        <br>
+                          <h4>Affiliation to Wellesley College</h4>
+                        <div id="type">
+                          <input type="radio" name="type" value="Student" >
+                          <label>Student</label>
+                          <input type="radio" name="type" value="Professor" >
+                          <label>Professor</label>
+                          <input type="radio" name="type" value="Alum" >
+                          <label>Alumn</label><br><br>
+                        </div>
+                        
+                        <div><button class="btn btn-primary" id="submitButton" type="submit" value="Sign Up">Update</button></div>
+                        <br><br>
+                  </form>
+                </div>
+              </div>
+          </div>
+      </section>
+{% endblock %}

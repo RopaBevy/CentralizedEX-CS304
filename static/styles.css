@@ -22,11 +22,6 @@
   -moz-box-sizing: border-box;
 }
 
-.form-signup{
-  width: 100%
-}
-
-
 .memberPage{
   display: flex;
 }
@@ -11780,7 +11775,7 @@ body {
 .signup-section .form-signup input {
   padding-top: 0%;
   box-shadow: 0 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0.1) !important;
-  /*padding: 1.25rem 2rem; */
+  padding: 1.25rem 2rem;
   height: auto;
   font-family: "Varela Round", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 80%;

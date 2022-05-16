@@ -72,10 +72,10 @@ def insert_and_update_rating(conn,email,pid,userRating):
                             [email, pid, userRating, userRating])
     conn.commit()
 
-def insert_comment(conn,email,pid,userComment):
+def insert_comment(conn, email, pid, userComment):
     curs = dbi.dict_cursor(conn)
-    curs.execute('''INSERT INTO comment(email,pid,rating) VALUES (%s,%s,%s)''', 
-                            [email, pid, userComment, userComment])
+    curs.execute('''INSERT INTO comment(email,pid,comment) VALUES (%s,%s,%s)''', 
+                            [email, pid, userComment])
     conn.commit()
 
 

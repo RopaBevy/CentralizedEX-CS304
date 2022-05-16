@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block page_content %}
-
+<br><br><br>
 <h1>All Opportunities</h1>
 <div>
   <form class="form-signup" action="{{url_for('search')}}" >
@@ -48,15 +48,6 @@
           {% for institution in institutions %}
           <option value="{{institution.get('institution')}}">{{institution.get('institution')}}</option>
           {% endfor %}
-      </select>
-    </label>
-    <label> Season 
-      <select name="exp" class="form-control">
-          <option value>Any</option>
-          <option value="Fall">Fall</option>
-          <option value="Spring">Spring</option>
-          <option value="Summer">Summer</option>
-          <option value="winter">Winter</option>
       </select>
     </label>
     <label> Visa Sponsorship 

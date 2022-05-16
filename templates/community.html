@@ -17,7 +17,7 @@
 {% block page_content %}
 
 <div>
-  <h1 style="padding-top: 20%">CentralEx Members</h1>
+  <h1 style="padding-top: 5%">CentralEx Members</h1>
   <!-- <div class="search-container"> -->
     <form action="{{url_for('filter_members')}}" class="form-signup" style="background-color: rgb(176, 199, 230); width: 95%; border: none;">
       <label> Wellesley Affliation 
@@ -47,10 +47,8 @@
       <input type="text" placeholder="Search name..." name="keyword" class="form-control" style="width: 40%;">
       <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
     </form>
-  <!-- </div> -->
-  
 
-  <table id="pid-list">
+  <table id="pid-list" style="width: 100%;">
     <tr>
       <th>Name</th>
       <th >Profession</th>
