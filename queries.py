@@ -48,7 +48,7 @@ def login(conn, email):
     curs.execute(sql, [email])
     return curs.fetchone()
 
-def insert_opportunity(conn, email, field, title, institution, startDate, location, 
+def insert_opportunity(conn, email, field, title, institution, location, 
                     experienceType, experienceLevel, description, appLink, 
                     sponsorship):
     '''
@@ -56,10 +56,10 @@ def insert_opportunity(conn, email, field, title, institution, startDate, locati
     '''
     curs = dbi.dict_cursor(conn)
     sql = ''' INSERT INTO  opportunity (email, field, title, institution, 
-            startDate, `location`, experienceType, experienceLevel, 
+             `location`, experienceType, experienceLevel, 
             `description`, appLink, sponsorship)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) '''
-    curs.execute(sql, [email, field, title, institution, startDate, location, 
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) '''
+    curs.execute(sql, [email, field, title, institution, location, 
                         experienceType, experienceLevel, description, appLink, 
                         sponsorship])
     conn.commit()
@@ -141,7 +141,7 @@ def get_affiliations(conn):
     curs.execute(sql)
     return curs.fetchall()
 
-def get_filtered_oppor(conn, field, kind, exp,institution, sponsorship,keyword):
+def get_filtered_oppor(conn, field, kind, exp,institution, sponsorship):
     conn = dbi.connect()
     curs = dbi.dict_cursor(conn)
     sql = '''
@@ -149,32 +149,32 @@ def get_filtered_oppor(conn, field, kind, exp,institution, sponsorship,keyword):
             select field from opportunity where experienceType like  %s and experienceType in (
                 select experienceType from opportunity where experienceLevel like %s and experienceLevel in (
                     select experienceLevel from opportunity where institution like %s and institution in (
-                        select institution from opportunity where sponsorship like %s and sponsorship in (
-                            select sponsorship from opportunity where title like %s
-                        )
+                        select institution from opportunity where sponsorship like %s                 
                     )
                 )
             )
         )
         '''
-    curs.execute(sql, ['%'+field+'%', '%'+kind+'%', '%'+exp+'%', '%'+institution+'%', '%'+sponsorship+'%','%'+keyword+'%'])
+    curs.execute(sql, ['%'+field+'%', '%'+kind+'%', '%'+exp+'%', '%'+institution+'%', '%'+sponsorship+'%'])
     return curs.fetchall()
 
+def get_filtered_members(conn, affiliation, profession, institution):
+    curs = dbi.dict_cursor(conn)
+    sql = '''select * from member where `type` like %s and `type` in (
+                    select `type` from member where profession like %s and profession in (
+                        select profession from member where institution like %s
+                    )
+                )'''
+    curs.execute(sql, ['%'+affiliation+'%', '%'+profession+'%','%'+institution+'%'])
+    return curs.fetchall()
 
-def get_filtered_members(conn, affiliation, profession, institution, name):
+def get_members_keyword(conn, keyword):
     conn = dbi.connect()
     curs = dbi.dict_cursor(conn)
-    sql = '''
-        select * from member where `type` like %s and `type` in (
-            select `type` from member where profession like  %s and profession in (
-                select profession from member where institution like %s and institution in (
-                    select institution from member where `name` like %s
-                    )
-                )
-            )
-        '''
-    curs.execute(sql, ['%'+affiliation+'%', '%'+profession+'%', '%'+institution+'%', '%'+name+'%'])
+    sql = 'select * from member where `name` like %s'
+    curs.execute(sql, ['%'+keyword+'%'])
     return curs.fetchall()
+    
 
 def get_all_members(conn):
     curs = dbi.dict_cursor(conn)
@@ -221,7 +221,6 @@ def removeFavorite(email, pid):
 def look_member_name(conn, name):
     curs = dbi.dict_cursor(conn)
     sql = "select * from member where name like %s"
-    curs = dbi.dict_cursor(conn)
     name = '%' + name + '%'
     curs.execute(sql, [name]) 
     return curs.fetchall()
@@ -229,7 +228,6 @@ def look_member_name(conn, name):
 def look_member_profession(conn, profession):
     curs = dbi.dict_cursor(conn)
     sql = "select * from member where profession like %s"
-    curs = dbi.dict_cursor(conn)
     profession = '%' + profession + '%'
     curs.execute(sql, [profession]) 
     return curs.fetchall()
@@ -237,8 +235,15 @@ def look_member_profession(conn, profession):
 def look_member_type(conn, type):
     curs = dbi.dict_cursor(conn)
     sql = "select * from member where type = %s"
-    curs = dbi.dict_cursor(conn)
     curs.execute(sql, [type]) 
     return curs.fetchall()
 
+# Farida and Ropah's code 
+# query to get comment from users and their user name 
+
+def get_comments(conn):
+    curs = dbi.dict_cursor(conn)
+    sql = "select * from comment inner join member using (email)"
+    curs.execute(sql) 
+    return curs.fetchall()
 

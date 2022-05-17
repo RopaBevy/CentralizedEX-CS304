@@ -16,6 +16,10 @@
   float: right;
 } */
 
+#submitLater{
+  color: black;
+}
+
 .comment-box{
   box-sizing: border-box;
   -webkit-box-sizing:border-box;

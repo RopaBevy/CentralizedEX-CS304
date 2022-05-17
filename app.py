@@ -44,7 +44,10 @@ def signup():
     under the post request. 
     '''
     if(request.method == 'GET'):
-        return render_template("signup.html")
+        if 'email' in session:
+             return render_template("signup.html", pageTitle = "Update Profile")
+        else:
+            return render_template("signup.html", pageTitle = "Sign up")
     else:
         conn = dbi.connect()
         email = request.form.get('email')
@@ -74,12 +77,13 @@ def signup():
         email_pattern = re.compile('@wellesley.edu$')
         if(len(email_pattern.findall(email)) == 0):
             flash('Please use your Wellesley College email.')
-            return redirect(url_for('signup'))
+            pageTitle = "Sign up"
+            return redirect(url_for('signup', pageTitle = pageTitle))
         
         # Checks whether passwords match
         if(password != password2):
             flash('Passwords do not match')
-            return redirect(url_for('signup'))
+            return redirect(url_for('signup', pageTitle = "Sign up"))
 
         # create a new user with the form data.
         hashed_password = bcrypt.hashpw(password.encode('utf-8'),
@@ -89,7 +93,7 @@ def signup():
 
         # if user is already in database, redirect back to login page
         if (queries.user_exists(conn, email)):
-            if 'email' in session:
+            if 'email' in session and request.form.get('email') == session['email']:
                 flash('Account updated')
                 queries.update_member(conn, email, profession, institution, stored_password, name, user_type, about)
                 member = queries.get_one_member(conn,session['email'])
@@ -187,7 +191,6 @@ def fav():
         email = session['email']
         member = queries.get_one_member(conn, session['email'])
         pid = request.form.get('pid')
-        print('PID:' + pid)
         if not queries.isFavorite(conn, email, pid):
             queries.addFavorite(conn, email, pid)
         return redirect(url_for('display'))
@@ -216,7 +219,6 @@ def save():
         if (session.get('email')): 
             email = session['email']
             pid = request.form.get('pid')
-            print('PID:' + pid)
             queries.removeFavorite(email, pid)
         # Returns to main page of opportunities 
         return redirect(url_for('display'))
@@ -226,8 +228,7 @@ def logout():
     '''
     Logs out the current user and updates the session accordingly.
     '''
-    if 'email' in session:
-        email = session['email']
+    if 'email' in session and session['email']:
         session.pop('email')
         session.pop('logged_in')
         flash('You are logged out')
@@ -263,7 +264,6 @@ def upload():
             field = request.form.get('field')
             title = request.form.get('title')
             institution = request.form.get('institution')
-            year = request.form.get('year')
             location = request.form.get('location')
             experienceType = request.form.get('experienceType')
             experienceLevel = request.form.get('experienceLevel')
@@ -272,7 +272,7 @@ def upload():
             sponsorship = request.form.get('sponsorship')
 
             queries.insert_opportunity(conn, email, field, title, institution, 
-                                        year, location, experienceType, 
+                                        location, experienceType, 
                                         experienceLevel, description, appLink, 
                                         sponsorship)
             member = queries.get_one_member(conn,session['email'])
@@ -290,11 +290,14 @@ def display():
     if('email' in session):
         conn = dbi.connect()
         opportunities = queries.get_opportunities(conn)
+        comments = queries.get_comments(conn)
         member = queries.get_one_member(conn,session['email'])
         fields = queries.get_fields(conn)
         institutions = queries.get_institutions_opportunity(conn)
+
         return render_template('display.html', opportunities=opportunities,
-                                fields=fields, institutions=institutions, member=member)
+                                comments=comments, fields=fields, 
+                                institutions=institutions, member=member)
     else:
         flash('Please login.')
         return render_template('login.html')
@@ -308,7 +311,6 @@ def rating():
         email = session['email']
         userRating = request.form.get("stars")
         pid = request.form.get("pid")
-        print(pid, "pid", email, "email", userRating, "userRating")
         queries.insert_and_update_rating(conn,email,pid,userRating)
         avgRating = queries.average_rating(conn,pid)
         queries.update_pid_average(conn,avgRating,pid)
@@ -328,7 +330,6 @@ def comment():
         email = session['email']
         userComment = request.form.get("comments")
         pid = request.form.get("pid")
-        print(pid, "pid", email, "email", userComment, "userComment")
         queries.insert_comment(conn,email,pid,userComment)
         flash("user{} added a comment about opportunity {}".format(session["email"],pid))
         member = queries.get_one_member(conn,session['email'])
@@ -355,35 +356,17 @@ def search():
         exp = request.args.get('exp')
         institution = request.args.get('institution')
         sponsorship = request.args.get('sponsorship')
-        keyword = request.args.get('search')
-
-        #filter by all columns is not necessary, this handles the empty columns
-        if field is None:
-            field = '%'
-        if kind is None:
-            kind = '%'
-        if exp is None:
-            exp = '%'
-        if institution is None:
-            institution = '%'
-        if sponsorship is None:
-            sponsorship = '%'
-        if keyword is None:
-            keyword = '%'
-
 
         opportunities = queries.get_filtered_oppor(conn, field, kind, exp, 
-                                                    institution, sponsorship,
-                                                    keyword)
+                                                institution, sponsorship)
 
-        print(opportunities)
-        
-        return render_template('display.html', member = member, 
-                                opportunities=opportunities, institutions=institutions)
+        return render_template('display.html', member=member, fields=fields,
+                    opportunities=opportunities, institutions=institutions)
 
     else:
         flash('Please login.')
         return render_template('login.html')
+
 
 # page with all members of the app
 @app.route('/filter_members/', methods=['GET'])
@@ -404,7 +387,7 @@ def filter_members():
         institution = request.args.get('institution')
         name = request.args.get('keyword')
 
-        #if filter fields are empty, select everything for that field
+        # if filter fields are empty, select everything for that field
         if affiliation is None:
             affiliation = '%'
         if profession is None:
@@ -413,12 +396,12 @@ def filter_members():
             institution = '%'
         if name is None:
             name = '%'
+      
+        members = queries.get_filtered_members(conn, affiliation, profession,institution)
 
-        members = queries.get_filtered_members(conn, affiliation, profession, institution, name)
-
-        return render_template("community.html", member=member, 
+        return render_template("community.html", members=members, member=member, 
                             affiliations=affiliations, professions=professions,
-                            institutions=institutions, members=members)
+                            institutions=institutions)
 
     else:
         flash('Please login.')
@@ -450,7 +433,6 @@ def community():
 def display_member(email):
     if('email' in session):
         conn = dbi.connect()
-
         member = queries.get_one_member(conn,session['email'])
         return render_template("memberPage.html", src=url_for('pic',email=email), email = email, member = member)
     else:
@@ -478,13 +460,13 @@ app.config['UPLOADS'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 1*1024*1024 # 1 MB
 
 # uploads image 
+# Farida's code 
 @app.route('/file_upload/', methods=["GET", "POST"])
 def file_upload():
     if 'email' in session:
         email = session['email']
         if request.method == 'GET':
             return render_template('uploadPhoto.html',src=url_for('pic',email=email),email=email)
-            # ,src= os.path.join(app.config['UPLOADS'],'ftahirywellesley.edu.jpg'),email='')
 
         if request.form["submit"] == "Upload Later":
             conn = dbi.connect()
@@ -515,10 +497,10 @@ def file_upload():
             except Exception as err:
                 flash('Upload failed {why}'.format(why=err))
                 session.pop('email')
-                return redirect(url_for('signup'))
+                return redirect(url_for('signup', pageTitle = "Sign Up"))
     else:
         flash('signup unsuccessful')
-        return redirect(url_for('signup'))
+        return redirect(url_for('signup', pageTitle = "Sign up"))
 
 if __name__ == '__main__':
     dbi.cache_cnf()

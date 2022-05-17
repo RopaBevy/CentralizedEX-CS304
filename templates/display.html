@@ -13,8 +13,8 @@
 {% endblock %}
 
 {% block page_content %}
-<br><br><br>
-<h1>All Opportunities</h1>
+
+<h1 style="padding-top: 5%">All Opportunities</h1>
 <div>
   <form class="form-signup" action="{{url_for('search')}}" >
     <label> Field 
@@ -57,14 +57,13 @@
           <option value="no">No</option>
           <option value="maybe">Maybe</option>
       </select>
-    </label><br>
-    <input type="text" placeholder="Search..." name ="search" class="search-bar" style='width: 62.5%;'>
+    </label>
     <button type="submit" class='btn btn-primary'><i class="fa fa-search"></i></button>
   </form>
   
 <br>
 <div>
-  <table id="pid-list" style="width:90%; margin-left:auto; margin-right:auto">
+  <table id="pid-list" style="width:99%; margin-left:auto; margin-right:auto">
     <tr>
       <th>Title</th>
       <th >Field</th>
@@ -100,16 +99,15 @@
     
      <td>
       <form method="post" action="{{url_for('comment')}}">
+      
       <input type="hidden" name="pid" value={{opportunity.pid}}>
+      <label class="comments">
       <input class="center" type="text" style="width:40%; margin-left:auto;
-      margin-right:auto" placeholder="Type..." name ="comments"></label>
+      margin-right:auto" placeholder="Comment..." name ="comments" id='comment'></label>
       <br>  
-      <input type="submit" style="size:5%; font-size: 10px" value="Comment">
+      <label for="comments"><input type="submit" style="size:5%; font-size: 10px" value="Comment"></label>
       </form>
     </td>
-    <!-- <td>
-      <td colspan="5" style="width:100%"><p>Description</p>
-    </td> -->
     <td>
         <form class="save-form" method="post" action="{{url_for('fav')}}">
             <input type="hidden" class="savebutton" name="pid" value={{opportunity.pid}}>
@@ -117,7 +115,20 @@
         </form>
     </td>
 
-
+    <tr><td colspan="7" style="width:100%">
+      <div>
+      <p><b>Description:</b> {{opportunity.description}}</p>
+      <p><b>Comments:</b></p>
+        {% for comment in comments %}
+        {% if comment.pid == opportunity.pid %}
+          <p><i>{{comment.name}}</i>: {{comment.comment}} </p>
+        {% endif %}
+        {% endfor %}
+        {% if opportunity.appLink is not none %}
+        <p><b>Application Link:</b> <a href='{{opportunity.appLink}}'>Apply Here!</a></p>
+        {% endif %}
+      </div>
+    </td></tr>
   </tr>
     {% endfor %}
   </table>

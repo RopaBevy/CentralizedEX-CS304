@@ -12,14 +12,15 @@
   <div class="container px-4 px-lg-5">
       <div class="row gx-4 gx-lg-5">
           <div class="col-md-10 col-lg-8 mx-auto text-center">
-              <h2 class="text-white mb-5">Sign Up</h2>
+              <h2 class="text-white mb-5">{{pageTitle}}</h2>
                   <form class="form-signup" id="signupForm" action="{{url_for('signup')}}" method="POST">
                     <!-- Email address input-->
+                    
                         <p><label for="name"> Name</label><br>
                         <input class="form-control" id="name" type="text" name="name" placeholder="Wendy Wellesley" aria-label="Enter email address..." data-sb-validations="required,name" /><br></p>
                         <p><label for="profession"> Profession</label><br>
                         <input class="form-control" id="profession" type="text" name="profession" placeholder="Student of Computer Science" data-sb-validations="required,name" /><br></p>
-                        <p><label for="about"> Institution</label><br>
+                        <p><label for="institution"> Institution</label><br>
                         <input class="form-control" id="institution" type="text" name="institution" placeholder="Wellesley College" data-sb-validations="required,name" /><br></p>
                         <p><label for="about"> About You</label><br>
                         <input class="form-control" id="about" type="text" name="about" placeholder="What would you like the Wellesley community to know about you " data-sb-validations="required,name" /><br></p>
@@ -30,19 +31,23 @@
                         <p><label for="password2"> Enter password again</label><br>
                         <input class="form-control" id="password2" type="password" name="password2" placeholder="#wendy123!@#"  aria-label="Enter email address..." data-sb-validations="required,password" /><br><br></p>
                         <br>
-                          <h4>Affiliation to Wellesley College</h4>
+                        
+
+                        <h4>Affiliation to Wellesley College</h4>
                         <div id="type">
                           <input type="radio" name="type" value="Student" required>
-                          <label>Student</label>
+                          <label for="student">Student</label>
                           <input type="radio" name="type" value="Professor" required>
-                          <label>Professor</label>
+                          <label for="professor">Professor</label>
                           <input type="radio" name="type" value="Alum" required>
-                          <label>Alumn</label><br><br>
+                          <label for="alumn">Alumn</label><br><br>
                         </div>
                         
                         <div><button class="btn btn-primary" id="submitButton" type="submit" value="Sign Up">Sign Up</button></div>
                         <br><br>
+                        {% if pageTitle == 'Sign up'%}
                         <p style="color: aliceblue;"><b>Already have an account? <a href="{{url_for('login')}}" style="color: #9377df;">Login here!</a></b></p>
+                        {% endif %}
                   </form>
                 </div>
               </div>

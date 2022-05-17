@@ -19,21 +19,25 @@
 
     <script>
 
+    var e = document.getElementById('communityDropDown');
+    e.options[e.selectedIndex].text;
+
     $(function() {
-        $("td[colspan=5]").find("p").hide();
+        $("td[colspan=7]").find("div").hide();
         $("table").click(function(event) {
             event.stopPropagation();
             var $target = $(event.target);
             let title = $target.closest("tr").prev().find("td:first");
             let current = $(title).html();
 
-            if ( $target.closest("td").attr("colspan") > 100000000) {
+
+            if ( $target.closest("td").attr("colspan") < 100000000) {
                 console.log($target.closest("td").attr("colspan") )
-                $target.slideUp();
+                $target.closest("tr").next().find("div").slideUp();
                 $(title).html(current);
                 // $target.closest("tr").prev().find("td:first").html("+");
             } else {
-                $target.closest("tr").next().find("p").slideToggle();
+                $target.closest("tr").next().find("div").slideToggle();
                 if (title == $(title).html(current))
                 $(title).html(current);
                 else

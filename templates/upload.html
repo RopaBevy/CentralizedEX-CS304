@@ -21,19 +21,18 @@
               <h2 class="text-white mb-5">Post an Opportunity</h2>
                   <form class="form-signup" id="uploadForm" action="{{url_for('upload')}}" method="POST">
                         <label for="field"> Field</label><br>
-                        <input class="form-control" id="field" type="text" name="field" aria-label="Enter email address..." placeholder="Computer Science" required /><br><br>
+                        <input class="form-control" id="field" type="text" name="field" placeholder="Computer Science" required /><br><br>
                         <label for="title"> Title</label><br>
-                        <input class="form-control" id="title" type="text" name="title" placeholder="Design internship" aria-label="Enter email address..." required /><br><br>
+                        <input class="form-control" id="title" type="text" name="title" placeholder="Design internship" required /><br><br>
                         <label for="description"> Description</label><br>
-                        <input class="form-control" id="description" type="textarea" name="description" aria-label="Enter email address..." /><br><br>
+                        <input class="form-control" id="description" type="textarea" name="description" /><br><br>
                         <label for="institution"> Institution</label><br>
-                        <input class="form-control" id="institution" type="text" name="institution" placeholder="ABC Inc" aria-label="Enter email address..." required /><br><br>
+                        <input class="form-control" id="institution" type="text" name="institution" placeholder="ABC Inc" required /><br><br>
                         <label for="location"> Location</label><br>
-                        <input class="form-control" id="location" type="text" name="location" placeholder="New York, NY" aria-label="Enter email address..." /><br><br>
+                        <input class="form-control" id="location" type="text" name="location" placeholder="New York, NY" /><br><br>
                         <label for="link">Application Link</label><br>
-                        <input class="form-control" id="link" type="text" name="link" aria-label="Enter email address..." required /><br><br>
-                  <!-- </form> -->
-                  <!-- <form> -->
+                        <input class="form-control" id="link" type="text" name="link" required/><br><br>
+
                   <p><b>Type of Experience</b></p>
                   <input type="radio" name="experienceType" value="Internship" required>
                   <label>Internship</label>
@@ -42,15 +41,15 @@
                   <input type="radio" name="experienceType" value="Part-Time" required>
                   <label>Part-Time</label><br><br><br>
                   <p><b>Experience Level</b></p>
-                  <input type="checkbox" name="experienceLevel" value="Freshman" required>
+                  <input type="checkbox" name="experienceLevel" value="Freshman" >
                   <label>Freshman</label>
-                  <input type="checkbox" name="experienceLevel" value="Sophomore" required>
+                  <input type="checkbox" name="experienceLevel" value="Sophomore">
                   <label>Sophomore</label>
-                  <input type="checkbox" name="experienceLevel" value="Junior" required>
+                  <input type="checkbox" name="experienceLevel" value="Junior">
                   <label>Junior</label>
-                  <input type="checkbox" name="experienceLevel" value="Senior" required>
+                  <input type="checkbox" name="experienceLevel" value="Senior">
                   <label>Senior</label>
-                  <input type="checkbox" name="experienceLevel" value="Any" required>
+                  <input type="checkbox" name="experienceLevel" value="Any">
                   <label>Any</label><br><br><br>
                   <p><b>Visa Sponsorship</b></p>
                   <input type="radio" name="sponsorship" value="Yes" required>

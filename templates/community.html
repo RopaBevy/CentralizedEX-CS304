@@ -21,15 +21,15 @@
   <!-- <div class="search-container"> -->
     <form action="{{url_for('filter_members')}}" class="form-signup" style="background-color: rgb(176, 199, 230); width: 95%; border: none;">
       <label> Wellesley Affliation 
-        <select name="affliation" class="form-control">
+        <select name="affiliation" class="form-control" id = "communityDropDown">
             <option value>Any</option>
             {% for affiliation in affiliations %}
-            <option value="{{affiliation}}">{{affiliation.get('type')}}</option>
+            <option value="{{affiliation.get('type')}}">{{affiliation.get('type')}}</option>
             {% endfor %}
         </select>
       </label>
       <label> Profession 
-        <select name="profession" class="form-control">
+        <select name="profession" class="form-control" id = "communityDropDown">
             <option value>Any</option>
             {% for prof in professions %}
             <option value="{{prof.get('profession')}}">{{prof.get('profession')}}</option>
@@ -37,14 +37,13 @@
         </select>
       </label>
       <label> Institution 
-        <select name="institution" class="form-control">
+        <select name="institution" class="form-control" id = "communityDropDown">
             <option value>Any</option>
             {% for inst in institutions %}
             <option value="{{inst.get('institution')}}">{{inst.get('institution')}}</option>
             {% endfor %}
         </select>
       </label>
-      <input type="text" placeholder="Search name..." name="keyword" class="form-control" style="width: 40%;">
       <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
     </form>
 
@@ -52,20 +51,20 @@
     <tr>
       <th>Name</th>
       <th >Profession</th>
-      <th>Contact</th>
+      <th>Institution</th>
       <th>Wellesley Affiliation</th>
       <th>Profile Link</th>
 
     </tr>
-    {% for member in members %}
+    {% for person in members %}
     <tr data-pid="{{member.get('email')}}">
       
-      <td>{{ member.get('name') }}</td>
-      <td>{{ member.get('profession') }}</td>
-      <td>{{ member.get('email') }}</td>
-      <td>{{ member.get('type') }}</td>
-      <td><form method="get" action="{{ url_for('display_member', email = member.get('email')) }}">
-        <input type="submit" name="memberEmail" value="{{member.get('email')}}">
+      <td>{{ person.get('name') }}</td>
+      <td>{{ person.get('profession') }}</td>
+      <td>{{ person.get('institution') }}</td>
+      <td>{{ person.get('type') }}</td>
+      <td><form method="get" action="{{ url_for('display_member', email=person.get('email')) }}">
+        <input type="submit" name="memberEmail" value="{{person.get('email')}}">
       </form></td>
       {% endfor %}
   </table>
