@@ -1,14 +1,13 @@
 from ssl import SSL_ERROR_SSL
 from flask import (Flask, render_template, make_response,
                    request, session, redirect, url_for, flash,
-                   url_for, session, send_from_directory, Response, jsonify)
+                   url_for, send_from_directory, Response, jsonify)
 
 from werkzeug.utils import secure_filename
-import sys, os, random
-import cs304dbi as dbi
+import sys, re, random
 import bcrypt
+import cs304dbi as dbi
 import queries
-import random, re
 
 app = Flask(__name__)
 
@@ -29,16 +28,23 @@ def index():
     else:
         return render_template("index.html")
 
-
-@app.route('/about/')
-def about():
-    return render_template("index.html")
-
+@app.route('/home/')
+def home():
+    """
+    Homepage that can be accessed once the user is logged in.
+    """
+    if 'email' in session:
+        conn = dbi.connect()
+        email = session['email']
+        member = queries.get_one_member(conn,email)
+        return render_template('welcomePage.html', member=member)
+    else:
+        return redirect(url_for('index'))
 
 @app.route('/signup/', methods=['GET', 'POST'])
 def signup():
     '''
-    Gives the user the signup form under the get request. 
+    Displays signup form under the GETS request. 
     Collects the user's credentials and inserts the user into the database if 
     the credentials are appropriate (user must use Wellesley College email) 
     under the post request. 
@@ -103,6 +109,7 @@ def signup():
                 return redirect(url_for('login'))
             
         else:
+            flash("Creating user")
             # create a new user with the form data.
             hashed_password = bcrypt.hashpw(password.encode('utf-8'),
                                             bcrypt.gensalt())
@@ -170,16 +177,6 @@ def login():
         else:
             flash('Login unsuccessful. Please try again or sign up.')
             return redirect(url_for('login'))
-
-@app.route('/home/')
-def home():
-    if 'email' in session:
-        conn = dbi.connect()
-        email = session['email']
-        member = queries.get_one_member(conn,email)
-        return render_template('welcomePage.html', member=member)
-    else:
-        return redirect(url_for('index'))
 
 @app.route('/fav/', methods=['POST'])
 def fav():
@@ -504,8 +501,7 @@ def file_upload():
 
 if __name__ == '__main__':
     dbi.cache_cnf()
-    dbi.use('centralex_db') #centralex_db
-
+    dbi.use('af1_db') 
     import os
     port = os.getuid()
     app.debug = True
